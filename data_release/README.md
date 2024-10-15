@@ -4,7 +4,7 @@ Summary of files generated from the CLS3 data:
     <li><a href="#CLS-anchored-models">CLS anchored models</a></li>
     <li><a href="#CLS-transcripts">CLS transcripts</a></li>
     <li><a href="#CLS-loci">CLS loci</a>
-    <li><a href="#GENCODE-CLS3 Mappings">v47-CLS3 Mappings</a>
+    <li><a href="#GENCODE-CLS3-Mappings">GENCODE-CLS3 Mappings</a>
     <li><a href="#Extended-GENCODE-v47">Extended GENCODE v47</a>
     <li><a href="#Target-files">Target files</a>
     
