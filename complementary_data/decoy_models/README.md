@@ -78,3 +78,6 @@ awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2 }END{print SUM}' intergenic.gencode_v27+cls
 ```
 python3 relocate_loci.py intergenic.gencode_v27+cls.no_complex_regions.canonical_assembly.bed spliced_cls.loci.gtf
 ```
+
+# Output
+Find the set of randomly relocated, strand-less transcripts [here]().
