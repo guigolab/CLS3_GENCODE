@@ -20,7 +20,7 @@ The final set of transcript models, anchor-merged across samples, for human and 
   - [Human]()
   - [Mouse]()
   
-The attribute tags description can be found [here]().
+The attribute tags description can be found [here](gtf_tags_explained.md).
 
  ## CLS transcripts
  To further reduce the redundancy of the aforementioned transcripts collection, models sharing the same structure were merged together, ignoring eventual variation at the terminal exons, and therefore neglecting end-support information. 
@@ -78,9 +78,7 @@ This can be downloaded here:
   - [Human v47 enhanced annotation]()
     
 ## Target files
-
-
-**Merged targets** (used for probe design):
+Targets used for probe design:
 - [Human targeted regions]()
 - [Mouse targeted regions]()
 
