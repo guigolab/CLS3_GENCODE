@@ -4,8 +4,8 @@ Summary of files generated from the CLS3 data:
     <li><a href="#CLS-anchored-models">CLS anchored models</a></li>
     <li><a href="#CLS-transcripts">CLS transcripts</a></li>
     <li><a href="#CLS-loci">CLS loci</a>
-    <li><a href="#v47-CLS3-Mappings">v47-CLS3 Mappings</a>
-    <li><a href="#Extended-GENCODE-v47">enhanced gencode v47</a>
+    <li><a href="#GENCODE-CLS3 Mappings">v47-CLS3 Mappings</a>
+    <li><a href="#Extended-GENCODE-v47">Extended GENCODE v47</a>
     <li><a href="#Target-files">Target files</a>
     
 The CLS3 long-read data is processed through LyRic to obtaing high-confidence transcript models per sample through starting from pacBioSII- and ONT-sequenced long reads. Further, to collect a comprehensive set of transcripts
