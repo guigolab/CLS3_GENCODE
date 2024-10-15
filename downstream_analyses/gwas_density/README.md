@@ -99,7 +99,7 @@ for i in CLS3i*.merged.bed; do name=$(basename $i); name=${name/merged./}; bedto
 # Intergenic space before and after enxtending with CLS
 for i in *nocomplexregions.bed; do name=$(basename $i); name=${name/_nocomplexregions/}; bedtools intersect -a gwas_pruned_coordinates.bed -b $i -wo -f 1.0 > bedtools_gwas.$name; done
 ```
-Statistics are collected at: [GWAS_Stats](https://docs.google.com/spreadsheets/d/1oyfN9OQOIFkF2TWagqkdYKL8ZY6kaW8w50aHjQTpL50/edit?usp=sharing)
+Statistics are collected at: [GWAS_Stats]()
 
 # Compare the density of GWAS across main GENCODE v27 annotation, CLS and decoy models.
 ```
