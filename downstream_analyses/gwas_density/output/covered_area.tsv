@@ -1,0 +1,17 @@
+biotype	reference	basepairs
+protein_coding	exon	98319864
+protein_coding	gene_body	1279376088
+lncRNA	exon	22104696
+lncRNA	gene_body	361557086
+pseudogene	exon	12758238
+pseudogene	gene_body	56535507
+others	exon	1138306
+others	gene_body	1412490
+annotation	gencode	1611298179
+annotation	enhanced	1871304818
+intergenic	enhanced	1006089003
+intergenic	gencode	1265449346
+cls	exon	22816468
+cls	gene_body	260006639
+decoy	exon	24221554
+decoy	gene_body	249229026 
