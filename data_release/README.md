@@ -6,8 +6,7 @@ Summary of files generated from the CLS3 data:
     <li><a href="#CLS-loci">CLS loci</a>
     <li><a href="#GENCODE-CLS3-Mappings">GENCODE-CLS3 Mappings</a>
     <li><a href="#Extended-GENCODE-v47">Extended GENCODE v47</a>
-
-   <li><a href="#Target-files">Target files</a>
+    <li><a href="#Target-files">Target files</a>
     
 ![CLS workflow](https://github.com/user-attachments/assets/47c87440-8aca-44fc-a3bc-0bf27d5527f8)
  
@@ -67,11 +66,9 @@ For each transcript (ENST) created/extended due to CLS3 (anchICs), the file list
 **geneClassification** | gene (ENSG) novelty status taking into account the different gffcompare classifications from all the underlying transcripts <br />
 **CLS3_anchTM** | CLS3 anchTM(s) that led to the addition of the transcript to v47. Mapped through the anchICs. <br />
 
-The gffcompare novelty status definitions w.r.t. v27 for the anchICs, ENSTs and ENSGs:
-<img width="868" alt="image" src="https://github.com/user-attachments/assets/cbf3bf78-60fd-4ae2-9e19-9b97b8d7b652">
-![CLS-GENCODEv47 Mapping](https://github.com/user-attachments/assets/a6d7cc40-c729-420b-a88f-f8960414d598)
+The gffcompare novelty status definitions w.r.t. v27 for the anchICs, ENSTs and ENSGs.
+![Mapping](https://github.com/user-attachments/assets/7bbfea20-27d5-4bf5-8a55-494e5991943b)
 <br />
-
 
 ## Extended GENCODE v47
 For the sole purpose of analysing those CLS transcripts that were not yet incorporated into the annotation, for some analyses we leveraged an extended version of the GENCODE v47.
