@@ -132,18 +132,9 @@ grep -Ff <( cut -f4 ../bedfiles/annotation_lncRNA.bed ) gencodev27.genebody.bed 
 awk -F"\t" -v OFS="\t" '{ print $1,$6-1,$6,1 }' gwas_pruned_coordinates.bed | sort -k1,1 -k2,2n -u > gwas_prunedcoordinates.bedGraph 
 bedGraphToBigWig gwas_prunedcoordinates.bedGraph hg38.chrom.sizes gwas_prunedcoordinates.bw 
 
-awk -F"\t" -v OFS="\t" '{ print $1,$2,$3,1 }' gwas_pruned_coordinates.bed | sort -k1,1 -k2,2n -u > gwas_coordinates.bedGraph  
-bedGraphToBigWig gwas_coordinates.bedGraph hg38.chrom.sizes gwas_coordinates.bw 
-
 #Compute Matrix
-computeMatrix scale-regions -R  CLS.genebody.bed lncrna.genebody.bed proteincoding.genebody.bed decoy.genebody.bed -S gwas_coordinates.bw -o gwas.tsv.gz --upstream 20000 --downstream 20000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 200 --regionBodyLength 5000 --averageTypeBins sum
-
-#Compute matrix per catalog. Needed for clustering heatmap later.
-computeMatrix scale-regions -R CLS.genebody.bed -S gwas_coordinates.bw -o CLS.tsv.gz --upstream 15000 --downstream 15000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 500 --regionBodyLength 5000 --skipZeros
-computeMatrix scale-regions -R lncrna.genebody.bed -S gwas_coordinates.bw -o lncrna.tsv.gz --upstream 15000 --downstream 15000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 500 --regionBodyLength 5000 --skipZeros
-computeMatrix scale-regions -R proteincoding.genebody.bed -S gwas_coordinates.bw -o proteincoding.tsv.gz --upstream 15000 --downstream 15000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 500 --regionBodyLength 5000 --skipZeros
-computeMatrix scale-regions -R decoy.genebody.bed -S gwas_coordinates.bw -o decoy.tsv.gz --upstream 15000 --downstream 15000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 500 --regionBodyLength 5000 --skipZeros
+computeMatrix scale-regions -R  CLS.genebody.bed lncrna.genebody.bed proteincoding.genebody.bed decoy.genebody.bed -S gwas_prunedcoordinates.bw -o gwas_pruned.tsv.gz --upstream 20000 --downstream 20000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 200 --regionBodyLength 5000 --averageTypeBins sum
 
 #Plot
-plotProfile -m gwas.tsv.gz -o gwas.profile.svg --perGroup --plotType heatmap --regionsLabel CLS lncRNA proteinCoding Decoy --yMin 0 --yMax 0.0001 --endLabel TTS --plotFileFormat svg
+plotProfile -m gwas_pruned.tsv.gz -o gwas.profile.svg --perGroup --plotType heatmap --regionsLabel "CLS transcripts" "lncRNAs (v27)" "protein-coding (v27)" "decoy models" --yMin 0 --yMax 0.0001 --endLabel TTS --plotFileFormat svg
 ```
