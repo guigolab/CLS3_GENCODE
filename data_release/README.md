@@ -48,7 +48,7 @@ The latest human and mouse annotations have reported a huge increase in the over
 CLS3 models. Such transcripts, processed by the HAVANA team of manual annotators at EBI, that contributed to the refinement and augmentation of GENCODE v47 and vM36, starting from version v27 (human) and vM16 (mouse) is documented 
 in the following table.
 
-  - [v47-CLS3 mapping](https://zenodo.org/api/records/13946596/draft/files/v47-CLS3mapping_status.txt.gz/content)
+  - [v47-CLS3 mapping](https://zenodo.org/api/records/13946596/draft/files/v47-CLS3mapping_status.txt/content)
 
 The mapping across v47 ENSTs and the CLS3 anchICs they were extended/created from, with added details like novelty at the transcript as well as gene level. 
 
