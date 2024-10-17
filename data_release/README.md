@@ -75,7 +75,7 @@ For the sole purpose of analysing those CLS transcripts that were not yet incorp
 This refers to a tailored-made GTF file enhanced by adding CLS3 loci built from non artefactual spliced transcripts.
 
 This can be downloaded here:
-  - [Human v47 enhanced annotation](https://zenodo.org/api/records/13946596/draft/files/enhanced_annotation_v47.refined.gtf.gz/content)
+  - [Human v47 extended annotation](https://zenodo.org/api/records/13946596/draft/files/enhanced_annotation_v47.refined.gtf.gz/content)
     
 ## Target files
 Targets used for probe design:
