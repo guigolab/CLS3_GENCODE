@@ -35,6 +35,8 @@ The attribute tags description can be found [here](gtf_tags_explained.md).
    - [Mouse - spliced](https://zenodo.org/api/records/13946596/draft/files/Mv2_splicedmasterTable_refined.gtf.gz/content)
    - [Mouse - monoexonic](https://zenodo.org/api/records/13946596/draft/files/Mv2_unsplicedmasterTable_refined.gtf.gz/content)
 
+Get an [overview](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release/overview) of the transcripts distribution across stages, tissues, and technology.
+
 ## CLS loci
 With the intent of grouping together different models in uniquely identifiable loci, we clustered CLS transcripts into regions of continuous transcription.
 Eventually, transcripts sharing any overlap on the same strand have been brought together into a single locus, preserving their structure. 
