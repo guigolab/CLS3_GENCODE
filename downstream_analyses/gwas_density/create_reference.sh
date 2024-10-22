@@ -3,20 +3,13 @@ zgrep -v "^#" gencode.v27.primary_assembly.annotation.gtf.gz | cut -d";" -f1 | a
 cat <(zgrep -v "^#" gencode.v27.primary_assembly.annotation.gtf.gz) CLS3i.intergenic.annotation.v27.gtf | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > enhanced_for_intergenic_bases.bed 
 
 #protein_coding 
-awk ' $3 ~ /gene/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | grep "protein_coding" | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_proteincoding.bed 
-awk ' $3 ~ /exon/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | grep "protein_coding" | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_proteincoding_exon.bed    
+awk ' $3 ~ /gene/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | awk -F";" '$2 ~ /protein_coding/' | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '$1 ~ /chr/ { print $1,$4-1,$5,$9}' | grep -v chrM | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_proteincoding.bed 
+awk ' $3 ~ /exon/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | awk -F";" '$3 ~ /protein_coding/' | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '$1 ~ /chr/ { print $1,$4-1,$5,$9}' | grep -v chrM | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_proteincoding_exon.bed    
 
 #lncRNA 
-awk ' $3 ~ /gene/' <(zcat gencode.v27.long_noncoding_RNAs.gtf.gz) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_lncRNA.bed 
-awk ' $3 ~ /exon/' <(zcat gencode.v27.long_noncoding_RNAs.gtf.gz) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_lncRNA_exon.bed 
-
-#pseudogenes 
-awk ' $3 ~ /gene/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | grep "pseudogene" | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_pseudogenes.bed 
-awk ' $3 ~ /exon/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | grep "pseudogene" | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_pseudogene_exon.bed
-
-#others 
-grep -vFf <( cat <(cut -f4 annotation_proteincoding.bed) <(cut -f4  annotation_lncRNA.bed) <(cut -f4 annotation_pseudogenes.bed) | sort | uniq ) <(awk ' $3 ~ /gene/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz)) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_others.bed
-grep -vFf <( cat <(cut -f4 annotation_proteincoding_exon.bed) <(cut -f4  annotation_lncRNA_exon.bed) <(cut -f4 annotation_pseudogene_exon.bed) | sort | uniq ) <(awk ' $3 ~ /exon/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz)) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9}' | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_others_exon.bed  
+awk ' $3 ~ /gene/' <(zcat gencode.v27.long_noncoding_RNAs.gtf.gz) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '$1 ~ /chr/ { print $1,$4-1,$5,$9}' | grep -v chrM | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_lncRNA.bed 
+grep -Ff <(bedtools intersect -a annotation_lncRNA.bed -b annotation_proteincoding.bed -wao -f 0.1 | awk -F"\t" '$9 == 0' | cut -f4) annotation_lncRNA.bed > annotation_lncRNA.nooverlap.bed && mv annotation_lncRNA.nooverlap.bed annotation_lncRNA.bed
+awk ' $3 ~ /exon/' <(zcat gencode.v27.long_noncoding_RNAs.gtf.gz) | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '$1 ~ /chr/ { print $1,$4-1,$5,$9}' | grep -Ff <( cut -f4 annotation_lncRNA.bed) | grep -v chrM | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_lncRNA_exon.bed 
 
 #Decoy models
 awk ' $3 ~ /exon/' ../decoy_models/random_replicates_locirelocation.gtf | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '{ print $1,$4-1,$5,$9 }' | sort --parallel=4 -k1,1 -k2,2n > annotation_decoy.v27.exon.bed 
