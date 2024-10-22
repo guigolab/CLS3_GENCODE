@@ -3,13 +3,13 @@ library(dplyr)
 library(svglite)
 
 exonic_data <- data.frame(
-  subgroup = c("bigTranscriptome", "CMfinderCRSs", "fantomCat", "fantomEnhancers", "Gencode lncRNA v20+", "miTranscriptome", "non targeted", "NONCODE", "phyloCSF", "refSeq", "UCE", "VISTAenhancers"),
+  subgroup = c("bigTranscriptome", "CMfinderCRSs", "fantomCat", "fantomEnhancers", "GENCODE20+", "miTranscriptome", "non targeted", "NONCODE", "phyloCSF", "refSeq", "UCE", "VISTAenhancers"),
   value = c(10.50, 11.30, 10.71, 12.94, 10.06, 9.80, 8.36, 10.03, 13.73, 8.42, 12.65, 5.22),
   group = c("lncRNA", "Putative", "lncRNA", "Enhancers", "lncRNA", "lncRNA", "lncRNA", "lncRNA", "Putative", "lncRNA", "Putative", "Enhancers"),
   set = "Exonic")
 
 gene_body_data <- data.frame(
-  subgroup = c("bigTranscriptome", "CMfinderCRSs", "fantomCat", "fantomEnhancers", "Gencode lncRNA v20+", "miTranscriptome", "non targeted", "NONCODE", "phyloCSF", "refSeq", "UCE", "VISTAenhancers"),
+  subgroup = c("bigTranscriptome", "CMfinderCRSs", "fantomCat", "fantomEnhancers", "GENCODE20+", "miTranscriptome", "non targeted", "NONCODE", "phyloCSF", "refSeq", "UCE", "VISTAenhancers"),
   value = c(5.08, 5.15, 4.84, 6.02, 4.88, 4.65, 4.43, 4.78, 5.90, 4.40, 4.58, 4.87),
   group = c("lncRNA", "Putative", "lncRNA", "Enhancers", "lncRNA", "lncRNA", "lncRNA", "lncRNA", "Putative", "lncRNA", "Putative", "Enhancers"),
   set = "Gene Body")
