@@ -51,14 +51,13 @@ awk -F"\t" -v OFS="\t" '{ print $1, $2-1, $2, $3, $4, $5}' gwas_coordinates_reso
 7. [CLS - GENCODEv47 mapping](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings)
    
 8. Extended CLS IDs
-Find here the [extended annotation](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#extended-gencode-v47).
 ```
 grep "CLS3i" enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f10 | tr "," "\n" | sort -u > ic_extending47.ids 
 grep "CLS3i" enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f2,10 | tr "\"" "\t" | awk -v OFS="\t" '{ split($2, ics, ","); for (i in ics) { print $1, ics[i] } }' | sort -u > mapping_ic_ID.tsv
 ```
+Find here the [extended annotation](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#extended-gencode-v47).
 
 9. CLS Data
-Find the original data [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#cls-transcripts).
 ```
 cat Hv3_splicedmasterTable_refined.gtf Hv3_unsplicedmasterTable_refined.gtf > Hv3_intronchains_refined.gtf
 awk '$9 ~ /Intergenic/' v47-CLS3mapping_status.txt | cut -f4 | tr "," "\n" | sort -u | grep -v OLD | grep -v UNMAPPED > ic_intergenic_in47.ids 
@@ -76,7 +75,8 @@ awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2+1 }END{print SUM}' CLS3i.intergenic.loci.v2
 awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2+1 }END{print SUM}' CLS3i.intergenic.loci.v27.exon.merged.bed #22.816.468 bp 
 #+1 because were taken from GTF without transforming in 0-based as BED requires. 
 ```
-   
+Find the original data [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#cls-transcripts).
+
 10. Formatted references: GENCODE v27 annotation, Intergenic space, and Decoy Models
 Find details on those datasets [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data).
 ```
