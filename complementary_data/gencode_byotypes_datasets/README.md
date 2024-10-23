@@ -8,17 +8,16 @@ Original files available [here](https://github.com/guigolab/CLS3_GENCODE/blob/ma
 
 ### Novel CLS models
 ```
-egrep "refCompare \"Extends|refCompare \"Intronic|refCompare \"revIntronic|refCompare \"Antisense|refCompare \"Intergenic" Hv3_unsplicedmasterTable_refined.gtf Hv3_splicedmasterTable_refined.gtf | cut -d"\"" -f2 > novel_cls_ids.txt
+egrep "refCompare \"Extends|refCompare \"Intronic|refCompare \"revIntronic|refCompare \"Antisense|refCompare \"Intergenic|refCompare \"runOn" Hv3_unsplicedmasterTable_refined.gtf Hv3_splicedmasterTable_refined.gtf | cut -d"\"" -f2 > novel_cls_ids.txt
 ```
-The creation of TSS is documented [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives).
+The creation of the list of TSS is documented [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives).
 
 ### novel human lncRNA loci now in v47
-```
-pending
-```
+
+The lncRNA transcripts and genes now in v47 because CLS data, as mapped [here](https://zenodo.org/api/records/13946596/draft/files/v47-CLS3mapping_status.txt/content), have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings). Results are available in the folder for [transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/v47_CLS3_mapping.transcripts) and [genes](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/v47_CLS3_mapping.genes). Depending on the analysis, either all or a subset of these lncRNAs have been selected. Choices are detailed in the methods.
 
 ### intergenic spliced CLS models
-We decided to complement the analyses with all those models not included in v47 solely because they did not reach the minimal recount threshold (9,772 genes, 22,211 transcripts)
+We decided to complement some analyses with all those models not included in v47 solely because they did not reach the minimal recount[^38] threshold.
 ```
 pending
 ```
@@ -42,10 +41,12 @@ awk ' $3 ~ /gene/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | awk 
 awk ' $3 ~ /exon/' <(zcat gencode.v27.primary_assembly.annotation.gtf.gz) | awk -F";" '$3 ~ /protein_coding/' | cut -d";" -f1 | awk -F"\t" -v OFS="\t" '$1 ~ /chr/ { print $1,$4-1,$5,$9}' | grep -v chrM | sort --parallel=4 -k1,1 -k2n,2 | uniq > annotation_proteincoding_exon.bed    
 ```
 
+The lists of [lncRNAs](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/annotation_lncRNA.bed.gz) and [protein-coding](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/annotation_proteincoding.bed.gz) IDs have then been used to grep the associated transcripts back from the original GTF annotation.
+
 ## 3. Background
 For some analyses, we have also employed a set of decoy models (17,223 genes, 85,283 transcripts) that attempt to mimic the background (non-genic) behavior of the genome.
 Find them [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/decoy_models).
 
 
-
+[^38]: Wilks, C. et al. recount3: summaries and queries for large-scale RNA-seq expression and splicing. Genome Biol. 22, 323 (2021).
 
