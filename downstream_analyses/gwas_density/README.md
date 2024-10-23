@@ -48,23 +48,21 @@ format_snps_ld.R -i gwas_coordinates_resolvedName_catalog.bed
 awk -F"\t" -v OFS="\t" '{ print $1, $2-1, $2, $3, $4, $5}' gwas_coordinates_resolvedName_catalog.noLD.5k.bed > gwas_pruned_coordinates.bed
 ```
 
-7. CLS - GENCODEv47 mapping
-```
-wget https://public-docs.crg.es/rguigo/Data/gkaur/CLS3_finalFiles/v47-CLS3mapping_status.txt
-```
-
+7. [CLS - GENCODEv47 mapping](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings)
+   
 8. Extended CLS IDs
+Find here the [extended annotation](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#extended-gencode-v47).
 ```
-wget https://public-docs.crg.es/rguigo/Data/gkaur/CLS3_finalFiles/gencodev47Files/gencode.v47.primary_assembly.annotation.enhanced.gtf
-grep "CLS3i" /users/rg/tperteghella/Gencode/InputData/Final/enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f10 | tr "," "\n" | sort -u > ic_extending47.ids 
-grep "CLS3i" /users/rg/tperteghella/Gencode/InputData/Final/enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f2,10 | tr "\"" "\t" | awk -v OFS="\t" '{ split($2, ics, ","); for (i in ics) { print $1, ics[i] } }' | sort -u > mapping_ic_ID.tsv
+grep "CLS3i" enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f10 | tr "," "\n" | sort -u > ic_extending47.ids 
+grep "CLS3i" enhanced_annotation_v47.refined.gtf | grep -w exon | cut -d"\"" -f2,10 | tr "\"" "\t" | awk -v OFS="\t" '{ split($2, ics, ","); for (i in ics) { print $1, ics[i] } }' | sort -u > mapping_ic_ID.tsv
 ```
 
 9. CLS Data
+Find the original data [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#cls-transcripts).
 ```
 cat Hv3_splicedmasterTable_refined.gtf Hv3_unsplicedmasterTable_refined.gtf > Hv3_intronchains_refined.gtf
-awk '$9 ~ /Intergenic/' /users/rg/tperteghella/Gencode/InputData/Final/v47-CLS3mapping_status.txt | cut -f4 | tr "," "\n" | sort -u | grep -v OLD | grep -v UNMAPPED > ic_intergenic_in47.ids 
-grep -Ff ic_intergenic_in47.ids <(cut -f1,4 ~/Gencode/InputData/Final/v47-CLS3mapping_status.txt | awk -v OFS="\t" '{ split($2, ics, ","); for (i in ics) { print $1, ics[i] } }' ) >> mapping_ic_ID.tsv 
+awk '$9 ~ /Intergenic/' v47-CLS3mapping_status.txt | cut -f4 | tr "," "\n" | sort -u | grep -v OLD | grep -v UNMAPPED > ic_intergenic_in47.ids 
+grep -Ff ic_intergenic_in47.ids <(cut -f1,4 v47-CLS3mapping_status.txt | awk -v OFS="\t" '{ split($2, ics, ","); for (i in ics) { print $1, ics[i] } }' ) >> mapping_ic_ID.tsv 
 
 grep -Ff <(cat ic_intergenic_in47.ids ic_extending47.ids) Hv3_intronchains_refined.gtf | awk ' $0 ~ /chr/ ' > CLS3i.intergenicICv27.annotation.gtf
 
@@ -80,6 +78,7 @@ awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2+1 }END{print SUM}' CLS3i.intergenic.loci.v2
 ```
    
 10. Formatted references: GENCODE v27 annotation, Intergenic space, and Decoy Models
+Find details on those datasets [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data).
 ```
 ./create_references.sh
 ```
