@@ -19,9 +19,6 @@ Read length per sample was addressed using the script:
 ```
 
 ### SQANTI Evaluation
-The accuracy and quality of the models have been assessed using SQANTI3[^27], in comparison to GENCODE v27 and vM16, for [human](https://guigolab.github.io/CLS3_GENCODE/SQANTI_reports/Human_CLStranscripts_v27.html) and [mouse](https://guigolab.github.io/CLS3_GENCODE/SQANTI_reports/Mouse_CLStranscripts_vM16.html), respectively. Run parameters as follow:
-```
-sqanti command line
-```
+The accuracy and quality of the models have been assessed using SQANTI3[^27], in comparison to GENCODE v27 and vM16, for [human](https://guigolab.github.io/CLS3_GENCODE/SQANTI_reports/Human_CLStranscripts_v27.html) and [mouse](https://guigolab.github.io/CLS3_GENCODE/SQANTI_reports/Mouse_CLStranscripts_vM16.html), respectively. Run with default parameters.
 
 [^27]: Pardo-Palacios, F. J. et al. SQANTI3: curation of long-read transcriptomes for accurate identification of known and novel isoforms. Nat. Methods (2024) doi:10.1038/s41592-024-02229-2.
