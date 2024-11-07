@@ -17,8 +17,8 @@ from the different tissues and technologies, the models were "anchored" accordin
 In this way we reduce the redundancy in the dataset while also preserving potential alternative start and end sites. 
 
 The final set of transcript models, anchor-merged across samples, for human and mouse can be downloaded at:
-  - [Human](https://zenodo.org/api/records/13946596/draft/files/Hv3_masterTable_refined.gtf.gz/content)
-  - [Mouse](https://zenodo.org/api/records/13946596/draft/files/Mv2_masterTable_refined.gtf.gz/content)
+  - [Human](https://zenodo.org/records/13946596/files/Hv3_masterTable_refined.gtf.gz?download=1)
+  - [Mouse](https://zenodo.org/records/13946596/files/Mv2_masterTable_refined.gtf.gz?download=1)
   
 The attribute tags description can be found [here](gtf_tags_explained.md).
 
@@ -30,10 +30,10 @@ The attribute tags description can be found [here](gtf_tags_explained.md).
  2. For the _monoexonic transcripts_, they were merged together in case they share more that 50% overlap with each other.
    
  The chain GTF for human and mouse can be downloaded using the following links:
-   - [Human - spliced](https://zenodo.org/api/records/13946596/draft/files/Hv3_splicedmasterTable_refined.gtf.gz/content)
-   - [Human - monoexonic](https://zenodo.org/api/records/13946596/draft/files/Hv3_unsplicedmasterTable_refined.gtf.gz/content)
-   - [Mouse - spliced](https://zenodo.org/api/records/13946596/draft/files/Mv2_splicedmasterTable_refined.gtf.gz/content)
-   - [Mouse - monoexonic](https://zenodo.org/api/records/13946596/draft/files/Mv2_unsplicedmasterTable_refined.gtf.gz/content)
+   - [Human - spliced](https://zenodo.org/records/13946596/files/Hv3_splicedmasterTable_refined.gtf.gz?download=1)
+   - [Human - monoexonic](https://zenodo.org/records/13946596/files/Hv3_unsplicedmasterTable_refined.gtf.gz?download=1)
+   - [Mouse - spliced](https://zenodo.org/records/13946596/files/Mv2_splicedmasterTable_refined.gtf.gz?download=1)
+   - [Mouse - monoexonic](https://zenodo.org/records/13946596/files/Mv2_unsplicedmasterTable_refined.gtf.gz?download=1)
 
 Get an [overview](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release/overview) of the transcripts distribution across stages, tissues, and technology.
 
@@ -42,15 +42,15 @@ With the intent of grouping together different models in uniquely identifiable l
 Eventually, transcripts sharing any overlap on the same strand have been brought together into a single locus, preserving their structure. 
 
 The loci GTFs can be downloaded at: 
-  - [Human - gencode v27 tagged](https://zenodo.org/api/records/13946596/draft/files/Hv3_masterTable_refined_+withinTmerge_gencodev27_tagged.loci.gtf.gz/content)
-  - [Mouse - gencode vM16 tagged](https://zenodo.org/api/records/13946596/draft/files/Mv2_masterTable_refined_+withinTmerge_gencodevM16_tagged.loci.gtf.gz/content)
+  - [Human - gencode v27 tagged](https://zenodo.org/records/13946596/files/Hv3_masterTable_refined_+withinTmerge_gencodev27_tagged.loci.gtf.gz?download=1)
+  - [Mouse - gencode vM16 tagged](https://zenodo.org/records/13946596/files/Mv2_masterTable_refined_+withinTmerge_gencodevM16_tagged.loci.gtf.gz?download=1)
 
 ## GENCODE-CLS3 Mappings
 The latest human and mouse annotations have reported a huge increase in the overall number of lncRNA genes and transcripts, together with a great improvement in the annotation of already exising lncRNA genes, thanks to the incorporation of 
 CLS3 models. Such transcripts, processed by the HAVANA team of manual annotators at EBI, that contributed to the refinement and augmentation of GENCODE v47 and vM36, starting from version v27 (human) and vM16 (mouse) is documented 
 in the following table.
 
-  - [v47-CLS3 mapping](https://zenodo.org/api/records/13946596/draft/files/v47-CLS3mapping_status.txt/content)
+  - [v47-CLS3 mapping](https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1)
 
 The mapping across v47 ENSTs and the CLS3 anchICs they were extended/created from, with added details like novelty at the transcript as well as gene level. 
 
@@ -77,12 +77,12 @@ For the sole purpose of analysing those CLS transcripts that were not yet incorp
 This refers to a tailored-made GTF file enhanced by adding CLS3 loci built from non artefactual spliced transcripts.
 
 This can be downloaded here:
-  - [Human v47 extended annotation](https://zenodo.org/api/records/13946596/draft/files/enhanced_annotation_v47.refined.gtf.gz/content)
+  - [Human v47 extended annotation](https://zenodo.org/records/13946596/files/enhanced_annotation_v47.refined.gtf.gz?download=1)
     
 ## Target files
 Targets used for probe design:
-- [Human targeted regions](https://zenodo.org/api/records/13946596/draft/files/hs.allNonPcgTargetsMerged.targets.gtf.gz/content)
-- [Mouse targeted regions](https://zenodo.org/api/records/13946596/draft/files/mm.allNonPcgTargetsMerged.targets.gtf.gz/content)
+- [Human targeted regions](https://zenodo.org/records/13946596/files/hs.allNonPcgTargetsMerged.targets.gtf.gz?download=1)
+- [Mouse targeted regions](https://zenodo.org/records/13946596/files/mm.allNonPcgTargetsMerged.targets.gtf.gz?download=1)
 
 For the target design, 8 catalogs (CMfinderCRSs, GWAScatalog, UCE, VISTAenhancers, fantomCat, fantomEnhancers, bigTranscriptome, miTranscriptome) were liftedOver from human to mouse. Mappings for all such targets can be found here:
-  - [LiftedOver targets](https://zenodo.org/api/records/13946596/draft/files/final.liftedOverTargets.mapping.txt/content)
+  - [LiftedOver targets](https://zenodo.org/records/13946596/files/final.liftedOverTargets.mapping.txt?download=1)
