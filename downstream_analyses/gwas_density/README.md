@@ -77,7 +77,7 @@ awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2+1 }END{print SUM}' CLS3i.intergenic.loci.v2
 ```
 Find the original data [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#cls-transcripts).
 
-10. Formatted references: GENCODE v27 annotation, Intergenic space, and Decoy Models
+10. Formatted references: GENCODE v27 annotation, Intergenic space, and Decoy Models.
 Find details on those datasets [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data).
 ```
 ./create_references.sh
