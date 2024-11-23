@@ -1,5 +1,5 @@
 #split concatemers using the selected strategy
-bash readme_joint_main.sh
+bash split_steps.sh
 
 #skip Multi Splits
 bash skipMultiSplits.sh
