@@ -1,1 +1,5 @@
-/users/project/gencode_006070_no_backup/gkaur/TABLES_gencodePhase3/TABLES_v2_noHiSS_splitONT/anchoredMerging/table/scripts/1_split_concatemers/split_concatemers.sh
+#split concatemers using the selected strategy
+bash split_steps.sh
+
+#skip Multi Splits
+bash skipMultiSplits.sh 
