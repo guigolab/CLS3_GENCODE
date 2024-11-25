@@ -4,7 +4,6 @@ This preprocessing step uses the [split_on_adapter]([url](https://github.com/nan
 
 This utility was adjusted in accordance with the CapTrap-Seq adapter and primer sequences and is forked [here](https://github.com/Gazal90/duplex-tools). 
 
-The split_concatemers.sh is the main script 
 
 ### ONT preprocessing
 Main script for splitting the ONT concatemers:
@@ -13,7 +12,7 @@ Main script for splitting the ONT concatemers:
 ```
 
 
-In addition to these changes, two rounds of “read splitting” were performed, followed by a final quality control step.
+Overall, two rounds of “read splitting” were performed, followed by a final quality control step.
 
 #### Round 1: 
 In the first step, the complete set including the ONT adapter linked to the CapTrap-Seq primer was used to detect concatemers and split them into sub-reads. Due to presence of incomplete ONT adapter within some reads, these concatemers were left undetected. 
