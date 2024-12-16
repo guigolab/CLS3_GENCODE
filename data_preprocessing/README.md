@@ -3,7 +3,7 @@
 ## Preprocessing
 
 ### ONT
-Basecalling for ONT was performed using Guppy v6 SUP. NanoPlot was utilized to generate metrics, including read length distributions, quality scores (Q-scores), and the total number of reads, providing insights into the overall performance of the sequencing run. Additionally, the split_on_adapter utility from the Duplex Tools suite was employed to evaluate the presence of concatamers in the data. See the [resolving_concatamers](https://github.com/guigolab/CLS3_GENCODE/blob/main/data_preprocessing/resolving_concatamers.md) documentation for a more detailed description. 
+Basecalling for ONT was performed using Guppy v6 SUP. NanoPlot was utilized to generate metrics, including read length distributions, quality scores (Q-scores), and the total number of reads, providing insights into the overall performance of the sequencing run. Additionally, the split_on_adapter utility from the Duplex Tools suite was employed to evaluate the presence of concatamers in the data. See the [ONT readme](https://github.com/guigolab/CLS3_GENCODE/blob/main/data_preprocessing/ONT/readme.md) for a more detailed description of the strategy employed to resolve the issue. 
 
 ### PacBio
 To make the PacBio data compatible with the downstream LyRic processing, PacBio FASTQ files containing CCS (Circular Consensus Sequencing) reads were generated using the [pb_gen](https://github.com/guigolab/pb_gen) workflow.
