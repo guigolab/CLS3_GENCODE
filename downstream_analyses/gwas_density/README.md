@@ -132,7 +132,7 @@ awk -F"\t" -v OFS="\t" '{ print $1,$6-1,$6,1 }' gwas_pruned_coordinates.bed | so
 bedGraphToBigWig gwas_prunedcoordinates.bedGraph hg38.chrom.sizes gwas_prunedcoordinates.bw 
 
 #Compute Matrix
-computeMatrix scale-regions -R  CLS.genebody.bed lncrna.genebody.bed proteincoding.genebody.bed decoy.genebody.bed -S gwas_prunedcoordinates.bw -o gwas_pruned.tsv.gz --upstream 20000 --downstream 20000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 200 --regionBodyLength 5000 --averageTypeBins sum
+computeMatrix scale-regions -R  CLS.genebody.bed lncrna.genebody.bed proteincoding.genebody.bed decoy.genebody.bed -S gwas_prunedcoordinates.bw -o gwas_pruned.tsv.gz --upstream 20000 --downstream 20000 --sortRegions ascend --missingDataAsZero -p 8 --smartLabels --binSize 200 --regionBodyLength 5000
 
 #Plot
 plotProfile -m gwas_pruned.tsv.gz -o gwas.profile.svg --perGroup --plotType heatmap --regionsLabel "CLS transcripts" "lncRNAs (v27)" "protein-coding (v27)" "decoy models" --yMin 0 --yMax 0.0001 --endLabel TTS --plotFileFormat svg
