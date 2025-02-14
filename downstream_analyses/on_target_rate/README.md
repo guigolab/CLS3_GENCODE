@@ -1,22 +1,21 @@
 # Plotting on-target rate (OTR) for the control ERCC spike-ins to check the efficacy of the capture/target panel
 
-> Calculate on-target rate per tissue/sample:
-#-------calculate OTR per tissue/sample
+## Calculate OTR per tissue/sample:
 ```
 qsub onTargetRate.sh
 ```
 
-#------merge across tissues for allTissues calculations
+## merge across tissues for allTissues calculations
 ```
 qsub mergeAcrossTissues.sh
 ```
 
-#-------calculate OTR across all tissues/samples per capture type
+## calculate OTR across all tissues/samples per capture type
 ```
 qsub onTargetRateallTissues.sh
 ```
 
-#-------prepare input file to plot OTR
+## prepare input file to plot OTR
 ```
 echo -e "EnrichCateg\ttech\tspec\ttissue\tcap\tOTR\tEnrichment\tOTRperc" > Enrichment_phase3
 for tech in pacBio ont; do
@@ -40,7 +39,7 @@ for tech in pacBio ont; do
 done
 ```
 
-#------------
+## Plot the results
 ```
 Rscript OTR.R
 ```
