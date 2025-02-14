@@ -1,8 +1,10 @@
-Plotting on-target rate (OTR) for the control ERCC spike-ins to check the efficacy of the capture/target panel
+# Plotting on-target rate (OTR) for the control ERCC spike-ins to check the efficacy of the capture/target panel
 
 > Calculate on-target rate per tissue/sample:
 #-------calculate OTR per tissue/sample
+```
 qsub onTargetRate.sh
+```
 
 #------merge across tissues for allTissues calculations
 qsub mergeAcrossTissues.sh
