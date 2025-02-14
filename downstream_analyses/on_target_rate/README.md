@@ -7,12 +7,17 @@ qsub onTargetRate.sh
 ```
 
 #------merge across tissues for allTissues calculations
+```
 qsub mergeAcrossTissues.sh
+```
 
 #-------calculate OTR across all tissues/samples per capture type
+```
 qsub onTargetRateallTissues.sh
+```
 
 #-------prepare input file to plot OTR
+```
 echo -e "EnrichCateg\ttech\tspec\ttissue\tcap\tOTR\tEnrichment\tOTRperc" > Enrichment_phase3
 for tech in pacBio ont; do
         for spec in CapTrap_H CapTrap_M; do
@@ -33,5 +38,9 @@ for tech in pacBio ont; do
                 done < <(ls ${tech}*${spec}*_OTR* | awk -F"_" '{print $4}' | awk -F"\." '{print $1}' |sort | uniq)
         done
 done
+```
+
 #------------
+```
 Rscript OTR.R
+```
