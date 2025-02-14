@@ -42,4 +42,5 @@ done
 ## Plot the results
 ```
 Rscript OTR.R
+Rscript OTR_ERCConly.R
 ```
