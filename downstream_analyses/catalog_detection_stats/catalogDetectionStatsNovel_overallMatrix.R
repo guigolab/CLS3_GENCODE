@@ -1,4 +1,3 @@
-#t<-c("propDetectedRegions")
 ov <- c("AllCatalogs","AllTissues","uncaptured")
 t<-c("detectedICs","propDetectedRegions")
 s<-c("Hv3","Mv2")
@@ -61,8 +60,7 @@ for(cat in ov)
 			{       uplim=65
 			}
 		}
-		#data$class=factor(data$class, levels=c("NONCODE", "miTranscriptome", "fantomCat", "refSeq", "gencodeLncRna", "bigTranscriptome", "CMfinderCRSs", "phyloCSF", "GWAScatalog", "UCE", "fantomEnhancers", "VISTAenhancers"))  ##scRNA excluded
-		#colors_labels <- c(rep("darkmagenta",6), rep("forestgreen",4), rep("lightgoldenrod3",2))
+
 		if(typ == "detectedICs")
 		{
 			outfile<-paste("plots/",spec,".refined_MergedTargetRegions.NovelICsDetected_",cat,".marix.tiff",sep="")
@@ -80,7 +78,6 @@ for(cat in ov)
 		}
 		print(data)		
 		
-	#	ggplot(data,aes(x=tissue,y=class,fill=))+
 		p+
 		geom_tile()+
 		scale_fill_gradientn(colours=matrix_palette,limits=c(0,uplim))+

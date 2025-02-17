@@ -1,5 +1,3 @@
-#rm stats/*.MergedTargetRegions.proportionDetected.Novel_perTissue_*
-
 #!/usr/bin/bash
 #$ -N targetRegionsperTissue
 #$ -t 1-12
