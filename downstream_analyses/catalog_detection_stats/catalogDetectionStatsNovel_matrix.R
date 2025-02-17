@@ -1,4 +1,3 @@
-#t<-c("propDetectedRegions")
 t<-c("detectedICs","propDetectedRegions")
 s<-c("Hv3","Mv2")
 library(ggplot2)
@@ -41,7 +40,6 @@ for(spec in s)
 		}
 		print(data)		
 		
-	#	ggplot(data,aes(x=tissue,y=class,fill=))+
 		p+
 		geom_tile()+
 		scale_fill_gradientn(colours=matrix_palette,limits=c(0,uplim))+
