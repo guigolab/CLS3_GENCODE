@@ -3,8 +3,12 @@ Plots the % target regions detected overall, further differentiating the novel a
 ```
 bash catalogDetectionStats_Novel.sh
 ```
+final plot -> https://docs.google.com/presentation/d/1S4pvtA8Lpl8P_fMwfMA2GnKOKp8mIoZaAQWCFaMuGiw/edit#slide=id.g30a87e2963f_0_0
 ## Novel transcripts detected per target class per tissue (matrices)
 Plots transcripts (CLS intron chains) as well as the proportion of target regions detected thanks to the target catalog
 ```
 bash catalogDetectionStats_Novel_IClevel_perTissue.sh
 ```
+final plots:
+https://docs.google.com/presentation/d/1S4pvtA8Lpl8P_fMwfMA2GnKOKp8mIoZaAQWCFaMuGiw/edit#slide=id.g2ffe14a0607_0_472
+https://docs.google.com/presentation/d/1S4pvtA8Lpl8P_fMwfMA2GnKOKp8mIoZaAQWCFaMuGiw/edit#slide=id.g2fa50d3fcc5_1_16
