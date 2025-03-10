@@ -28,7 +28,7 @@ done
 
 #----data generation
 #source activate forPlotting
-bash rcd_catalogDetectionStats_IClevel.sh
+bash catalogDetectionStats_calc.sh
 
 # After the job finishes, continue with the following
 #----collate into a final stats file
