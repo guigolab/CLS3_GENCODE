@@ -27,7 +27,7 @@ for spec in Hv3 Mv2; do
 done
 
 #----data generation
-source activate forPlotting
+#source activate forPlotting
 bash rcd_catalogDetectionStats_IClevel.sh
 
 # After the job finishes, continue with the following

@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 #----data generation
-source activate forPlotting
+#source activate forPlotting
 bash rcd_catalogDetection_perTissue_calc.sh
 echo "calculations done"
 

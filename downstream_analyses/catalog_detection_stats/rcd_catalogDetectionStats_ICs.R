@@ -1,3 +1,7 @@
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
 s<-c("Hv3","Mv2")
 
 for(spec in s)
