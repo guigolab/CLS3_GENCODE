@@ -7,7 +7,7 @@ for(cat in ov)
 {   for(spec in s)
 {	for(typ in t)
 	{	options(scipen = 999)
-		infile<-paste("stats/",spec,".refined_MergedTargetRegions.proportionDetected.Novel_",cat,sep="")
+		infile<-paste("stats/",spec,".MergedTargetRegions.proportionDetected_",cat,sep="")
 		data_all <- read.table(infile,header = TRUE)
 		data <- subset(data_all, regionType=="detectedNovel")	
 		print(cat)	 
@@ -28,7 +28,7 @@ for(cat in ov)
 				colors_labels <- c(rep("black",1))
 			}else
 			{	data$tissue=factor(data$tissue, levels=c("allTissues"),labels=c("allTissues"))
-				data$class=factor(data$class, levels=c("allCatalogs","NONCODE", "miTranscriptome", "fantomCat", "refSeq", "gencodeLncRna", "bigTranscriptome", "CMfinderCRSs", "phyloCSF", "GWAScatalog", "UCE", "fantomEnhancers", "VISTAenhancers"))
+				data$class=factor(data$class, levels=c("uncaptured","allCatalogs","NONCODE", "miTranscriptome", "fantomCat", "refSeq", "gencodeLncRna", "bigTranscriptome", "CMfinderCRSs", "phyloCSF", "GWAScatalog", "UCE", "fantomEnhancers", "VISTAenhancers"))
 				uplim=75000
 				colors_labels <- c(rep("darkmagenta",6), rep("forestgreen",4), rep("lightgoldenrod3",2))		
 			}
@@ -51,7 +51,7 @@ for(cat in ov)
 				}
 			}else
 			{	data$tissue=factor(data$tissue, levels=c("allTissues"),labels=c("allTissues"))
-				data$class=factor(data$class, levels=c("allCatalogs","NONCODE", "miTranscriptome", "fantomCat", "refSeq", "gencodeLncRna", "bigTranscriptome", "CMfinderCRSs", "phyloCSF", "GWAScatalog", "UCE", "fantomEnhancers", "VISTAenhancers"))
+				data$class=factor(data$class, levels=c("uncaptured","allCatalogs","NONCODE", "miTranscriptome", "fantomCat", "refSeq", "gencodeLncRna", "bigTranscriptome", "CMfinderCRSs", "phyloCSF", "GWAScatalog", "UCE", "fantomEnhancers", "VISTAenhancers"))
 				colors_labels <- c(rep("darkmagenta",6), rep("forestgreen",4), rep("lightgoldenrod3",2))
 				uplim=75000
 			}
@@ -63,14 +63,14 @@ for(cat in ov)
 
 		if(typ == "detectedICs")
 		{
-			outfile<-paste("plots/",spec,".refined_MergedTargetRegions.NovelICsDetected_",cat,".marix.tiff",sep="")
+			outfile<-paste("plots/",spec,".MergedTargetRegions.NovelICsDetected_",cat,".marix.tiff",sep="")
 			p<-ggplot(data,aes(x=tissue,y=class,fill=detectedICs))
 			text<-geom_text(aes(label = detectedICs),size=2)
 			matrix_palette = c("#FFF5F0","#FEE0D2","#FCBBA1","#FC9272","#FB6A4A","#EF3B2C","#CB181D","#A50F15","#67000D")
 			title=ggtitle("# novel transcripts detected")
 		}else
 		{	
-			outfile<-paste("plots/",spec,".refined_MergedTargetRegions.NovelpercDetectedRegions_",cat,".marix.tiff",sep="")
+			outfile<-paste("plots/",spec,".MergedTargetRegions.NovelpercDetectedRegions_",cat,".marix.tiff",sep="")
 			p<-ggplot(data,aes(x=tissue,y=class,fill=propDetectedRegions))
 			text<-geom_text(size=2,aes(label = round(propDetectedRegions,digits=1)))
 			matrix_palette = c("#F7FCF5","#E5F5E0","#C7E9C0","#A1D99B","#74C476","#41AB5D","#238B45","#006D2C","#00441B")

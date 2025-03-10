@@ -2,7 +2,7 @@ s<-c("Hv3","Mv2")
 
 for(spec in s)
 {	options(scipen = 999)
-	infile<-paste("stats/",spec,".refined_MergedTargetRegions.proportionDetected.Novel_AllTissues",sep="")
+	infile<-paste("stats/",spec,".MergedTargetRegions.proportionDetected_AllTissues",sep="")
 	data_all <- read.table(infile,header = TRUE)
 	data <- subset(data_all, (regionType=="detectedNovel" | regionType=="detectedNonNovel") & class!="uncaptured")
 	print(data)
@@ -29,6 +29,6 @@ for(spec in s)
 	geom_text(aes(label = paste(data$detectedRegions,"\n\n"),colour="#catalog regions",fontface="bold"),size=2,position = position_stack(0.6))+
 	geom_text(aes(label = paste(data$detectedICs),colour="#transcript models",fontface="bold"), size=2,position = position_stack(0.6))
 	#+ geom_text(aes(label = paste0((data$detectedRegions,colour="red"),"\n(",data$detectedLoci,")\n(",data$detectedTMs,")")), size=2,position = position_stack(0.6)) #+facet_wrap(~ref, ncol=2)
-	outfile<-paste("plots/",spec,".refined_MergedTargetRegions.proportionDetected.Novel.vennbar.tiff",sep="")
+	outfile<-paste("plots/",spec,".MergedTargetRegions.proportionDetected.vennbar.tiff",sep="")
 	ggsave(outfile, device = 'tiff', width = 7, height = 4)
 }
