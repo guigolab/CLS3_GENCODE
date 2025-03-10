@@ -36,4 +36,4 @@ for spec in Hv3 Mv2; do
 	cat stats/${spec}.MergedTargetRegions.proportionDetected.* | grep -v sncRNA >> stats/${spec}.MergedTargetRegions.proportionDetected_AllTissues
 done
 
-Rscript rcd_catalogDetectionStats_ICs.R || { echo "Error: R script failed to execute"; }
+Rscript catalogDetectionStats.R || { echo "Error: R script failed to execute"; }

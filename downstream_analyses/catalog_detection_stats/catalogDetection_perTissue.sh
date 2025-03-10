@@ -4,7 +4,7 @@ set -o pipefail
 
 #----data generation
 #source activate forPlotting
-bash rcd_catalogDetection_perTissue_calc.sh
+bash catalogDetection_perTissue_calc.sh
 echo "calculations done"
 
 
@@ -23,7 +23,7 @@ for spec in Hv3 Mv2; do
      echo "$spec calculations done"
 done
 
-Rscript rcd_catalogDetectionStats_matrix.R #perTissue matrix plot
+Rscript catalogDetectionStats_matrix.R #perTissue matrix plot
 echo main matrix plot created
-Rscript rcd_catalogDetectionStats_overallMatrix.R  #overall matrices
+Rscript catalogDetectionStats_overallMatrix.R  #overall matrices
 echo overall matrices created DONE
