@@ -46,11 +46,24 @@ The loci GTFs can be downloaded at:
   - [Mouse - gencode vM16 tagged](https://zenodo.org/records/13946596/files/Mv2_masterTable_refined_+withinTmerge_gencodevM16_tagged.loci.gtf.gz?download=1)
 
 ## GENCODE-CLS3 Mappings
-The latest human and mouse annotations have reported a huge increase in the overall number of lncRNA genes and transcripts, together with a great improvement in the annotation of already exising lncRNA genes, thanks to the incorporation of 
-CLS3 models. Such transcripts, processed by the HAVANA team of manual annotators at EBI, that contributed to the refinement and augmentation of GENCODE v47 and vM36, starting from version v27 (human) and vM16 (mouse) is documented 
-in the following table.
+The latest human and mouse annotations have reported a huge increase in the overall number of lncRNA genes and transcripts, together with a great improvement in the annotation of already exising lncRNA genes, thanks to the incorporation of CLS3 models. Such transcripts have been processed by the HAVANA team of manual annotators at EBI, and the refinement and augmentation of GENCODE v47 and vM36 annotation attributable to CLS data have been documented here:
+
+  - [v47-CLS3_extended_mappings] (coming soon on Zenodo)
+  - [vM36-CLS3_extended_mappings] (coming soon on Zenodo)
+
+The original numbers released in the publication, can be obtained by quierying the files as follow;
+```
+#Total novel lncRNA genes (17,931):
+awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f8 | sort -u | wc -l
+
+#Total novel lncRNA transcripts (140,268):
+awk -F "\t" '$2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f1 | sort -u | wc -l
+```
+
+The novelty brought by these transcripts, with respect to version v27 (human) and vM16 (mouse) are reported the following table, and assigned asdefined in the schema below.
 
   - [v47-CLS3 mapping](https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1)
+  - [vM36-CLS3 mapping] (coming soon on Zenodo)
 
 The mapping across v47 ENSTs and the CLS3 anchICs they were extended/created from, with added details like novelty at the transcript as well as gene level. 
 
