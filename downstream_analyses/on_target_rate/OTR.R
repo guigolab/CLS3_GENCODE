@@ -68,7 +68,7 @@ for(plot in ttype)
 			}
 	cbPalette=c("#7fc7a2", "#9bd5f4")
 	
-	plot_width <- ifelse(plot == "perTissue", 85, ifelse(plot == "collated", 42))
+	plot_width <- ifelse(plot == "perTissue", 85, ifelse(plot == "collated", 45))
         plot_height <- ifelse(plot == "perTissue", 45, ifelse(plot == "collated", 40))
 
 	if (val == "H") {species <- "Human"} else {species <- "Mouse"}
