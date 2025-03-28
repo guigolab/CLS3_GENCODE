@@ -1,8 +1,8 @@
 options(scipen = 999)
 library(ggplot2)
-library(qpdf) 
-
-pdf_list <- c()  
+library(gridExtra)
+library(grid)
+library(tiff)
 
 spec1 <- c("H","M")
 tec <- c("pacBio","ont")
@@ -13,7 +13,7 @@ for(plot in ttype)
 	{	for(T in tec)
 		{	print(val)
 			print(T)
-			data_all <- read.table(file="Enrichment_phase3",header = TRUE)
+			data_all <- read.table(file="stats/Enrichment_phase3",header = TRUE)
 			if(plot == "perTissue")
 			{	data <- subset(data_all, spec==paste("CapTrap_",val,sep="") & tech==T & EnrichCateg=="OTRonlyERCC")
 				print(data)
@@ -40,9 +40,10 @@ for(plot in ttype)
                                            )
                                 text_layer <- geom_text(
                                                 aes(x = category, y = max(OTRperc) + 12, label = paste("x", round(Enrichment, 1))),
-                                                fontface = "bold",
-                                                size = 3.5,
-                                                angle = 45
+                        			fontface = "bold",
+                                                size = 1.67,
+                                                angle = 45,
+                                                family = "Helvetica" 
                                                 )
 			}
 			if(plot == "collated")
@@ -57,19 +58,17 @@ for(plot in ttype)
                                            )
                                 text_layer <- geom_text(
                                                 aes(x = data$tissue, y = max(OTRperc) + 5, label = paste("x", round(Enrichment, 1))),
-                                                fontface = "bold",
-                                                size = 3.5,
-                                                angle = 45
+                    				fontface = "bold",
+                                                size = 1.67,
+                                                angle = 45,
+                                                family = "Helvetica"   
                                                 )
 #				colors_labels<-c("#331D2C")
 			}
 	cbPalette=c("#7fc7a2", "#9bd5f4")
-	
-	plot_width <- ifelse(plot == "perTissue", 7, ifelse(plot == "collated", 3))
-        plot_height <- ifelse(plot == "perTissue", 4, ifelse(plot == "collated", 3))
-        pdf_filename <- paste0("tmp.plot_", plot, "_", val, "_", T, "-ERCConly.pdf")
-        pdf_list <- c(pdf_list, pdf_filename)
-        pdf(file = pdf_filename, width = plot_width, height = plot_height)
+
+        plot_width <- ifelse(plot == "perTissue", 85, ifelse(plot == "collated", 42))
+        plot_height <- ifelse(plot == "perTissue", 45, ifelse(plot == "collated", 40))	
 
 	if (val == "H") {species <- "Human"} else {species <- "Mouse"}
         plot_title <- paste(species, T, "OTR", plot, "- ERCC only")
@@ -78,31 +77,37 @@ for(plot in ttype)
 	geom_bar(position="dodge", stat="identity",width=0.9)+  xlab(" ")+
 	scale_fill_manual(values=cbPalette)+
 	ylab ("% reads on target")+
-	coord_cartesian(ylim = c(0, max(data$OTRperc)+15))+
-	theme_bw(base_size=12,base_family="Helvetica")+theme(legend.title=element_blank(), axis.text.x=element_text(face="bold",angle = 90,vjust = 1, hjust=1))+
+	coord_cartesian(ylim = c(0, max(data$OTRperc)+20))+
+	theme_bw(base_size=5,base_family="Helvetica")+theme(legend.position = "none", axis.text.x=element_text(face="bold",family="Helvetica", size=5,angle = 45,vjust = 1, hjust=1))+	
 	manual_breaks+
         text_layer +
-        geom_text(aes(label=paste(round(OTRperc,1),"%",sep="")), position=position_dodge(width=0.9), vjust=-0.25, size=2.5, hjust=0.5)+
-        ggtitle(plot_title)
+        geom_text(aes(label=paste(round(OTRperc,1),"%",sep="")), position=position_dodge(width=0.9), vjust=-0.25, size=1.67, family = "Helvetica", hjust=0.5)
+        #ggtitle(plot_title)
 
-        print(p)
-
-#	outfile <- paste(val,"_",T,"_",plot,"_OTRonlyERCC.tiff",sep="")
-#	if(plot == "perTissue")
-#	{	
-#	ggsave(outfile, device = 'tiff', width = 7, height = 4)
-#	}
-#	if(plot == "collated")
-#	{	ggsave(outfile, device = 'tiff', width = 3, height = 3)
-#	}
-	dev.off()
+ 	outfile <- paste(val,"_",T,"_",plot,"_OTRonlyERCC.pdf",sep="")
+        ggsave(outfile, plot=p, width = plot_width, height = plot_height, units = "mm")
+        outfile <- paste(val,"_",T,"_",plot,"_OTRonlyERCC.tiff",sep="")
+        ggsave(outfile, plot=p, width = plot_width, height = plot_height, units = "mm", dpi = 1200)
 	}}
 }
 
-# Merge all PDFs into a single file
-if (length(pdf_list) > 1) {
-    pdf_combine(input = pdf_list, output = "OTR-ERCConly_plots.pdf")
-    cat("Merged PDF saved as: OTR-ERCConly_plots.pdf\n")
-} else {
-    cat("Only one PDF generated, no need to merge.\n")
+for(plot in ttype)
+{       img1 <- rasterGrob(as.raster(readTIFF(paste0("H_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img2 <- rasterGrob(as.raster(readTIFF(paste0("H_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img3 <- rasterGrob(as.raster(readTIFF(paste0("M_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img4 <- rasterGrob(as.raster(readTIFF(paste0("M_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+
+# Save as a PDF
+        if(plot == "perTissue")
+        {       final_width = 180
+                final_height = 80
+        }
+        if(plot == "collated")
+        {       final_width = 90
+                final_height = 80
+        }
+        outfile <- paste("OTR_",plot,"onlyERCC.pdf",sep="")
+        pdf(outfile, width=final_width, height=final_height)
+        grid.arrange(img1, img2, img3, img4, ncol = 2, nrow = 2)
+        dev.off()
 }

@@ -1,18 +1,13 @@
 # Plotting on-target rate (OTR) for the control ERCC spike-ins to check the efficacy of the capture/target panel
 
-## Calculate OTR per tissue/sample:
-```
-qsub onTargetRate.sh
-```
-
 ## merge across tissues for allTissues calculations
 ```
-qsub mergeAcrossTissues.sh
+bash mergeAcrossTissues.sh
 ```
 
-## calculate OTR across all tissues/samples per capture type
+## Calculate OTR per tissue/sample:
 ```
-qsub onTargetRateallTissues.sh
+bash onTargetRate.sh
 ```
 
 ## prepare input file to plot OTR
@@ -46,8 +41,8 @@ for tech in pacBio ont; do
                                 pre=`cat ${tech}*${spec}pre*_${tissue}*_OTR| $col`; post=`cat ${tech}*${spec}v*_${tissue}*_OTR| $col`;
                                 Enrichment=`echo "scale=1;$post/$pre" | bc| awk '{print $0}'`
 
-                                echo -e "$calc\t$tech\t$spec\t$tissue\tpre\t$pre\t$Enrichment"| awk -v categ=$category '{print $0"\t"$6*100"\t"categ}' >> Enrichment_phase3
-                                echo -e "$calc\t$tech\t$spec\t$tissue\tpost\t$post\t$Enrichment"| awk -v categ=$category '{print $0"\t"$6*100"\t"categ}' >> Enrichment_phase3
+                                echo -e "$calc\t$tech\t$spec\t$tissue\tpre\t$pre\t$Enrichment"| awk -v categ=$category '{print $0"\t"$6*100"\t"categ}' >> stats/Enrichment_phase3
+                                echo -e "$calc\t$tech\t$spec\t$tissue\tpost\t$post\t$Enrichment"| awk -v categ=$category '{print $0"\t"$6*100"\t"categ}' >> stats/Enrichment_phase3
                         done
                 done < <(ls ${tech}*${spec}*_OTR* | awk -F"_" '{print $4}' | awk -F"\." '{print $1}' |sort|uniq)
         done

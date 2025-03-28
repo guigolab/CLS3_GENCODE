@@ -1,30 +1,22 @@
 #!/usr/bin/bash
-#$ -N OTRcalc
-#$ -t 1-88
-#$ -tc 20
-#$ -q rg-el7,long-centos79
-#$ -cwd
-#$ -l virtual_free=32G,h_rt=2:00:00
-#$ -pe smp 4
-#$ -P prj006070
-#$ -V
-#$ -e errOTRcalc
-#$ -o outOTRcalc
 
-working=/users/rg/gkaur/LyRic_gencode_copy/output_SPLIT/mappings/longReadMapping
+set -e
+set -o pipefail
 
-echo -e "capDesign\tpre_post\ttissue\ttotalMappedReads\ttotalMappedReadsnoSIRV\ttotalMappedReadsnoERCC\ttotalMappedReadsnoSIRVnoERCC\ttotalonlyERCCReads\tonTargetNonERCCReads\tonTargetwithERCCReads\tonTargetonlyERCCReads\tOTRnonERCC\tOTRwithERCC\tOTRonlyERCC" > header_OTR
+working=data/bam/
 
-file=$(ls -1 $working/pacBio*bam $working/ont*bam| sed -n ${SGE_TASK_ID}p)
+echo -e "capDesign\tpre_post\ttissue\ttotalMappedReads\ttotalMappedReadsnoSIRV\ttotalMappedReadsnoERCC\ttotalMappedReadsnoSIRVnoERCC\ttotalonlyERCCReads\tonTargetNonERCCReads\tonTargetwithERCCReads\tonTargetonlyERCCReads\tOTRnonERCC\tOTRwithERCC\tOTRonlyERCC" > stats/header_OTR
 
-dataset=`basename $file`
-echo $dataset
+for file in $working/pacBio*bam $working/ont*bam;
+do
+  dataset=`basename $file`
+  echo $dataset
 
-if [[ $dataset == *"Mv2"* || $dataset == *"Mpre"* ]]; then
-        targetsFile="/users/rg/gkaur/targetFiles/mm.allNonPcgTargetsMerged.targets.gtf"
-else
-        targetsFile="/users/rg/gkaur/targetFiles/hs.allNonPcgTargetsMerged.targets.gtf"
-fi
+  if [[ $dataset == *"Mv2"* || $dataset == *"Mpre"* ]]; then
+  	targetsFile="/users/rg/gkaur/targetFiles/mm.allNonPcgTargetsMerged.targets.gtf"
+  else
+  	targetsFile="/users/rg/gkaur/targetFiles/hs.allNonPcgTargetsMerged.targets.gtf"
+  fi
 
 nonT_ERCC='/users/project/gencode_006070/gkaur/ERCCfiles'
 capDesign=`echo $dataset | awk -F "_" '{print $1}'`
@@ -59,4 +51,5 @@ onTargetonlyERCCReads=`cat \`basename $file .bam\`.vs.\`basename $targetsFile .g
 	#let offTargetnonERCCReads=$totalMappedReads-$onTargetNonERCCReads
 	#let onTargetwithERCC=$onTargetERCCReads+$onTargetNonERCCReads
 
-echo -e "$capDesign\t$pre_post\t$tissue\t$totalMappedReads\t$totalMappedReadsnoSIRV\t$totalMappedReadsnoERCC\t$totalMappedReadsnoSIRVnoERCC\t$totalonlyERCCReads\t$onTargetNonERCCReads\t$onTargetwithERCCReads\t$onTargetonlyERCCReads"|awk '{print $0"\t"$9/$7"\t"$10/$5"\t"$11/$8}' > ${dataset}_OTR
+echo -e "$capDesign\t$pre_post\t$tissue\t$totalMappedReads\t$totalMappedReadsnoSIRV\t$totalMappedReadsnoERCC\t$totalMappedReadsnoSIRVnoERCC\t$totalonlyERCCReads\t$onTargetNonERCCReads\t$onTargetwithERCCReads\t$onTargetonlyERCCReads"|awk '{print $0"\t"$9/$7"\t"$10/$5"\t"$11/$8}' > stats/${dataset}_OTR
+done
