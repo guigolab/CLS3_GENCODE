@@ -78,24 +78,24 @@ for(plot in ttype)
 	scale_fill_manual(values=cbPalette)+
 	ylab ("% reads on target")+
 	coord_cartesian(ylim = c(0, max(data$OTRperc)+20))+
-	theme_bw(base_size=5,base_family="Helvetica")+theme(legend.position = "none", axis.text.x=element_text(face="bold",family="Helvetica", size=5,angle = 45,vjust = 1, hjust=1))+	
+	theme_bw(base_size=5,base_family="Helvetica")+theme(legend.position = "none", axis.text.x=element_text(face="bold",family="Helvetica", size=7,angle = 45,vjust = 1, hjust=1))+	
 	manual_breaks+
         text_layer +
         geom_text(aes(label=paste(round(OTRperc,1),"%",sep="")), position=position_dodge(width=0.9), vjust=-0.25, size=1.67, family = "Helvetica", hjust=0.5)
         #ggtitle(plot_title)
 
- 	outfile <- paste(val,"_",T,"_",plot,"_OTRonlyERCC.pdf",sep="")
+ 	outfile <- paste("tmp.",val,"_",T,"_",plot,"_OTRonlyERCC.pdf",sep="")
         ggsave(outfile, plot=p, width = plot_width, height = plot_height, units = "mm")
-        outfile <- paste(val,"_",T,"_",plot,"_OTRonlyERCC.tiff",sep="")
+        outfile <- paste("tmp.",val,"_",T,"_",plot,"_OTRonlyERCC.tiff",sep="")
         ggsave(outfile, plot=p, width = plot_width, height = plot_height, units = "mm", dpi = 1200)
 	}}
 }
 
 for(plot in ttype)
-{       img1 <- rasterGrob(as.raster(readTIFF(paste0("H_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
-        img2 <- rasterGrob(as.raster(readTIFF(paste0("H_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
-        img3 <- rasterGrob(as.raster(readTIFF(paste0("M_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
-        img4 <- rasterGrob(as.raster(readTIFF(paste0("M_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+{       img1 <- rasterGrob(as.raster(readTIFF(paste0("tmp.H_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img2 <- rasterGrob(as.raster(readTIFF(paste0("tmp.H_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img3 <- rasterGrob(as.raster(readTIFF(paste0("tmp.M_pacBio_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
+        img4 <- rasterGrob(as.raster(readTIFF(paste0("tmp.M_ont_",plot,"_OTRonlyERCC.tiff"))), interpolate = TRUE)
 
 # Save as a PDF
         if(plot == "perTissue")
