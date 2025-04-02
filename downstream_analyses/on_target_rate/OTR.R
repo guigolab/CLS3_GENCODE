@@ -39,7 +39,7 @@ for(plot in ttype)
                                            data,aes(y=OTRperc,x=category,fill=cap)
                                            )
                                 text_layer <- geom_text(
-                                                aes(x = category, y = max(OTRperc) + 10, label = paste("x", round(Enrichment, 1))),
+                                                aes(x = category, y = max(OTRperc) + 10, label = sprintf("%sx", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
                                                 fontface = "bold",
                                                 size = 1.67,
                                                 angle = 45,
@@ -58,14 +58,14 @@ for(plot in ttype)
 				myplot <- ggplot(
                                            data,aes(y=OTRperc,x=tissue,fill=cap)
                                            )
-				text_layer <- geom_text(
-                                                aes(x = data$tissue, y = max(OTRperc) + 5, label = paste("x", round(Enrichment, 1))),
+				text_layer <- geom_text( 
+						aes(x = data$tissue, y = max(OTRperc) + 5, label = sprintf("%sx", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
                                                 fontface = "bold",
                                                 size = 1.67,
                                                 angle = 45,
 						family = "Helvetica"
                                                 )
-			}
+			}	
 	cbPalette=c("#7fc7a2", "#9bd5f4")
 	
 	plot_width <- ifelse(plot == "perTissue", 85, ifelse(plot == "collated", 45))
@@ -82,7 +82,8 @@ for(plot in ttype)
 	theme_bw(base_size=5,base_family="Helvetica")+theme(legend.position = "none", axis.text.x=element_text(face="bold",family="Helvetica", size=7,angle = 45,vjust = 1, hjust=1))+
 	manual_breaks+
 	text_layer +
-        geom_text(aes(label=paste(round(OTRperc,1),"%",sep="")), position=position_dodge(width=0.9), vjust=-0.25, size=1.67, family = "Helvetica", hjust=0.5)
+	geom_text(aes(label = sprintf("%s%%", ifelse(OTRperc < 10, sprintf("%.1f", round(OTRperc, 1)), round(OTRperc)))),position=position_dodge(width=0.9), vjust=-0.25, size=1.67, family = "Helvetica", hjust=0.5)
+
 	#ggtitle(plot_title)
 
 	outfile <- paste("tmp.",val,"_",T,"_",plot,"_OTR.pdf",sep="")
