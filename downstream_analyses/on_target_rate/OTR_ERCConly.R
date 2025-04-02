@@ -39,7 +39,7 @@ for(plot in ttype)
                                            data,aes(y=OTRperc,x=category,fill=cap)
                                            )
                                 text_layer <- geom_text(
-                                                aes(x = category, y = max(OTRperc) + 12, label = sprintf("%sx", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
+                                                aes(x = category, y = max(OTRperc) + 12, label = sprintf("x %s", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
                         			fontface = "bold",
                                                 size = 1.67,
                                                 angle = 45,
@@ -57,7 +57,7 @@ for(plot in ttype)
                                            data,aes(y=OTRperc,x=tissue,fill=cap)
                                            )
                                 text_layer <- geom_text(
-                                                aes(x = data$tissue, y = max(OTRperc) + 5, label = sprintf("%sx", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
+                                                aes(x = data$tissue, y = max(OTRperc) + 5, label = sprintf("x %s", ifelse(Enrichment < 10, sprintf("%.1f", round(Enrichment, 1)), round(Enrichment)))),
                     				fontface = "bold",
                                                 size = 1.67,
                                                 angle = 45,
