@@ -63,3 +63,14 @@ for (type in t)
 		ggsave(outfile, width = 170, height = 65, units = "mm", dpi = 1200)	
 }
 #}
+
+        img1 <- rasterGrob(as.raster(readTIFF("plots/targs_biotypes_p.tiff")), interpolate = TRUE)
+
+        final_width = 170
+        final_height = 65
+
+        outfile <- paste("plots/targs_biotypes_p.pdf",sep="")
+        pdf(outfile, width=final_width, height=final_height)
+        grid.arrange(img1)#, img2, img3, img4, img5, img6, img7, img8, ncol = 4, nrow = 2)
+        dev.off()
+
