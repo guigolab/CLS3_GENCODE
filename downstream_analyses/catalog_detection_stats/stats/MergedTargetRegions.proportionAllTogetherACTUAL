@@ -1,0 +1,9 @@
+spec	class	regions	allTargs	prop
+Hv3	pre-capture	706	176435	0.400147
+Hv3	common	19971	176435	11.3192
+Hv3	post-capture	45001	176435	25.5057
+Hv3	allDetected	65678	176435	37.225
+Mv2	pre-capture	502	148965	0.336992
+Mv2	common	22473	148965	15.0861
+Mv2	post-capture	30759	148965	20.6485
+Mv2	allDetected	53734	148965	36.0716
