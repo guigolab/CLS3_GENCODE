@@ -16,7 +16,7 @@ library(tiff)
 s<-c("Hv3","Mv2")
 for(spec in s)
 {	#data <- read.table(file="stats/filterThreshold_vs_supportedTMs.txt",header = TRUE)
-	infile<-paste(spec,"_filterThreshold_vs_supportedTMs_3classes.txt",sep="")
+	infile<-paste("stats/",spec,"_filterThreshold_vs_supportedTMs_3classes.txt",sep="")
 	data_all <- read.table(infile,header = TRUE)
 	data <- subset(data_all,tech=="all_ICs"|tech=="intergenic_ICs"|tech=="novel_ICs")
 	data$tech=factor(data$tech, levels=c("all_ICs","intergenic_ICs","novel_ICs"))
@@ -40,7 +40,7 @@ for(spec in s)
 	ylab ("% transcripts supported") +
 	xlab ("# recount reads support")+
 	theme_bw(base_size=5,base_family="Helvetica")+
-        theme(legend.position = "bottom", legend.title=element_blank(), legend.text = element_text(size = 5, family = "Helvetica"), legend.key.size = unit(0.3, "cm"), axis.text.x=element_text(face="bold",family="Helvetica", size=5,angle = 90, vjust = 1, hjust=1))
+        theme(legend.position = "bottom", legend.title=element_blank(), legend.text = element_text(size = 5, family = "Helvetica"), legend.key.size = unit(0.3, "cm"), axis.text.x=element_text(face="bold",family="Helvetica", size=5,angle = 180, vjust = 1, hjust=1))
 
 #ggsave('recountSupportFILTERS.bar.tiff', device = 'tiff', width = 6, height = 4) 
 	outfile<-paste("plots/",spec,"_recountSupportFILTERS_3classesCurve_noTech",".tiff",sep="")
