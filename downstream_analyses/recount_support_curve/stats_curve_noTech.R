@@ -40,7 +40,7 @@ for(spec in s)
 	ylab ("% transcripts supported") +
 	xlab ("# recount reads support")+
 	theme_bw(base_size=5,base_family="Helvetica")+
-        theme(legend.position = "bottom", legend.title=element_blank(), legend.text = element_text(size = 5, family = "Helvetica"), legend.key.size = unit(0.3, "cm"), axis.text.x=element_text(face="bold",family="Helvetica", size=5, vjust = 1, hjust=1))
+        theme(legend.position = "bottom", legend.title=element_blank(), legend.text = element_text(size = 5, family = "Helvetica"), legend.key.size = unit(0.3, "cm"), axis.text.x=element_text(face="bold",family="Helvetica", size=5, angle=0, vjust = 1, hjust=1))
 
 #ggsave('recountSupportFILTERS.bar.tiff', device = 'tiff', width = 6, height = 4) 
 	outfile<-paste("plots/",spec,"_recountSupportFILTERS_3classesCurve_noTech",".tiff",sep="")
