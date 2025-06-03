@@ -1,0 +1,7 @@
+spec	categ	count	dataset	proCapfilter	total	perc
+Hv3	5_support	8734	cage	MTE5	80284	10.8789
+Hv3	no_support	71550	cage	MTE5	80284	89.1211
+Hv3	5_support	20303	proCap	MTE5	80284	25.289
+Hv3	no_support	59981	proCap	MTE5	80284	74.711
+Hv3	5_support	29037	CageProCap	MTE5	80284	36.1679
+Hv3	no_support	51247	CageProCap	MTE5	80284	63.8321
