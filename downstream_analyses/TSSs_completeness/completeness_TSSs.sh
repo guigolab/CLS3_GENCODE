@@ -6,7 +6,7 @@ set -o pipefail
 rm -rf data/ plots/ stats/
 
 #----download required files
-mkdir -p data/masterTable/ data/proCapScores/ data/recount/ stats/ stats/filtered_ICs/ stats/filtered_ICtables/ plots/ data/endSupport/ data/genomes/ data/cage/
+mkdir -p data/masterTable/ data/proCapScores/ data/recount/ stats/ plots/ data/endSupport/ data/genomes/ data/cage/
 
 echo -e "#### created needed directories ####"
 
