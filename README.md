@@ -1,8 +1,7 @@
 # GENCODE CLS Project
 ## GENCODE: massively expanding the lncRNA catalog through capture long-read RNA sequencing
-Gazaldeep Kaur<sup>1,\*</sup>, Tamara Perteghella<sup>1,2,\*</sup>, Sílvia Carbonell-Sala<sup>1,\*</sup>, Jose Gonzalez-Martinez<sup>3,\*</sup>,Toby Hunt<sup>3,\*</sup>, Tomasz Mądry<sup>4</sup>, Irwin Jungreis<sup>5,6</sup>, Carme Arnan<sup>1</sup>, Julien Lagarde<sup>1,7</sup>, Beatrice Borsari<sup>8,9</sup>, Cristina Sisu<sup>10</sup>, Yunzhe Jiang<sup>8,9</sup>, Ruth Bennett<sup>3</sup>, Andrew Berry<sup>3</sup>, Daniel Cerdán-Vélez<sup>11</sup>, Kelly Cochran<sup>12</sup>, Covadonga Vara<sup>13</sup>, Claire Davidson<sup>3</sup>, Sarah Donaldson<sup>3</sup>, Cagatay Dursun<sup>8,9</sup>, Silvia González-López<sup>1,2</sup>, Sasti Gopal Das<sup>4</sup>, Matthew Hardy<sup>3</sup>, Zoe Hollis<sup>3</sup>, Mike Kay<sup>3</sup>, José Carlos Montañés<sup>13</sup>, Pengyu Ni<sup>8,9</sup>, Ramil N. Nurtdinov<sup>1</sup>, Emilio Palumbo<sup>1</sup>, Carlos Pulido-Quetglas<sup>14,15</sup>, Marie-Marthe Suner<sup>3</sup>, Xuezhu Yu<sup>8,9</sup>, Dingyao Zhang<sup>8,9</sup>, Jane E. Loveland<sup>3</sup>, M. Mar Albà<sup>13,16</sup>, Mark Diekhans<sup>17</sup>, Andrea Tanzer<sup>18,19</sup>, Jonathan M. Mudge<sup>3</sup>, Paul Flicek<sup>3</sup>, Fergal J Martin<sup>3</sup>, Mark Gerstein<sup>8,9</sup>, Manolis Kellis<sup>5,6</sup>, Anshul Kundaje<sup>12</sup>, Benedict Paten<sup>17</sup>, Michael L. Tress<sup>11</sup>, Rory Johnson<sup>14,15</sup>, Barbara Uszczynska-Ratajczak<sup>4</sup>, Adam Frankish<sup>3</sup>, Roderic Guigó<sup>1,2</sup>
-
-
+Tamara Perteghella<sup>1,2,*\*</sup>, Gazaldeep Kaur<sup>1,*\*</sup>,  Sílvia Carbonell-Sala<sup>1,*\*</sup>, Jose Gonzalez-Martinez<sup>3,*\*</sup>, Toby Hunt<sup>3,*\*</sup>, Tomasz Mądry<sup>4\*</sup>, Irwin Jungreis<sup>5,6\*</sup>, Fabien Degalez<sup>1\*</sup>, Carme Arnan<sup>1\*</sup>, Ramil Nurtdinov<sup>1\*</sup>, Julien Lagarde<sup>1,7\*</sup>, Beatrice Borsari<sup>8,9\*</sup>, Cristina Sisu<sup>10\*</sup>, Yunzhe Jiang<sup>8,9\*</sup>, Ruth Bennett<sup>3\*</sup>, Andrew Berry<sup>3\*</sup>, Marta Blangiewicz<sup>4\*</sup>, Daniel Cerdán-Vélez<sup>11\*</sup>, Kelly Cochran<sup>12\*</sup>, Covadonga Vara<sup>13\*</sup>, Claire Davidson<sup>3\*</sup>, Sarah Donaldson<sup>3\*</sup>, Cagatay Dursun<sup>8,9\*</sup>, Silvia González-López<sup>1,2\*</sup>, Sasti Gopal Das<sup>4\*</sup>, Kathryn Lawrence<sup>14\*</sup>, Daniel Nachun<sup>14\*</sup>, Matthew Hardy<sup>3\*</sup>, Zoe Hollis<sup>3\*</sup>, Mike Kay<sup>3\*</sup>, José Carlos Montañés<sup>13\*</sup>, Pengyu Ni<sup>8,9\*</sup>, Emilio Palumbo<sup>1\*</sup>, Carlos Pulido-Quetglas<sup>15,16\*</sup>, Marie-Marthe Suner<sup>3\*</sup>, Xuezhu Yu<sup>8,9\*</sup>, Dingyao Zhang<sup>8,9\*</sup>, Francois Aguet<sup>6\*</sup>, Kristin Ardlie<sup>6\*</sup>, Stephen B. Montgomery<sup>14,17,18\*</sup>, Jane E. Loveland<sup>3\*</sup>, M. Mar Albà<sup>13,19\*</sup>, Mark Diekhans<sup>20\*</sup>, Andrea Tanzer<sup>21\*</sup>, Jonathan M. Mudge<sup>3\*</sup>, Paul Flicek<sup>3\*</sup>, Fergal J Martin<sup>3\*</sup>, Mark Gerstein<sup>8,9\*</sup>, Manolis Kellis<sup>5,6\*</sup>, Anshul Kundaje<sup>12,14\*</sup>, Benedict Paten<sup>20\*</sup>, Michael L. Tress<sup>11\*</sup>, Rory Johnson<sup>15,16\*</sup>, Barbara Uszczynska-Ratajczak<sup>4\*</sup>, Adam Frankish<sup>3\*</sup>, Roderic Guigó<sup>1,2\*</sup>
+ 
     1. Centre for Genomic Regulation (CRG), The Barcelona Institute of Science and Technology, Dr. Aiguader 88, Barcelona 08003, Catalonia, Spain.
     2. Departament de Ciències Experimentals i de la Salut, Universitat Pompeu Fabra (UPF).
     3. European Molecular Biology Laboratory, European Bioinformatics Institute, Wellcome Genome Campus, Hinxton, Cambridge CB10 1SD, UK.
@@ -16,12 +15,14 @@ Gazaldeep Kaur<sup>1,\*</sup>, Tamara Perteghella<sup>1,2,\*</sup>, Sílvia Carb
     11. Bioinformatics Unit, Spanish National Cancer Research Centre (CNIO), Calle Melchor Fernandez Almagro, 3, 28029 Madrid, Spain.
     12. Department of Computer Science, Stanford University, Stanford, CA, USA.
     13. Hospital del Mar Research Institute, Dr. Aiguader 88, Barcelona 08003, Spain.
-    14. Department of Medical Oncology, Bern University Hospital, Murtenstrasse 35, 3008 Bern, Switzerland.
-    15. School of Biology and Environmental Science, University College Dublin, University College Dublin, Belfield, Dublin 4, D04 V1W8, Ireland.
-    16. Catalan Institute for Research and Advanced Studies (ICREA), Barcelona, Spain.
-    17. UC Santa Cruz Genomics Institute, 2300 Delaware Avenue, University of California, Santa Cruz, CA 95060, USA.
-    18. University of Vienna, Research Network Data Science, Kolingasse 14-16, 1090 Vienna, Austria.
-    19. University of Vienna, Faculty of Computer Science, Research Group Visualization and Data Analysis, Waehringerstrasse 29, 1090 Vienna, Austria.
+    14. Department of Genetics, Stanford University School of Medicine, Stanford, CA, USA.
+    15. Department of Medical Oncology, Bern University Hospital, Murtenstrasse 35, 3008 Bern, Switzerland.
+    16. School of Biology and Environmental Science, University College Dublin, University College Dublin, Belfield, Dublin 4, D04 V1W8, Ireland.
+    17. Department of Pathology, Stanford University School of Medicine, Stanford, CA, USA
+    18. Department of Biomedical Data Science, Stanford University School of Medicine, Stanford, CA, USA
+    19. Catalan Institute for Research and Advanced Studies (ICREA), Barcelona, Spain.
+    20. UC Santa Cruz Genomics Institute, 2300 Delaware Avenue, University of California, Santa Cruz, CA 95060, USA.
+    21. University of Vienna, Department of Biochemistry and Cell Biology, Vienna, Austria
     
     * Equal contribution
     Correspondence should be addressed to R.G. (roderic.guigo@crg.cat)
