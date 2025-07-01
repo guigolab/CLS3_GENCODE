@@ -23,9 +23,9 @@ for spec in Hv3 Mv2; do #download CLS transcript (IC) files
 
 #----calculations
 echo -e "spec\ttech\ttissue\tcapture\tstats\tcateg2" > stats/$spec\_refined_overall_ALL_anchIC_stats
-echo -e "spec\ttech\ttissue\tcapture\tstats\tcateg2" > stats/$spec\_refined_overall_NI_anchIC_stats
+echo -e "spec\ttech\ttissue\tcapture\tstats\tcateg2" > stats/$spec\_refined_overall_N_anchIC_stats
 echo -e "spec\tcateg\tcapture\tstats" > stats/$spec\_refined_overall_ALL_anchIC_capstats
-echo -e "spec\tcateg\tcapture\tstats" > stats/$spec\_refined_overall_NI_anchIC_capstats
+echo -e "spec\tcateg\tcapture\tstats" > stats/$spec\_refined_overall_N_anchIC_capstats
 
 cTs=$currnoHiss/IntronChainMT/${spec}_splicedmasterTable_refined.gtf
 cTu=$currnoHiss/IntronChainMT/${spec}_unsplicedmasterTable_refined.gtf
@@ -70,26 +70,35 @@ do
 		echo -e "$spec\tpacBio+ONT\t$stage$tissue\tpre-capture\t$ACTUALstat_pre\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tcommon\t$stat_common\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tpost-capture\t$ACTUALstat_post\t$categ2" >> stats/${spec}_refined_overall_ALL_anchIC_stats
 echo "Overall $tissue done"
 ##NI --> Novel Intergenic
-		stat_NI_post=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}'| grep -c $c0\.$cap$c2`
-                stat_NI_pre=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}' | grep -c $c0\.$other$c2`
-                stat_NI_common=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}' | grep $c0\.$cap$c2 | grep -c $c0\.$other$c2`
-		ACTUALstat_NI_post=$(($stat_NI_post-$stat_NI_common))
-		ACTUALstat_NI_pre=$(($stat_NI_pre-$stat_NI_common))
-		echo -e "$spec\tpacBio+ONT\t$stage$tissue\tpre-capture\t$ACTUALstat_NI_pre\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tcommon\t$stat_NI_common\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tpost-capture\t$ACTUALstat_NI_post\t$categ2" >> stats/$spec\_refined_overall_NI_anchIC_stats
-echo "NI $tissue done"
-#NISfl: novel Intergenic spliced FL
+#		stat_NI_post=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}'| grep -c $c0\.$cap$c2`
+#                stat_NI_pre=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}' | grep -c $c0\.$other$c2`
+#                stat_NI_common=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/) print $0}' | grep $c0\.$cap$c2 | grep -c $c0\.$other$c2`
+#		ACTUALstat_NI_post=$(($stat_NI_post-$stat_NI_common))
+#		ACTUALstat_NI_pre=$(($stat_NI_pre-$stat_NI_common))
+#		echo -e "$spec\tpacBio+ONT\t$stage$tissue\tpre-capture\t$ACTUALstat_NI_pre\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tcommon\t$stat_NI_common\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tpost-capture\t$ACTUALstat_NI_post\t$categ2" >> stats/$spec\_refined_overall_NI_anchIC_stats
+#echo "NI $tissue done"
+##N --> Novel ###
+               stat_N_post=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/ || $20 ~ /Intronic/ || $20 ~ /Extends/ || $20 ~ /Antisense/ || $20 ~ /revIntronic/ || $20 ~ /runOn/) print $0}' | grep -c $c0\.$cap$c2`
+                stat_N_pre=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/ || $20 ~ /Intronic/ || $20 ~ /Extends/ || $20 ~ /Antisense/ || $20 ~ /revIntronic/ || $20 ~ /runOn/) print $0}' | grep -c $c0\.$other$c2`
+                stat_N_common=`cat ${cTs} ${cTu} | awk '{if($3 == "transcript")print $0}' | awk '{if ($20 ~ /Intergenic/ || $20 ~ /Intronic/ || $20 ~ /Extends/ || $20 ~ /Antisense/ || $20 ~ /revIntronic/ || $20 ~ /runOn/) print $0}' | grep $c0\.$cap$c2 | grep -c $c0\.$other$c2`
+               ACTUALstat_N_post=$(($stat_N_post-$stat_N_common))
+               ACTUALstat_N_pre=$(($stat_N_pre-$stat_N_common))
+               echo -e "$spec\tpacBio+ONT\t$stage$tissue\tpre-capture\t$ACTUALstat_N_pre\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tcommon\t$stat_N_common\t$categ2\n$spec\tpacBio+ONT\t$stage$tissue\tpost-capture\t$ACTUALstat_N_post\t$categ2" >> stats/$spec\_refined_overall_N_anchIC_stats
+echo "N $tissue done"
+
+
 	fi
 done < $currnoHiss/${spec}_sampleCoding
 
 
-for div in ALL NI;
+for div in ALL N;
 do	if [[ $div == "ALL" ]]; then
         	novelty() {
                 grep SID
                 }
-        elif [[ $div == "NI" ]]; then
+        elif [[ $div == "N" ]]; then
                 novelty() {
-                awk '{if ($20 ~ /Intergenic/) print $0}'
+                awk '{if ($20 ~ /Intergenic/ || $20 ~ /Intronic/ || $20 ~ /Extends/ || $20 ~ /Antisense/ || $20 ~ /revIntronic/ || $20 ~ /runOn/) print $0}'
                 }
         fi
 	for cap in preCap common postCap;

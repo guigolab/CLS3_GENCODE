@@ -1,5 +1,6 @@
 options(scipen = 999)
 
+options(repos = c(CRAN = "https://cloud.r-project.org"))
 packages <- c("ggplot2", "gridExtra", "grid", "tiff")
 installed <- rownames(installed.packages())
 for (pkg in packages) {
@@ -14,7 +15,7 @@ library(tiff)
 
 s <- c("Hv3","Mv2")
 tec <- c("overall","pacBioSII","ont")
-nov <- c("ALL","NI")
+nov <- c("ALL","N")
 
 for(spec in s)
 { for(novelty in nov)
@@ -37,8 +38,8 @@ for(spec in s)
                                         panel.border = element_blank(),     # remove plot border
                                         axis.title = element_blank()        # remove axis titles
                 )
-        outfile<-paste("plots/",spec,"_",novelty,"_anchIC.vennbar.tiff",sep="")
-        ggsave(outfile, width = 20, height = 45, units = "mm", dpi = 1200)
+        outfile<-paste("plots/",spec,"_",novelty,"_anchIC.vennbar.pdf",sep="")
+        ggsave(outfile, width = 20, height = 45, units = "mm")
   }
 }
 
@@ -81,27 +82,27 @@ for(spec in s)
 	theme_bw(base_size=5,base_family="Helvetica")+theme(legend.position = "none", axis.text.x = element_text(face="bold",family="Helvetica", size=6,angle=45, vjust=1, hjust=1))+
 	manual_breaks
 	#guides(fill = "none")
-	outfile<-paste("plots/",spec,"_perTissue_",tech,"_",novelty,"_anchIC.vennbar.tiff",sep="")
-	ggsave(outfile, width =50, height = 45, units = "mm", dpi = 1200)
+	outfile<-paste("plots/",spec,"_perTissue_",tech,"_",novelty,"_anchIC.vennbar.pdf",sep="")
+	ggsave(outfile, width =50, height = 45, units = "mm")
 }	
 }
 }
 # Save as a PDF
-for(novelty in nov)
-{	img1 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
-	img2 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_overall_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
-        img3 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_pacBioSII_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE) 
-	img4 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_ont_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE) 
-	img5 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
-        img6 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_overall_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
-	img7 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_pacBioSII_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
-	img8 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_ont_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#for(novelty in nov)
+#{	img1 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#	img2 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_overall_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#        img3 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_pacBioSII_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE) 
+#	img4 <- rasterGrob(as.raster(readTIFF(paste0("plots/Hv3_perTissue_ont_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE) 
+#	img5 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#        img6 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_overall_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#	img7 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_pacBioSII_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE#)
+#	img8 <- rasterGrob(as.raster(readTIFF(paste0("plots/Mv2_perTissue_ont_",novelty,"_anchIC.vennbar.tiff"))), interpolate = TRUE)
+#
+#	final_width = 180
+#        final_height = 90
 
-	final_width = 180
-        final_height = 90
-
-        outfile <- paste("plots/",novelty,"_anchIC.pdf",sep="")
-        pdf(outfile, width=final_width, height=final_height)
-        grid.arrange(img1, img2, img3, img4, img5, img6, img7, img8, ncol = 4, nrow = 2)
-        dev.off()
-}
+#        outfile <- paste("plots/",novelty,"_anchIC.pdf",sep="")
+#        pdf(outfile, width=final_width, height=final_height)
+#        grid.arrange(img1, img2, img3, img4, img5, img6, img7, img8, ncol = 4, nrow = 2)
+#        dev.off()
+#}
