@@ -1,0 +1,224 @@
+░██████████░██                                              ░██████             
+░██                                                        ░██   ░██            
+░██        ░██ ░████████ ░██    ░██ ░██░████  ░███████           ░██  ░██████   
+░█████████ ░██░██    ░██ ░██    ░██ ░███     ░██    ░██      ░█████        ░██  
+░██        ░██░██    ░██ ░██    ░██ ░██      ░█████████     ░██       ░███████  
+░██        ░██░██   ░███ ░██   ░███ ░██      ░██           ░██       ░██   ░██  
+░██        ░██ ░█████░██  ░█████░██ ░██       ░███████     ░████████  ░█████░██ 
+                     ░██                                                        
+               ░███████                                                         
+                                                                                
+# Prepare environment
+```{bash echo=FALSE, engine.opts='-l'}
+# Remove old results
+rm -r .temp_2a/
+
+# Create directory tree
+mkdir .temp_2a/
+
+# Move to working dir
+cd .temp_2a/
+
+# Process lncRNA catalogues <- exclude chrM, keep unspliced
+zcat ../../Data/H_catalogs/NONCODE.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > NONCODE.hg38.gtf
+zcat ../../Data/H_catalogs/refSeq.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > refSeq.hg38.gtf
+zcat ../../Data/H_catalogs/miTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > miTranscriptome.hg38.gtf
+zcat ../../Data/H_catalogs/gencode20+.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > gencode20+.hg38.gtf
+zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > bigTranscriptome.hg38.gtf
+zcat ../../Data/H_catalogs/fantomCat.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > fantomCat.hg38.gtf
+# Add chess and lncBook (convert to bed12 and then gtf to remove unnecessary data)
+zcat ../../Data/H_catalogs/chess3_1_2_GRCh38_lncRNA.gtf.gz | ../../Utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | ../../Utils/bed12togff - > chess3_1_2.hg38.gtf
+zcat ../../Data/H_catalogs/lncRNA_LncBookv2_0_GRCh38.gtf.gz | ../../Utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | ../../Utils/bed12togff - > lncBookv2_0.hg38.gtf
+# Add gencode 27 and 47 
+zcat ../../Data/H_catalogs/gen47.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen47.hg38.gtf
+zcat ../../Data/H_catalogs/gen27.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen27.hg38.gtf
+
+# Include concatenated catalogs
+## Concatenate human catalogs into 1 file (ENST00000610119.1 has inconsistent strand); remove chrM
+cat NONCODE.hg38.gtf refSeq.hg38.gtf miTranscriptome.hg38.gtf gencode20+.hg38.gtf bigTranscriptome.hg38.gtf fantomCat.hg38.gtf | ../../Utils/gff2bed_full.pl - | sort | uniq | grep -vFw "ENST00000610119.1" | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | ../../Utils/bed12togff - | ../../Utils/sortgff - | ../../Utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' > H_concat_catalogs.hg38.gtf
+
+# Prepare config file
+## Ends
+echo "5" >> ends.config
+echo "3" >> ends.config
+
+# Prepare Config files
+for catalogue in `ls *.hg38.gtf`; do echo $catalogue >> figure_2a.config; done
+```
+
+# Generate data
+```{bash echo=FALSE, engine.opts='-l'}
+
+# Remove files from previous run
+rm figure_2a.input.tsv
+
+# Move to working dir
+cd .temp_2a/
+
+# Handle errors
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+# Create LOG file
+LOG_LOCATION=./LOGFILE.log
+exec > >(tee -i $LOG_LOCATION)
+exec 2>&1
+
+echo "Log saved to: [ $LOG_LOCATION ]"
+
+# Run buildLoci for all except Gencode 27 and Gencode 47
+echo "Running buildLoci"
+while read file || [ -n "$file" ]
+  do
+      name=`echo $file | awk -F'.' '{print $1}'`
+      echo "Name: $name"
+      if [[ "$name" == "gen27" ]] || [[ "$name" == "gen47" ]]; then
+         ../../Utils/gff2gff.pl $name.hg38.gtf > $name.hg38.gene.gtf
+         ../../Utils/extract_locus_coords.pl $name.hg38.gene.gtf > $name.hg38.gene.bed
+      
+      else
+         bedtools intersect -s -wao -a $file -b $file | ../../Utils/buildLoci.pl - > $name.gene.tmp.gtf
+         ../../Utils/gff2gff.pl $name.gene.tmp.gtf > $name.hg38.gene.gtf
+         ../../Utils/extract_locus_coords.pl $name.hg38.gene.gtf > $name.hg38.gene.bed
+      fi
+  done < ./figure_2a.config
+
+# Run intersecting
+echo "Running intersecting"
+while read file_a || [ -n "$file_a" ]
+  do
+      name_a=`echo $file_a | awk -F'.' '{print $1}'`
+      echo "Name_a: $name_a"
+        
+      while read file_b || [ -n "$file_b" ]
+        do
+          name_b=`echo $file_b | awk -F'.' '{print $1}'`
+          echo "Name_b: $name_b"
+          
+          bedtools intersect -s -wa -wb -f 1.00 -F 1.00 -e -a $name_a.hg38.gene.bed -b $name_b.hg38.gene.bed > $name_a.intersecting.$name_b.bed
+          
+          size=`cat $name_a.hg38.gene.bed | sort | uniq | wc -l`
+          intersecting=`cat $name_a.intersecting.$name_b.bed | awk '{print $4}' | sort | uniq | wc -l`
+          percentage=`echo "scale=2 ; $intersecting / $size" | bc`
+          echo -e "$name_a\t$name_b\t$size\t$intersecting\t$percentage" >> ../figure_2a.input.tsv
+          
+        done < ./figure_2a.config
+  done < ./figure_2a.config
+```
+
+# Load R libraries
+```{r}
+library(ggplot2)
+library(scales)
+library(dplyr)
+```
+
+# Plot
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data
+df <- read.table("figure_2a.input.tsv", header=F, sep="\t") %>%
+  rename(name_a="V1",
+         name_b="V2",
+         size="V3",
+         intersecting="V4",
+         percentage="V5") %>% 
+  # Add column for boxplot facet
+  mutate(category_a=ifelse((name_a=="lncBookv2_0" | name_a=="chess3_1_2"), "Non-targeted lncRNA annotations", NA)) %>% 
+  mutate(category_a=ifelse((name_a=="gen27" | name_a=="gen47"), "GENCODE", category_a)) %>%
+  mutate(category_a=ifelse((is.na(category_a)), "Targeted lncRNA annotations", category_a)) %>% 
+  mutate(category_b=ifelse((name_b=="lncBookv2_0" | name_b=="chess3_1_2"), "Non-targeted lncRNA annotations", NA)) %>% 
+  mutate(category_b=ifelse((name_b=="gen27" | name_b=="gen47"), "GENCODE", category_b)) %>%
+  mutate(category_b=ifelse((is.na(category_b)), "Targeted lncRNA annotations", category_b)) 
+
+# Preview data frame
+df
+
+levels_a <-c("lncBookv2_0",
+             "chess3_1_2",
+             "refSeq",
+             "NONCODE",
+             "miTranscriptome",
+             "gencode20+",
+             "fantomCat",
+             "bigTranscriptome",
+             "H_concat_catalogs",
+             "gen47",
+             "gen27")
+
+levels_b <- c("gen27",
+              "gen47",
+              "H_concat_catalogs",
+              "bigTranscriptome",
+              "fantomCat",
+              "gencode20+",
+              "miTranscriptome",
+              "NONCODE",
+              "refSeq",
+              "chess3_1_2",
+              "lncBookv2_0")
+
+labels_a <-c("LncBook v2.0",
+             "CHESS v3.1.2",
+             "refSeq",
+             "NONCODE",
+             "miTranscriptome",
+             "GENCODEv20+",
+             "fantomCat",
+             "bigTranscriptome",
+             "lncRNA-merge",
+             "GENCODE v47",
+             "GENCODE v27")
+
+labels_b <- c("GENCODE v27",
+              "GENCODE v47",
+              "lncRNA-merge",
+              "bigTranscriptome",
+              "fantomCat",
+              "GENCODEv20+",
+              "miTranscriptome",
+              "NONCODE",
+              "refSeq",
+              "CHESS v3.1.2",
+              "LncBook v2.0")
+
+# Create boxplot - Figure 2a
+df %>% 
+  filter(name_a != name_b) %>%
+  filter((name_b != "gen27" & name_a == "gen27") | (name_b != "gen27" & name_a == "gen47") | (name_b != "gen47" & name_a == "gen27") | (name_b != "gen47" & name_a == "gen47") | (name_b == "gen27") | (name_b == "gen47")) %>% 
+  ggplot(data=., aes(x=factor(name_b, levels=levels_b, labels=labels_b),
+                     y=percentage)) +
+  geom_boxplot(color="#0466c8") +
+  geom_dotplot(aes(fill=factor(name_a, levels=levels_a, labels=labels_a)),
+               binaxis='y', stackdir='center', dotsize=1) +
+  theme_bw() +
+  scale_fill_manual(values=c("#f7e49a", "#f8a656", "#fece79",  "#f48170",
+                             "#e4b7d5", "#8b8bc3", "#94cae3", "#da7422",
+                             "#b2967d", "#25a18e", "#00a5cf")) +
+  ylab("% of lncRNA genes") +
+  scale_y_continuous(labels=percent, lim=c(0,1)) +
+  theme(legend.position="top") +
+  theme(axis.text.x = element_text(size = 12, angle = 60, hjust = 1,  colour = "black"),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 12,  colour = "black"),
+        legend.text = element_text(size=12),
+        plot.title = element_text(size = 15, hjust = 0.5),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14),
+        strip.text.x=element_text(size=18),
+        strip.text.y=element_text(size=18)) +
+  facet_grid(. ~ factor(category_b, levels=c("GENCODE", "Targeted lncRNA annotations","Non-targeted lncRNA annotations")), space="free", scales="free", labeller = label_wrap_gen(18)) -> plot_figure_2a
+
+
+# Diplay plots
+plot_figure_2a
+```
+
+## Save as pdf
+```{r}
+pdf(file="figure_2a.pdf", width = 14, height = 9)
+plot_figure_2a
+```

@@ -1,0 +1,6 @@
+catalogue	total	supported	unsupported	supported_percentage
+gencodeM3+	13345	11252	2093	.84
+genM16	13079	10660	2419	.81
+genM36	146763	144065	2698	.98
+NONCODE	105101	36696	68405	.34
+refSeq	28487	27555	932	.96

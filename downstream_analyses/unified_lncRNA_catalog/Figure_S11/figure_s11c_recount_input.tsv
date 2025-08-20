@@ -1,0 +1,11 @@
+catalogue	total	supported	unsupported	supported_percentage
+bigTranscriptome	24758	18504	6254	.74
+chess3_1_2_GRCh38_lncRNA	34003	33183	820	.97
+fantomCat	62850	51842	11008	.82
+gen27	23997	20011	3986	.83
+gen47	182987	176259	6728	.96
+gencode20+	41845	36416	5429	.87
+lncRNA_LncBookv2_0_GRCh38	286715	213873	72842	.74
+miTranscriptome	183621	136649	46972	.74
+NONCODE	112165	60241	51924	.53
+refSeq	27579	24955	2624	.90
