@@ -1,0 +1,17 @@
+# Rproject files
+.Rproj.user
+*.Rproj
+.Rhistory
+.RData
+.Ruserdata
+
+# Downloadable files
+.temp*
+Data/masterTable/*.gz
+Data/Additional/*.gz
+Data/Additional/*.sizes
+Data/Additional/hg38.polyAsignals.bed
+Data/Additional/mm10.polyAsignals.bed
+
+# Outdated
+old/
