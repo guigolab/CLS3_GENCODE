@@ -48,8 +48,8 @@ The loci GTFs can be downloaded at:
 ## GENCODE-CLS3 Mappings
 The latest human and mouse annotations have reported a huge increase in the overall number of lncRNA genes and transcripts, together with a great improvement in the annotation of already exising lncRNA genes, thanks to the incorporation of CLS3 models. Such transcripts have been processed by the HAVANA team of manual annotators at EBI, and the refinement and augmentation of GENCODE v47 and vM36 annotation attributable to CLS data have been documented here:
 
-  - [v47-CLS3_extended_mappings] (coming soon on Zenodo)
-  - [vM36-CLS3_extended_mappings] (coming soon on Zenodo)
+  - [v47-CLS3_extended_mappings](https://zenodo.org/api/records/15004659/draft/files/CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt/content)
+  - [vM36-CLS3_extended_mappings](https://zenodo.org/api/records/15004659/draft/files/CLS3_transcripts_in_vM36.all_biotypes.chr.gencode_versions.genes.txt/content)
 
 The original numbers released in the publication, can be obtained by querying the files as follow;
 ```
@@ -63,7 +63,7 @@ awk -F "\t" '$2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | 
 The novelty brought by these transcripts, with respect to version v27 (human) and vM16 (mouse) are reported the following table, and assigned as defined in the schema below.
 
   - [v47-CLS3 mapping](https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1)
-  - [vM36-CLS3 mapping] (coming soon on Zenodo)
+  - [vM36-CLS3 mapping](https://zenodo.org/api/records/15004659/draft/files/vM36-CLS3mapping_status.txt/content)
 
 The mapping across v47 ENSTs and the CLS3 anchICs they were extended/created from, with added details like novelty at the transcript as well as gene level. 
 
