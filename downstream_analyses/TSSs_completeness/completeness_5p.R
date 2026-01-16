@@ -63,25 +63,25 @@ for (t in type)
 	geom_text(aes(label = round(data$perc,digits=2)),position=position_stack(0.5), size=1.67,fontface="bold",family = "Helvetica")+
 	facet_wrap(~dataset, ncol=3)
 	if(t == "NEWTSSs")
-        {       ggsave('plots/Hv3_completeness_novelTSSs_5p.tiff', width = 45, height = 45, units = "mm", dpi = 1200)
+        {       ggsave('plots/Hv3_completeness_novelTSSs_5p.pdf', width = 45, height = 45, units = "mm")
         }else if(t == "decoyTSSs")
-        {       ggsave('plots/Hv3_completeness_decoyTSSs_5p.tiff', width = 45, height = 45, units = "mm", dpi = 1200)
+        {       ggsave('plots/Hv3_completeness_decoyTSSs_5p.pdf', width = 45, height = 45, units = "mm")
         }else if(t == "proteincodingTSSs")
-        {       ggsave('plots/Hv3_completeness_proteincodingTSSs_5p.tiff', width = 45, height = 45, units = "mm", dpi = 1200)
+        {       ggsave('plots/Hv3_completeness_proteincodingTSSs_5p.pdf', width = 45, height = 45, units = "mm")
         }else if(t == "lncRNATSSs")
-        {       ggsave('plots/Hv3_completeness_lncRNATSSs_5p.tiff', width = 45, height = 45, units = "mm", dpi = 1200)
+        {       ggsave('plots/Hv3_completeness_lncRNATSSs_5p.pdf', width = 45, height = 45, units = "mm")
 	}
 }
 
-img1 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_novelTSSs_5p.tiff")), interpolate = TRUE)
-img2 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_lncRNATSSs_5p.tiff")), interpolate = TRUE)
-img3 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_proteincodingTSSs_5p.tiff")), interpolate = TRUE)
-img4 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_decoyTSSs_5p.tiff")), interpolate = TRUE)
+#img1 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_novelTSSs_5p.tiff")), interpolate = TRUE)
+#img2 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_lncRNATSSs_5p.tiff")), interpolate = TRUE)
+#img3 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_proteincodingTSSs_5p.tiff")), interpolate = TRUE)
+#img4 <- rasterGrob(as.raster(readTIFF("plots/Hv3_completeness_decoyTSSs_5p.tiff")), interpolate = TRUE)
 
-final_width = 180
-final_height = 45
+#final_width = 180
+#final_height = 45
 
-outfile <- paste("plots/Hv3_completeness_TSSs_5p.pdf",sep="")
-pdf(outfile, width=final_width, height=final_height)
-grid.arrange(img1, img2, img3, img4, ncol = 4)
+#outfile <- paste("plots/Hv3_completeness_TSSs_5p.pdf",sep="")
+#pdf(outfile, width=final_width, height=final_height)
+#grid.arrange(img1, img2, img3, img4, ncol = 4)
 dev.off()

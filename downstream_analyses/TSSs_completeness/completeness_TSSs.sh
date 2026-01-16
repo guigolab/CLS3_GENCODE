@@ -48,7 +48,7 @@ do
         #cage supported TSSs
 	cat data/${type}TSS_anchTMs_loci.TSS.bed | awk '{print $1"\t"$2"\t"$3"\t"$4"\t0\t"$6}' > data/endSupport/${type}TSSs_Hv3.5pEnds.bed
 
-	cat data/endSupport/${type}TSSs_Hv3.5pEnds.bed | sort -T /tmp/ -k1,1 -k2,2n -k3,3n  | bedtools slop -s -l 50 -r 50 -i stdin -g data/genomes/hg38.sorted.genome  | bedtools intersect -u -s -a stdin -b data/cage/hg38_fair+new_CAGE_peaks_phase1and2.bed | awk '{print $1"_"$2"_"$3"_"$6}' | sort | uniq > data/endSupport/support_cage_${type}TSSs
+	cat data/endSupport/${type}TSSs_Hv3.5pEnds.bed | sort -T /tmp/ -k1,1 -k2,2n -k3,3n  | bedtools slop -s -l 50 -r 50 -i stdin -g data/genomes/hg38.sorted.genome  | bedtools intersect -u -s -a stdin -b data/cage/hg38_fair+new_CAGE_peaks_phase1and2.bed | awk '{print $1"_"$2+50"_"$3-50"_"$6}' | sort | uniq > data/endSupport/support_cage_${type}TSSs
 
 	#proCapNet supported TSSs       
         if [[ $type == "novel" ]]; then
