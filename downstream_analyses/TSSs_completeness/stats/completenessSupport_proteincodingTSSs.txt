@@ -3,5 +3,5 @@ Hv3	5_support	29305	cage	MTE5	83445	35.1189
 Hv3	no_support	54140	cage	MTE5	83445	64.8811
 Hv3	5_support	22248	proCap	MTE5	83445	26.6619
 Hv3	no_support	61197	proCap	MTE5	83445	73.3381
-Hv3	5_support	51553	CageProCap	MTE5	83445	61.7808
-Hv3	no_support	31892	CageProCap	MTE5	83445	38.2192
+Hv3	5_support	34219	CageProCap	MTE5	83445	41.0078
+Hv3	no_support	49226	CageProCap	MTE5	83445	58.9922
