@@ -80,4 +80,4 @@ python3 relocate_loci.py intergenic.gencode_v27+cls.no_complex_regions.canonical
 ```
 
 # Output
-Find the set of randomly relocated, strand-less transcripts [here](https://zenodo.org/records/13946596/files/random_replicates_locirelocation.gtf.gz?download=1).
+Find the set of randomly relocated, strand-less transcripts [here](https://zenodo.org/records/15004659/files/random_replicates_locirelocation.gtf.gz?download=1).
