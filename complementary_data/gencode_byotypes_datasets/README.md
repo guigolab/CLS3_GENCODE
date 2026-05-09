@@ -66,13 +66,13 @@ bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenic
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
-## cls: XXX transcripts - 8,706 genes
+### cls: XXX transcripts - 8,706 genes
 ```
 bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
 awk '$9 == "Intergenic"' v47-CLS3_mapping_status | cut -f1 | sort -u > cls.loci.disjoint.ids
 ```
 
-## decoys: 84,063 transcripts - 17,005 genes
+### decoys: 84,063 transcripts - 17,005 genes
 As they were designed in the intergenic space of v27, a minimal number of decoy genes are discarded in this stage.
 ```
 bedtools intersect -a decoy.bed -b intergenicCLS.bed proteincodingv47.bed lncRNAv27.bed -v | cut -f5 > decoy.transcripts.disjoint.ids
