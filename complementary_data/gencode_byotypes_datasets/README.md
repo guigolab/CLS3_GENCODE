@@ -7,7 +7,7 @@ Original files available [here](https://github.com/guigolab/CLS3_GENCODE/blob/ma
 
 ### CLS transcripts: transcripts - genes
 
-The lncRNA transcripts and genes now in v47 because CLS data, as mapped [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1), have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings). Results are available in the folder for [transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/v47_CLS3_mapping.transcripts) and [genes](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/v47_CLS3_mapping.genes). 
+The lncRNA transcripts and genes now in v47 because CLS data, as mapped [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1), have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings).
 
 ```
 pending
