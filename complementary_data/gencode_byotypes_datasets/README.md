@@ -18,9 +18,9 @@ The universe of transcripts and genes for comparison has been defined as follow.
 
 ### protein-coding: 89,832 transcripts - 19,744 genes
 ```
-wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.basic.annotation.gtf.gz
-zcat ~/Gencode/InputData/Gencode_LastReleases/gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-9]+|[XYM])$/' | awk -F'\t' '$3=="transcript" && $9 ~ /gene_type "protein_coding"/ && $9 ~ /transcript_type "protein_coding"/' | cut -d"\"" -f4 | sort -u > protein_coding.transcripts.v47.ids
-zcat ~/Gencode/InputData/Gencode_LastReleases/gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-9]+|[XYM])$/' | awk -F'\t' '$3=="transcript" && $9 ~ /gene_type "protein_coding"/ && $9 ~ /transcript_type "protein_coding"/' | cut -d"\"" -f2 | sort -u > protein_coding.loci.v47.ids
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.primary_assembly.annotation.gtf.gz
+zcat gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-9]+|[XYM])$/' | awk -F'\t' '$3=="transcript" && $9 ~ /gene_type "protein_coding"/ && $9 ~ /transcript_type "protein_coding"/' | cut -d"\"" -f4 | sort -u > protein_coding.transcripts.v47.ids
+zcat gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-9]+|[XYM])$/' | awk -F'\t' '$3=="transcript" && $9 ~ /gene_type "protein_coding"/ && $9 ~ /transcript_type "protein_coding"/' | cut -d"\"" -f2 | sort -u > protein_coding.loci.v47.ids
 ```
 
 ### lncRNAs: 26,709 transcripts - 14,680 genes
@@ -48,10 +48,10 @@ From these sets, non-overlapping subset have been extracted for analyses that wo
 
 ### Gather transcripts annotation in BED format
 ```
-grep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.chrcorrected.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
+zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.g | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
 zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
 grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
-grep -wFf cls.transcripts.ids ~/Gencode/InputData/Gencode_LastReleases/gencode.v47.primary_assembly.annotation.chrcorrected.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
+zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
 ```
 
 ### protein-coding: 67,119 transcripts - 13,883 genes
