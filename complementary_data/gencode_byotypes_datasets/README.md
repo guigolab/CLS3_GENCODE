@@ -62,14 +62,14 @@ grep -vFf <(bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.be
 
 ### lncRNAs: 14,908 transcripts - 7,774 genes
 ```
-bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -v | cut -f5 > lncRNA.transcripts.v27.disjoint.id
+bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -v | cut -f5 > lncRNA.transcripts.v27.disjoint.ids
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
 ## cls: XXX transcripts - 8,706 genes
 ```
 bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
-awk '$9 == "Intergenic"' v47-CLS3_mapping_status | cut -f1 | sort -u > cls.loci.ids
+awk '$9 == "Intergenic"' v47-CLS3_mapping_status | cut -f1 | sort -u > cls.loci.disjoint.ids
 ```
 
 ## decoys: 84,063 transcripts - 17,005 genes
