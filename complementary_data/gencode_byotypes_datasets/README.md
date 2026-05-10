@@ -66,7 +66,7 @@ bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenic
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
-### cls: XXX transcripts - 8,706 genes
+### cls: 20,569 transcripts - 8,706 genes
 ```
 bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
 awk '$9 == "Intergenic"' v47-CLS3_mapping_status | cut -f1 | sort -u > cls.loci.disjoint.ids
