@@ -2,13 +2,10 @@
 Accurate gene annotations are fundamental to functionally interpreting the activity (transcription, chromatin modifications, folding, protein binding) and the sequence variation of genomes. We wanted to show how the incorporation of the CLS data into GENCODE greatly enhances the functional interpretability of the human genome. 
 
 ## 1. Novel CLS models
-In general, we have considered the novel CLS models with respect to GENCODE v27, although some analyses have been restricted to the novel human lncRNA CLS loci in v47. 
-Original files available [here](https://github.com/guigolab/CLS3_GENCODE/blob/main/data_release/README.md).
+In GENCODE v47, a total of 151,618 transcripts (listed [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1)) have been either created (140,268 lncRNAs and 293 others) or modified (10,852 lncRNAs and 205 others) thanks to CLS data. Each of these transcripts and genes have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings).
 
 ### Novel transcripts: 151,236 transcripts - 17,931 genes
-In GENCODE v47, 151,618 transcripts (listed [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1)), have been either created (140,268 lncRNAs and 293 others) or modified (10,852 lncRNAs and 205 others) thanks to CLS data. Each of these transcripts and genes have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings), based on their status with respect to v27, the reference at the time of the experiment. 
-
-In these analyses, novel transcripts are restricted to lncRNAs, including those extending previously annotated ones (151,236 transcripts), while novel loci are instead only those genes introduced as a consequence of CLS data (17,931).
+In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones, while novel loci are instead only those genes introduced as a consequence of CLS data.
 
 ```
 wget https://zenodo.org/records/15004659/files/CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt?download=1 && mv CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt\?download\=1 v47-CLS3_extended_mappings
