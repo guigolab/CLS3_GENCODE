@@ -14,10 +14,11 @@ awk -F "\t" '$5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f1 | sort -u > nov
 awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.ids
 ```
 
-### CLS loci: 8,706 genes
+### CLS loci: 20,903 transcripts - 8,706 genes
 ```
 wget https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1 && mv v47-CLS3mapping_status.txt\?download\=1 v47-CLS3_status 
-awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u > cls.loci.ids 
+zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f4 | sort -u > cls.transcripts.ids
+zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f2 | sort -u > cls.loci.ids
 ```
 
 ## 2. GENCODE reference
@@ -58,7 +59,7 @@ From these sets, non-overlapping subset have been extracted for analyses that wo
 zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.g | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
 zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
 grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
-zgrep -wFf cls.loci.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
+zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
 ```
 
 ### protein-coding: 67,119 transcripts - 13,883 genes
@@ -73,10 +74,10 @@ bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenic
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
-### cls: 20,569 transcripts - 8,706 genes
+### cls: 20,569 transcripts - 8,522 genes
 ```
 bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
-awk '$9 == "Intergenic"' v47-CLS3_mapping_status | cut -f1 | sort -u > cls.loci.disjoint.ids
+grep -vFf <(bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed lncRNAv27.bed decoy.bed -wa | cut -f4 | cut -d"." -f1) cls.loci.ids > cls.loci.disjoint.ids
 ```
 
 ### decoys: 84,063 transcripts - 17,005 genes
