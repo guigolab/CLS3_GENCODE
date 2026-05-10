@@ -14,6 +14,8 @@ awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CL
 ```
 
 ### CLS loci: 20,903 transcripts - 8,706 genes
+CLS transcripts and loci are a subset of the total novel genes, corresponding to transcripts and loci intergenic with respect to GENCODE v27 (the reference at the time of the design).
+
 ```
 wget https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1 && mv v47-CLS3mapping_status.txt\?download\=1 v47-CLS3_status 
 zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f4 | sort -u > cls.transcripts.ids
@@ -31,7 +33,7 @@ zcat gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-
 ```
 
 ### lncRNAs: 26,709 transcripts - 14,680 genes
-GENCODE v27 was used as reference given that was the geneset available at the time of the design.
+GENCODE v27 was used as reference being the geneset available at the time of the design.
 
 ```
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/gencode.v27.long_noncoding_RNAs.gtf.gz
