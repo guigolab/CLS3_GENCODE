@@ -5,12 +5,19 @@ Accurate gene annotations are fundamental to functionally interpreting the activ
 In general, we have considered the novel CLS models with respect to GENCODE v27, although some analyses have been restricted to the novel human lncRNA CLS loci in v47. 
 Original files available [here](https://github.com/guigolab/CLS3_GENCODE/blob/main/data_release/README.md).
 
-### CLS transcripts: transcripts - genes
-
-The lncRNA transcripts and genes now in v47 because CLS data, as mapped [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1), have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings).
+### Novel transcripts: 151,236 transcripts - 17,931 genes
+The lncRNA transcripts and genes now in v47 because CLS data, as mapped [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1), have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings). When considering transcripts, we account also for the ones extending previously annotated lncRNAs. Novel loci are instead considered only those loci introduced as a consequence of CLS data.
 
 ```
-pending
+wget https://zenodo.org/records/15004659/files/CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt?download=1 && mv CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt\?download\=1 v47-CLS3_extended_mappings 
+awk -F "\t" '$5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f1 | sort -u > novel.transcripts.ids
+awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.ids
+```
+
+### CLS loci: 8,706 genes
+```
+wget https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1 && mv v47-CLS3mapping_status.txt\?download\=1 v47-CLS3_status 
+awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u > cls.loci.ids 
 ```
 
 ## 2. GENCODE reference
@@ -51,7 +58,7 @@ From these sets, non-overlapping subset have been extracted for analyses that wo
 zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.g | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
 zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
 grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
-zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
+zgrep -wFf cls.loci.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
 ```
 
 ### protein-coding: 67,119 transcripts - 13,883 genes
