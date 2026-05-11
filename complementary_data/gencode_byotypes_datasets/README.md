@@ -50,7 +50,12 @@ cut -d"\"" -f4 random_replicates_locirelocation.original.gtf | sort -u > decoys.
 cut -d"\"" -f2 random_replicates_locirelocation.original.gtf | sort -u > decoys.loci.ids
 ```
 
-The creation of the list of TSS list from these files is documented [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives). For novel TSSs, we rescued the novel transcripts belonging to biotypes other than lncRNAs (151,618 total transcripts). 
+The creation of the list of TSS list from these files is documented [here](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives). 
+For novel TSSs, we rescued the novel transcripts belonging to biotypes other than lncRNAs (149,392 total transcripts on main chromosomes). 
+
+```
+awk -F "\t" '$6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f1 | sort -u
+```
 
 # Disjoint sets
 From these sets, non-overlapping subset have been extracted for analyses that would have otherwise been confounded.
