@@ -57,8 +57,8 @@ From these sets, non-overlapping subset have been extracted for analyses that wo
 
 ### Gather transcripts annotation in BED format
 ```
-zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.g | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
-zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
+zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
+zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.long_noncoding_RNAs.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
 grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
 zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
 ```
@@ -66,13 +66,13 @@ zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | 
 ### protein-coding: 67,119 transcripts - 13,883 genes
 ```
 bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.bed intergenicCLS.bed -v | cut -f5 > protein_coding.transcripts.v47.disjoint.ids
-grep -vFf <(bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.bed intergenicCLS.bed -wa | cut -f4) protein_coding.v47.loci.ids > protein_coding.loci.v47.disjoint.ids
+grep -vFf <(bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.bed intergenicCLS.bed -wa | cut -f4) protein_coding.loci.v47.ids > protein_coding.loci.v47.disjoint.ids
 ```
 
 ### lncRNAs: 14,908 transcripts - 7,774 genes
 ```
 bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -v | cut -f5 > lncRNA.transcripts.v27.disjoint.ids
-grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
+grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.loci.v27.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
 ### cls: 19,140 transcripts - 8,392 genes
@@ -84,6 +84,6 @@ grep -vFf <(bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed lncR
 ### decoys: 84,063 transcripts - 17,005 genes
 As they were designed in the intergenic space of v27, a minimal number of decoy genes are discarded in this stage.
 ```
-bedtools intersect -a decoy.bed -b intergenicCLS.bed proteincodingv47.bed lncRNAv27.bed -v | cut -f5 > decoy.transcripts.disjoint.ids
-grep -vFf <(bedtools intersect -a decoy.bed -b proteincodingv47.bed lncRNAv27.bed intergenicCLS.bed -wa | cut -f4) decoy.loci.ids > decoy.loci.disjoint.ids
+bedtools intersect -a decoy.bed -b intergenicCLS.bed proteincodingv47.bed lncRNAv27.bed -v | cut -f5 > decoys.transcripts.disjoint.ids
+grep -vFf <(bedtools intersect -a decoy.bed -b proteincodingv47.bed lncRNAv27.bed intergenicCLS.bed -wa | cut -f4) decoys.loci.ids > decoys.loci.disjoint.ids
 ```
