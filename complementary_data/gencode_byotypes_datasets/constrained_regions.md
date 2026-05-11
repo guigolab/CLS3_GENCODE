@@ -4,7 +4,7 @@ wget http://www.broadinstitute.org/ftp/pub/assemblies/mammals/29mammals/29way_om
 zcat 29way_omega_lods_elements_12mers.chr_specific.fdr_0.1_with_scores.txt.gz | sort -k1,1 -k2,2n | bedtools merge -i - -d 1 | gzip > 29way_omega_lods_elements_12mers.chr_specific.fdr_0.1.bed.gz
 ```
   
-# Download data on constrained regions for 241-way alignment and Merge together regions that are separated by just one base pair with an FDR < 5% (equivalent to a phyloP score > 2.27)
+## Download data on constrained regions for 241-way alignment and merge together regions that are separated by just one base pair with an FDR < 5% (equivalent to a phyloP score > 2.27)
 ```
 wget https://hgdownload.gi.ucsc.edu/goldenPath/hg38/cactus241way/cactus241way.phyloP.bw 
 bigWigToWig cactus241way.phyloP.bw cactus241way.phyloP.wig
