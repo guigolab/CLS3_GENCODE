@@ -4,22 +4,22 @@ Accurate gene annotations are fundamental to functionally interpreting the activ
 ## 1. Novel CLS models
 In GENCODE v47, a total of 151,618 transcripts (listed [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1)) have been either created (140,268 lncRNAs and 293 others) or modified (10,852 lncRNAs and 205 others) thanks to CLS data. Each of these transcripts and genes have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings).
 
-### Novel transcripts: 151,236 transcripts - 17,931 genes
-In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones, while novel loci are instead only those genes introduced as a consequence of CLS data.
+### Novel transcripts: 149,010 transcripts - 17,777 genes
+In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones, while novel loci are instead only those genes introduced as a consequence of CLS data. We also restricted the set to loci on main chromosomes only.
 
 ```
 wget https://zenodo.org/records/15004659/files/CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt?download=1 && mv CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt\?download\=1 v47-CLS3_extended_mappings
-awk -F "\t" '$5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f1 | sort -u > novel.transcripts.ids
-awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.ids
+awk -F "\t" '$5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f1 | sort -u > novel.transcripts.ids
+awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.ids
 ```
 
-### CLS loci: 20,903 transcripts - 8,706 genes
+### CLS loci: 19,473 transcripts - 8,576 genes
 CLS transcripts and loci are a subset of the total novel genes, corresponding to transcripts and loci intergenic with respect to GENCODE v27 (the reference at the time of the design).
 
 ```
-wget https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1 && mv v47-CLS3mapping_status.txt\?download\=1 v47-CLS3_status 
-zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f4 | sort -u > cls.transcripts.ids
-zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f2 | sort -u > cls.loci.ids
+wget https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1 && mv v47-CLS3mapping_status.txt\?download\=1 v47-CLS3_status
+zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$3 == "transcript" && $1 ~ /^chr([0-9]+|[XYM])$/' | cut -d"\"" -f4 | sort -u > cls.transcripts.ids
+zgrep -Ff <(awk '$9 == "Intergenic"' v47-CLS3_status | cut -f1 | sort -u) gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$3 == "transcript" && $1 ~ /^chr([0-9]+|[XYM])$/' | cut -d"\"" -f2 | sort -u > cls.loci.ids
 ```
 
 ## 2. GENCODE reference
@@ -75,7 +75,7 @@ bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenic
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.v27.loci.ids > lncRNA.loci.v27.disjoint.ids
 ```
 
-### cls: 20,569 transcripts - 8,522 genes
+### cls: 19,140 transcripts - 8,392 genes
 ```
 bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
 grep -vFf <(bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed lncRNAv27.bed decoy.bed -wa | cut -f4 | cut -d"." -f1) cls.loci.ids > cls.loci.disjoint.ids
