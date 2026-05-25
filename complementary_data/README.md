@@ -3,7 +3,7 @@
 ## Representative TSS sets all transcripts:
 
 #### 1. protein coding TSS: 89,832 transcripts (19,744 genes)
-TSS of protein coding transcripts
+TSS of [protein coding transcripts](url) from gencode v47 reference, 
 
 #### 2. lncRNA TSS: 26,709 transcripts (14,680 genes)
 TSS of lncRNA transcripts
