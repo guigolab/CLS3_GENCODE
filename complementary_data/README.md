@@ -1,14 +1,21 @@
 # Datasets used for generating the representative TSSs:
-## For all transcripts:
-### 1. Protein coding TSS (TSS of protein coding transcripts) 89,832 transcripts - 19,744 genes
-### 2. lncRNA TSS (TSS of lncRNA transcripts) 26,709 transcripts - 14,680 genes
-### 3. Decoy TSS 85,283 transcripts - 17,223 genes
-### 4. Novel TSS (TSS of novel transcripts) 149,392 transcripts 
+
+## Representtive TSS sets all transcripts:
+
+### 1. protein coding TSS: 89,832 transcripts (19,744 genes)
+TSS of protein coding transcripts
+### 2. lncRNA TSS: 26,709 transcripts (14,680 genes)
+TSS of lncRNA transcripts
+### 3. decoy TSS 85,283 transcripts (17,223 genes)
+### 4. novel TSS: 149,392 transcripts (xxx genes)
 ### Novel TSS are further classified into
-### 5. Novel protein coding TSS (novel TSS associated to pc genes) 371 transcripts 
-### 6. All Novel lncRNA TSS - 149,010 transcripts - 17,777 genes
-### 7. Novel lncRNA TSS (novel TSS associated to lncRNAs v27) 129,537 transcripts 
-### 8. CLS TSS (novel TSS associated with CLS transcripts) 19,473 transcripts - 8,576 genes
+### 5. novel protein coding TSS: 371 transcripts (xxx geenes)
+novel TSS associated to pc genes
+### 6. all novel lncRNA TSS: 149,010 transcripts (17,777 genes)
+### 7. novel lncRNA TSS: 129,537 transcripts 
+novel TSS associated to lncRNAs v27
+### 8. CLS TSS: 19,473 transcripts - 8,576 genes
+novel TSS associated with CLS transcripts
 
 
 
