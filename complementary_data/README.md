@@ -2,7 +2,7 @@
 The criteria used for selection of the representative TSSs is decribed [here]() _pending_.
 
 ## Representative TSS sets all transcripts: 
-Please note that the gene numbers correspond to the transcripts, and are not equilant to the gene datasets used for spme analyses.
+Please note that the gene numbers correspond to the transcripts, and are not equilant to the gene datasets used for some analyses.
 
 ### 1. protein coding TSS: 48,477 TSSs - 89,832 transcripts - 19,744 genes
 TSS of [protein coding transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#protein-coding-89832-transcripts---19744-genes) from GENCODE v47 reference.
