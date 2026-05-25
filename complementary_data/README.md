@@ -1,5 +1,5 @@
 # Datasets used for generating the representative TSSs:
-The criteria used for selection of the representative TSSs is decribed [here]().
+The criteria used for selection of the representative TSSs is decribed [here]() _pending_.
 
 ## Representative TSS sets all transcripts:
 ### 1. protein coding TSS: 48,477 TSSs - 89,832 transcripts (19,744 genes)
