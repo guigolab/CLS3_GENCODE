@@ -34,25 +34,25 @@ The TSSs from CLS transcripts are subdivided into embryonic. adult, common and p
 
 
 ## Representative TSS sets disjoint transcripts:
-### 1. protein coding TSS: 37,007 TSSs - 67,119 transcripts - 16,686 genes
+### 1. protein coding TSS: 30,599 TSSs - 56,821 transcripts - 13,880 genes
 TSS of [disjoint protein coding transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#protein-coding-67119-transcripts---13883-genes) from GENCODE v47 reference.
 
-### 2.lncRNAs: 11,519 TSSs - 14,908 transcripts - 8,282 genes
+### 2.lncRNAs: 10,432 TSSs - 13,146 transcripts - 7,772 genes
 TSS of [disjoint lncRNA transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#lncrnas-14908-transcripts---7774-genes) from GENCODE v27 reference.
 
-### 3. decoys: 59416 TSSs - 84,063(*2) transcripts - 17,005(*2) genes
+### 3. decoys: 59,298 TSSs - 83,942(*2) transcripts - 17,005(*2) genes
 TSS of the [disjoint decoy transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#decoys-84063-transcripts---17005-genes).
 Decoy transcripts were generated in a strand-agnostic manner and therefore duplicated on both strands prior to representative TSS set generation, resulting in a doubling of the total decoy transcript count.
 
-### 4b.i. novel lncRNA: 11,644 TSSs - 34,835 transcripts - 5,710 genes
+### 4b.i. novel lncRNA: (_pending: not needed for now_)
 TSS of the [disjoint novel lncRNA transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#cls-19140-transcripts---8392-genes) (4.b), without the intergenic CLS transcripts (4.b.ii). 
 Therefore these are the novel TSS w.r.t. lncRNAs v27.
 
-### 4.b.ii. cls: 11,462 TSSs - 19,140 transcripts - 8,406 genes
+### 4.b.ii. cls: 11,443 TSSs - 19,111 transcripts - 8,392 genes
 novel TSS associated with [disjoint CLS transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#cls-19140-transcripts---8392-genes) and loci intergenic w.r.t. GENCODE v27 (the reference at the time of the design)
-The TSSs from CLS transcripts are subdivided into embryonic. adult, common and placenta derived TSS sets.
+The TSSs from CLS transcripts are subdivided into embryonic(only), adult(only), common(embryo/adult/placenta) and placenta(only) derived TSS sets.
 
-
-
-
-
+### 4.b.ii.I. cls embryoOnly TSS - 1,781 TSSs - 2,783 transcripts - 1,566 genes
+### 4.b.ii.II. cls adultOnly TSS - 7,368 TSSs - 12,020 transcripts - 5,950 genes
+### 4.b.ii.III. cls placentaOnly TSS - 766 TSSs - 1,522 transcripts - 675 genes
+### 4.b.ii.IV. cls common TSS - 1,528 TSSs - 2,786 transcripts - 1,367 genes
