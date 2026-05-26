@@ -62,33 +62,33 @@ From these sets, non-overlapping subset have been extracted for analyses that wo
 
 ### Gather transcripts annotation in BED format
 ```
-zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
-zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.long_noncoding_RNAs.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
-grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
-zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
+zgrep -wFf protein_coding.transcripts.v47.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4-1,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > proteincodingv47.bed
+zgrep -wFf lncRNA.transcripts.v27.ids gencode.v27.long_noncoding_RNAs.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4-1,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k2,2n > lncRNAv27.bed
+grep -wFf decoys.transcripts.ids random_replicates_locirelocation.original.gtf | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4-1,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > decoy.bed
+zgrep -wFf cls.transcripts.ids gencode.v47.primary_assembly.annotation.gtf.gz | awk -F"\t" -v OFS="\t" '$3 == "transcript" { split($9, tags, "\""); print $1,$4-1,$5,tags[2],tags[4] }' | sort --parallel=4 -k1,1 -k4,4n > intergenicCLS.bed 
 ```
 
-### protein-coding: 67,119 transcripts - 13,883 genes
+### protein-coding: 56,821 transcripts - 13,880 genes
 ```
-bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.bed intergenicCLS.bed -v | cut -f5 > protein_coding.transcripts.v47.disjoint.ids
 grep -vFf <(bedtools intersect -a proteincodingv47.bed -b lncRNAv27.bed decoy.bed intergenicCLS.bed -wa | cut -f4) protein_coding.loci.v47.ids > protein_coding.loci.v47.disjoint.ids
+grep -wFf <(zgrep -wFf protein_coding.loci.v47.disjoint.ids gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f4) protein_coding.transcripts.v47.ids > protein_coding.transcripts.v47.disjoint.ids
 ```
 
-### lncRNAs: 14,908 transcripts - 7,774 genes
+### lncRNAs: 13,146 transcripts - 7,772 genes
 ```
-bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -v | cut -f5 > lncRNA.transcripts.v27.disjoint.ids
 grep -vFf <(bedtools intersect -a lncRNAv27.bed -b proteincodingv47.bed decoy.bed intergenicCLS.bed -wa | cut -f4) lncRNA.loci.v27.ids > lncRNA.loci.v27.disjoint.ids
+grep -wFf <(zgrep -wFf lncRNA.loci.v27.disjoint.ids gencode.v27.long_noncoding_RNAs.gtf.gz | cut -d"\"" -f4) lncRNA.transcripts.v27.ids > lncRNA.transcripts.v27.disjoint.ids
 ```
 
-### cls: 19,140 transcripts - 8,392 genes
+### cls: 19,111 transcripts - 8,392 genes
 ```
-bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed decoy.bed lncRNAv27.bed -v | cut -f5 > cls.transcripts.disjoint.ids
 grep -vFf <(bedtools intersect -a intergenicCLS.bed -b proteincodingv47.bed lncRNAv27.bed decoy.bed -wa | cut -f4 | cut -d"." -f1) cls.loci.ids > cls.loci.disjoint.ids
+grep -wFf <(zgrep -wFf cls.loci.disjoint.ids gencode.v47.primary_assembly.annotation.gtf.gz | cut -d"\"" -f4) cls.transcripts.ids > cls.transcripts.disjoint.ids
 ```
 
-### decoys: 84,063 transcripts - 17,005 genes
+### decoys: 83,942 transcripts - 17,005 genes
 As they were designed in the intergenic space of v27, a minimal number of decoy genes are discarded in this stage.
 ```
-bedtools intersect -a decoy.bed -b intergenicCLS.bed proteincodingv47.bed lncRNAv27.bed -v | cut -f5 > decoys.transcripts.disjoint.ids
 grep -vFf <(bedtools intersect -a decoy.bed -b proteincodingv47.bed lncRNAv27.bed intergenicCLS.bed -wa | cut -f4) decoys.loci.ids > decoys.loci.disjoint.ids
+grep -wFf <(grep -wFf decoys.loci.disjoint.ids random_replicates_locirelocation.original.gtf | cut -d"\"" -f4) decoys.transcripts.ids > decoys.transcripts.disjoint.ids
 ```
