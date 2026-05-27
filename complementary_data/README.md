@@ -1,6 +1,8 @@
 # Datasets used for generating the representative TSSs:
 The criteria used for selection of the representative TSSs is decribed [here]() _pending_.
 
+<img width="956" height="295" alt="image" src="https://github.com/user-attachments/assets/576c3eec-2bba-4cf8-82d5-259bf44fc740" />
+
 ## Representative TSS sets all transcripts: 
 Please note that the gene numbers correspond to the transcripts, and are not equilant to the gene datasets used for some analyses.
 
