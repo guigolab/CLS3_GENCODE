@@ -5,7 +5,6 @@ The criteria used for selection of the representative TSSs is decribed [here]() 
 <img width="980" height="301" alt="image" src="https://github.com/user-attachments/assets/be067fa6-deec-499d-a705-7ae95135fa24" />
 
 # Representative TSS sets for "all transcripts", [HERE](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives/allTSSsets): 
-Please note that the gene numbers correspond to the transcripts, and are not equilant to the gene datasets used for some analyses.
 
 ### 1. protein coding TSS: 48,477 TSSs - 89,832 transcripts - 19,744 genes
 TSS of [protein coding transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#protein-coding-89832-transcripts---19744-genes) from GENCODE v47 reference.
