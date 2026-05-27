@@ -35,6 +35,10 @@ TSS of the novel lncRNA transcripts (4.b), removing the intergenic CLS transcrip
 novel TSS associated with CLS transcripts and loci intergenic w.r.t. GENCODE v27 (the reference at the time of the design)
 The TSSs from CLS transcripts are subdivided into embryonic. adult, common and placenta derived TSS sets.
 
+### 4.b.ii.I. cls embryoOnly TSS - 1,759 TSSs - 2,739 transcripts - 1,549 genes
+### 4.b.ii.II. cls adultOnly TSS - 7,232 TSSs - 11,645 transcripts - 5,892 genes
+### 4.b.ii.III. cls placentaOnly TSS - 777 TSSs - 1,536 transcripts - 685 genes
+### 4.b.ii.IV. cls common TSS - 1,908 TSSs - 3,553 transcripts - 1,681 genes
 
 ## Representative TSS sets for "disjoint transcripts":
 ### 1. protein coding TSS: 30,599 TSSs - 56,821 transcripts - 13,880 genes
