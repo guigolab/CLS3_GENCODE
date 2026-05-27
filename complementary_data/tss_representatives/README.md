@@ -7,10 +7,10 @@ The criteria used for selection of the representative TSSs is decribed [here]() 
 ## Representative TSS sets for "all transcripts", [HERE](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives/allTSSsets): 
 Please note that the gene numbers correspond to the transcripts, and are not equilant to the gene datasets used for some analyses.
 
-### 1. protein coding TSS: 48,477 TSSs - 89,832 transcripts - 19,744 genes
+#### 1. protein coding TSS: 48,477 TSSs - 89,832 transcripts - 19,744 genes
 TSS of [protein coding transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#protein-coding-89832-transcripts---19744-genes) from GENCODE v47 reference.
 
-### 2. lncRNA TSS: 20,345 TSSs - 26,709 transcripts - 14,680 genes
+#### 2. lncRNA TSS: 20,345 TSSs - 26,709 transcripts - 14,680 genes
 TSS of [lncRNA transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#lncrnas-26709-transcripts---14680-genes) from GENCODE v27 reference.
 
 ### 3. decoy TSS: 60,143 TSSs - 85,283(*2) transcripts - 17,223(*2) genes
