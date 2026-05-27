@@ -40,6 +40,8 @@ The TSSs from CLS transcripts are subdivided into embryonic. adult, common and p
 ### 4.b.ii.III. cls placentaOnly TSS - 777 TSSs - 1,536 transcripts - 685 genes
 ### 4.b.ii.IV. cls common TSS - 1,908 TSSs - 3,553 transcripts - 1,681 genes
 
+
+
 ## Representative TSS sets for "disjoint transcripts":
 ### 1. protein coding TSS: 30,599 TSSs - 56,821 transcripts - 13,880 genes
 TSS of [disjoint protein coding transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#protein-coding-67119-transcripts---13883-genes) from GENCODE v47 reference.
