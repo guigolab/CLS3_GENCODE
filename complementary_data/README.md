@@ -14,14 +14,14 @@ TSS of [lncRNA transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/c
 TSS of the [decoy transcripts]().
 Decoy transcripts were generated in a strand-agnostic manner and therefore duplicated on both strands prior to representative TSS set generation, resulting in a doubling of the total decoy transcript count.
 
-### 4. novel TSS: 52,355 TSSs - 149,392 transcripts - 26,946 genes
+### 4. ALL novel TSS: 52,355 TSSs - 149,392 transcripts - 26,946 genes
 novel TSS of the entirity of transcripts added or extended in gencode v47 thanks to CLS.
 These include the below described novel protein-coding (4.a) and novel lncRNA transcripts (4.b).
 
 ### 4a. novel protein coding TSS: 198 TSSs - 371 transcripts - 141 genes
 novel TSS associated to protein-coding genes.
 
-### 4b. novel lncRNA transcripts TSS: 52,146 TSSs - 149,010 transcripts - 26,794 genes
+### 4b. novel transcripts (lncRNA) TSS: 52,146 TSSs - 149,010 transcripts - 26,794 genes
 novel TSS associated to lncRNA genes. 
 These transcripts are further subdivided into novel lncRNA (4.b.i) and CLS transcripts (4.b.ii).
 
