@@ -1,0 +1,151 @@
+{
+	"gtfs": {
+		"hg19": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz",
+		"hg38": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.annotation.gtf.gz",
+		"mm9": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M9/gencode.vM9.annotation.gtf.gz",
+		"mm10": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M16/gencode.vM16.annotation.gtf.gz",
+		"mm39": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/gencode.vM36.annotation.gtf.gz"
+	},
+	"gtfs_ensembl_r98": {
+		"mm10": "ftp://ftp.ensembl.org/pub/release-98/gtf/mus_musculus/Mus_musculus.GRCm38.98.gtf.gz",
+		"mm9": "ftp://ftp.ensembl.org/pub/release-65/gtf/mus_musculus/Mus_musculus.NCBIM37.65.gtf.gz",
+		"danrer11": "ftp://ftp.ensembl.org/pub/release-98/gtf/danio_rerio/Danio_rerio.GRCz11.98.gtf.gz",
+		"danrer7": "ftp://ftp.ensembl.org/pub/release-86/gtf/danio_rerio/Danio_rerio.GRCz10.86.gtf.gz",
+		"hg19": "ftp://ftp.ensembl.org/pub/grch37/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh37.87.gtf.gz",
+		"hg38": "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.gtf.gz"
+	},
+	"chain_maps": {
+		"hg18": {
+			"braflo1": "https://hgdownload-test.gi.ucsc.edu/goldenPath/hg18/liftOver/hg18ToBraFlo1.over.chain.gz"
+		},
+		"hg19": {
+			"danrer11": "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToDanRer11.over.chain.gz",
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToMm10.over.chain.gz",
+			"mm9": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToMm9.over.chain.gz",
+			"danrer10": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToDanRer10.over.chain.gz",
+			"danrer7": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToDanRer7.over.chain.gz",
+			"dr7": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToDanRer7.over.chain.gz",
+			"cj3": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToCalJac3.over.chain.gz",
+			"ot2": "https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/liftOver/hg19ToOreNil2.over.chain.gz",
+			"oc2": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToOryCun2.over.chain.gz",
+			"rm3": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToRheMac3.over.chain.gz",
+			"ga1": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToGasAcu1.over.chain.gz",
+			"md5": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToMonDom5.over.chain.gz",
+			"gg4": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToGalGal4.over.chain.gz",
+			"cf3": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToCanFam3.over.chain.gz",
+			"oa3": "https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/liftOver/hg19ToMusFur1.over.chain.gz",
+			"lc1": "https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/liftOver/hg19ToLatCha1.over.chain.gz",
+			"ac2": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToAnoCar2.over.chain.gz",
+			"aplcal1": "https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/liftOver/hg19ToAplCal1.over.chain.gz"
+		},
+		"hg38": {
+			"danrer10": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToDanRer10.over.chain.gz",
+			"danrer11": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToDanRer11.over.chain.gz",
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToHg19.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz",
+			"mm39": "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm39.over.chain.gz",
+			"ot2": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToOreNil2.over.chain.gz"
+		},
+		"mm9": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/mm9/liftOver/mm9ToHg19.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/mm9/liftOver/mm9ToMm10.over.chain.gz",
+			"danrer7": "https://hgdownload.soe.ucsc.edu/goldenPath/mm9/liftOver/mm9ToDanRer7.over.chain.gz"
+		},
+		"mm10": {
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz",
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg19.over.chain.gz",
+			"danrer11": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToDanRer11.over.chain.gz",
+			"danrer10": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToDanRer10.over.chain.gz"
+		},
+		"mm39": {
+			"hg38": "http://hgdownload.cse.ucsc.edu/goldenPath/mm39/liftOver/mm39ToHg38.over.chain.gz",
+			"danrer11": "http://hgdownload.cse.ucsc.edu/goldenPath/mm39/liftOver/mm39ToDanRer11.over.chain.gz"
+		},
+		"danrer7": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer7/liftOver/danRer7ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer7/liftOver/danRer7ToMm9.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer7/liftOver/danRer7ToMm10.over.chain.gz"
+		},
+		"danrer10": {
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer10/liftOver/danRer10ToHg38.over.chain.gz",
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer10/liftOver/danRer10ToHg19.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer10/liftOver/danRer10ToMm10.over.chain.gz"
+		},
+		"danrer11": {
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer11/liftOver/danRer11ToHg38.over.chain.gz",
+			"mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer11/liftOver/danRer11ToMm10.over.chain.gz",
+			"mm39": "http://hgdownload.cse.ucsc.edu/goldenPath/danRer11/liftOver/danRer11ToMm39.over.chain.gz"
+		},
+		"aplcal1": {
+			"hg19": "https://hgdownload-test.gi.ucsc.edu/goldenPath/aplCal1/liftOver/aplCal1ToHg19.over.chain.gz"
+		},
+		"braflo1": {
+			"hg18": "http://hgdownload.soe.ucsc.edu/goldenPath/braFlo1/liftOver/braFlo1ToHg18.over.chain.gz"
+		},
+		"dr7": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer7/liftOver/danRer7ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/danRer7/liftOver/danRer7ToMm9.over.chain.gz",
+			"ga1": "https://hgdownload.soe.ucsc.edu/gbdb/danRer7/liftOver/danRer7ToGasAcu1.over.chain.gz"
+		},
+		"cj3": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/calJac3/liftOver/calJac3ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/calJac3/liftOver/calJac3ToMm9.over.chain.gz",
+			"rm3": "https://hgdownload.soe.ucsc.edu/goldenPath/calJac3/liftOver/calJac3ToRheMac3.over.chain.gz",
+			"md5": "https://hgdownload.soe.ucsc.edu/goldenPath/calJac3/liftOver/calJac3ToMonDom5.over.chain.gz"
+		},
+		"ot2": {
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/oreNil2/liftOver/oreNil2ToHg38.over.chain.gz",
+			"hg19": "https://hgdownload-test.gi.ucsc.edu/goldenPath/oreNil2/liftOver/oreNil2ToHg19.over.chain.gz"
+		},
+		"oc2": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/oryCun2/liftOver/oryCun2ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/oryCun2/liftOver/oryCun2ToHg19.over.chain.gz",
+			"md5": "https://hgdownload.soe.ucsc.edu/goldenPath/oryCun2/liftOver/oryCun2ToMonDom5.over.chain.gz"
+		},
+		"rm3": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/rheMac3/liftOver/rheMac3ToHg19.over.chain.gz",
+			"cj3": "https://hgdownload.soe.ucsc.edu/goldenPath/rheMac3/liftOver/rheMac3ToCalJac3.over.chain.gz",
+			"md5": "https://hgdownload.soe.ucsc.edu/goldenPath/rheMac3/liftOver/rheMac3ToMonDom5.over.chain.gz"
+		},
+		"ga1": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/gbdb/gasAcu1/liftOver/gasAcu1ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/gasAcu1/liftOver/gasAcu1ToMm9.over.chain.gz",
+			"dr7": "https://hgdownload.soe.ucsc.edu/goldenPath/gasAcu1/liftOver/gasAcu1ToDanRer7.over.chain.gz",
+			"ac2": "https://hgdownload.soe.ucsc.edu/goldenPath/gasAcu1/liftOver/gasAcu1ToAnoCar2.over.chain.gz"
+		},
+		"md5": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/monDom5/liftOver/monDom5ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/monDom5/liftOver/monDom5ToMm9.over.chain.gz",
+			"cj3": "https://hgdownload.soe.ucsc.edu/goldenPath/monDom5/liftOver/monDom5ToCalJac3.over.chain.gz",
+			"oc2": "https://hgdownload.soe.ucsc.edu/goldenPath/monDom5/liftOver/monDom5ToOryCun2.over.chain.gz",
+			"rm3": "https://hgdownload.soe.ucsc.edu/goldenPath/monDom5/liftOver/monDom5ToRheMac3.over.chain.gz"
+		},
+		"gg4": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/galGal4/liftOver/galGal4ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload-test.gi.ucsc.edu/goldenPath/galGal4/liftOver/galGal4ToMm9.over.chain.gz",
+			"rm3": "https://hgdownload-test.gi.ucsc.edu/goldenPath/galGal4/liftOver/galGal4ToRheMac3.over.chain.gz",
+			"cf3": "https://hgdownload-test.gi.ucsc.edu/goldenPath/galGal4/liftOver/galGal4ToCanFam3.over.chain.gz"
+		},
+		"cf3": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/canFam3/liftOver/canFam3ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/canFam3/liftOver/canFam3ToMm9.over.chain.gz",
+			"rm3": "https://hgdownload.soe.ucsc.edu/goldenPath/canFam3/liftOver/canFam3ToRheMac3.over.chain.gz",
+			"gg4": "https://hgdownload.soe.ucsc.edu/goldenPath/canFam3/liftOver/canFam3ToGalGal4.over.chain.gz",
+			"oa3": "https://hgdownload.soe.ucsc.edu/goldenPath/canFam3/liftOver/canFam3ToMusFur1.over.chain.gz"
+		},
+		"oa3": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/musFur1/liftOver/musFur1ToHg19.over.chain.gz",
+			"cf3": "https://hgdownload.soe.ucsc.edu/goldenPath/musFur1/liftOver/musFur1ToCanFam3.over.chain.gz"
+		},
+		"lc1": {
+			"hg38": "https://hgdownload.soe.ucsc.edu/goldenPath/latCha1/liftOver/latCha1ToHg38.over.chain.gz",
+			"hg19": "https://hgdownload-test.gi.ucsc.edu/goldenPath/latCha1/liftOver/latCha1ToHg19.over.chain.gz"
+		},
+		"ac2": {
+			"hg19": "https://hgdownload.soe.ucsc.edu/goldenPath/anoCar2/liftOver/anoCar2ToHg19.over.chain.gz",
+			"mm9": "https://hgdownload.soe.ucsc.edu/goldenPath/anoCar2/liftOver/anoCar2ToMm9.over.chain.gz",
+			"ga1": "https://hgdownload.soe.ucsc.edu/goldenPath/anoCar2/liftOver/anoCar2ToGasAcu1.over.chain.gz"
+		}
+	}
+}

@@ -1,0 +1,3 @@
+species	assembly_version	annotation	chainmap
+Human	hg38	/PATH/TO/GTF/gencode.v47.annotation.no.chrM.gtf.gz
+Mouse	mm39	/PATH/TO/GTF/gencode.vM36.annotation.no.chrM.gtf.gz
