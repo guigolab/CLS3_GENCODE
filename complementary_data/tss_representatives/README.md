@@ -34,10 +34,10 @@ TSS of the novel lncRNA transcripts (4.b), removing the intergenic CLS transcrip
 novel TSS associated with CLS transcripts and loci intergenic w.r.t. GENCODE v27 (the reference at the time of the design)
 The TSSs from CLS transcripts are subdivided into embryonic. adult, common and placenta derived TSS sets.
 
-### 4.b.ii.I. cls embryoOnly TSS - 1,759 TSSs - 2,739 transcripts - 1,549 genes
-### 4.b.ii.II. cls adultOnly TSS - 7,232 TSSs - 11,645 transcripts - 5,892 genes
-### 4.b.ii.III. cls placentaOnly TSS - 777 TSSs - 1,536 transcripts - 685 genes
-### 4.b.ii.IV. cls common TSS - 1,908 TSSs - 3,553 transcripts - 1,681 genes
+### 4.b.ii.I. cls embryoOnly TSS - 1,535 TSSs - 1,935 transcripts - 1,377 genes
+### 4.b.ii.II. cls adultOnly TSS - 6,779 TSSs - 9,649 transcripts - 5,646 genes
+### 4.b.ii.III. cls placentaOnly TSS - 680 TSSs - 1,007 transcripts - 606 genes
+### 4.b.ii.IV. cls common TSS - 2,682 TSSs - 6,882 transcripts - 2,228 genes
 
 
 
@@ -60,7 +60,7 @@ Therefore these are the novel TSS w.r.t. lncRNAs v27.
 novel TSS associated with [disjoint CLS transcripts](https://github.com/guigolab/CLS3_GENCODE/blob/main/complementary_data/gencode_byotypes_datasets/README.md#cls-19140-transcripts---8392-genes) and loci intergenic w.r.t. GENCODE v27 (the reference at the time of the design)
 The TSSs from CLS transcripts are subdivided into embryonic(only), adult(only), common(embryo/adult/placenta) and placenta(only) derived TSS sets.
 
-### 4.b.ii.I. cls embryoOnly TSS - 1,781 TSSs - 2,783 transcripts - 1,566 genes
-### 4.b.ii.II. cls adultOnly TSS - 7,368 TSSs - 12,020 transcripts - 5,950 genes
-### 4.b.ii.III. cls placentaOnly TSS - 766 TSSs - 1,522 transcripts - 675 genes
-### 4.b.ii.IV. cls common TSS - 1,528 TSSs - 2,786 transcripts - 1,367 genes
+### 4.b.ii.I. cls embryoOnly TSS - 1,582 TSSs - 2,060 transcripts - 1,413 genes
+### 4.b.ii.II. cls adultOnly TSS - 7,029 TSSs - 10,404 transcripts - 5,766 genes
+### 4.b.ii.III. cls placentaOnly TSS - 670 TSSs - 995 transcripts - 597 genes
+### 4.b.ii.IV. cls common TSS - 2,162 TSSs - 5,652 transcripts - 1,830 genes
