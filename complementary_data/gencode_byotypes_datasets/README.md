@@ -8,9 +8,14 @@ In GENCODE v47, a total of 151,618 transcripts (listed [here](https://zenodo.org
 In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones, while novel loci are instead only those genes introduced as a consequence of CLS data. We also restricted the set to loci on main chromosomes only.
 
 ```
+wget -nv https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.primary_assembly.annotation.gtf.gz
+zcat gencode.v47.primary_assembly.annotation.gtf.gz | awk -F'\t' '$1 ~ /^chr([0-9]+|[XYM])$/' | awk -F'\t' '$3=="transcript"' | cut -d"\"" -f4 | sort -u > all.transcripts.v47.ids.tmp
+
 wget https://zenodo.org/records/15004659/files/CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt?download=1 && mv CLS3_transcripts_in_v47.all_biotypes.chr.gencode_versions.genes.txt\?download\=1 v47-CLS3_extended_mappings
-awk -F "\t" '$5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f1 | sort -u > novel.transcripts.ids
-awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.ids
+awk -F "\t" '$5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f1 > novel.transcripts.raw-ids.tmp
+awk 'NR==FNR{pat[$1]=1; next} {id=$1; sub(/\.[0-9]+$/,"",id); if(id in pat) print}'  novel.transcripts.raw-ids.tmp all.transcripts.v47.ids.tmp  | sort -u > novel.transcripts.ids
+awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/ && $6 ~ /^([0-9]+|[XYM])$/' v47-CLS3_extended_mappings | cut -f8 | sort -u > novel.loci.raw-ids.tmp
+awk 'NR==FNR{pat[$1]=1; next} {id=$1; sub(/\.[0-9]+$/,"",id); if(id in pat) print}'  novel.loci.raw-ids.tmp all.loci.v47.ids.tmp  | sort -u > novel.loci.ids
 ```
 
 ### CLS loci: 19,473 transcripts - 8,576 genes
