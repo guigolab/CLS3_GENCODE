@@ -10,7 +10,7 @@ Of which 46,701 show conservation signal for their exonic sequence, while 53,705
 Of which 819 show conservation signal for their exonic sequence, while 1,621 have conserved splice-junctions. These correspond to 1,010 genes (12% of the total genes present in the disjoint set).
 
 ### CLS: 2,146 transcripts (11.2%)
-Of which 1,126 show conservation signal for their exonic sequence, while 1,522 have conserved splice-junctions. These correspond to 1,230 genes (14% of the total genes present in the disjoint set).
+Of which 1,126 show conservation signal for their exonic sequence, while 1,522 have conserved splice-junctions. These correspond to 1,196 genes (14% of the total genes present in the disjoint set).
 
 ### Decoys: 2,074 transcripts (2.5%)
 Of which 769 show conservation signal for their exonic sequence, while 1,622 have conserved splice-junctions. These correspond to 1,001 genes (5.9% of the total genes present in the disjoint set).
