@@ -6,7 +6,7 @@ Transcripts lacking PhyloP scores for more than 10% of the exon bases or any of 
 ### protein-coding: 54,643 transcripts (96%)
 Of which 46,701 show conservation signal for their exonic sequence, while 53,705 have conserved splice-junctions. These correspond to 12,989 genes (94% of the total genes present in the disjoint set).
 
-### lncRNAs: 1,927 transcripts (14.7%)
+### lncRNAs: 1,924 transcripts (14.7%)
 Of which 819 show conservation signal for their exonic sequence, while 1,621 have conserved splice-junctions. These correspond to 1,010 genes (12% of the total genes present in the disjoint set).
 
 ### CLS: 2,146 transcripts (11.2%)
