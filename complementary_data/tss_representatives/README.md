@@ -39,7 +39,11 @@ The TSSs from CLS transcripts are subdivided into embryonic. adult, common and p
 ### 4.b.ii.III. cls placentaOnly TSS - 680 TSSs - 1,007 transcripts - 606 genes
 ### 4.b.ii.IV. cls common TSS - 2,682 TSSs - 6,882 transcripts - 2,228 genes
 
+### cls enhancer TSS - 2,123 TSSs - 3,776 transcripts - 1,627 genes
+CLS transcripts origination form enhancer regions.
 
+### cls enhancer only TSS - 400 TSSs - 481 transcripts - 353 genes
+CLS transcripts origination ONLY form enhancer regions.
 
 # Representative TSS sets for "disjoint transcripts", [HERE](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/tss_representatives/disjointTSSsets):
 ### 1. protein coding TSS: 30,560 TSSs - 56,821 transcripts - 13,880 genes
@@ -64,3 +68,7 @@ The TSSs from CLS transcripts are subdivided into embryonic(only), adult(only), 
 ### 4.b.ii.II. cls adultOnly TSS - 7,029 TSSs - 10,404 transcripts - 5,766 genes
 ### 4.b.ii.III. cls placentaOnly TSS - 670 TSSs - 995 transcripts - 597 genes
 ### 4.b.ii.IV. cls common TSS - 2,162 TSSs - 5,652 transcripts - 1,830 genes
+
+
+### cls enhancer TSS - 2,057 TSSs - 3,653 transcripts - 1,576 genes
+### cls enhancer only TSS - 387 TSSs - 467 transcripts - 341 genes
