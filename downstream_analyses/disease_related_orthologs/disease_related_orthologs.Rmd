@@ -1,0 +1,478 @@
+██████╗ ██╗███████╗███████╗ █████╗ ███████╗███████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗ 
+██╔══██╗██║██╔════╝██╔════╝██╔══██╗██╔════╝██╔════╝    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+██║  ██║██║███████╗█████╗  ███████║███████╗█████╗      ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
+██║  ██║██║╚════██║██╔══╝  ██╔══██║╚════██║██╔══╝      ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
+██████╔╝██║███████║███████╗██║  ██║███████║███████╗    ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
+╚═════╝ ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ 
+                                                                                                                
+ ██████╗ ██████╗ ████████╗██╗  ██╗ ██████╗ ██╗      ██████╗  ██████╗ ███████╗                                   
+██╔═══██╗██╔══██╗╚══██╔══╝██║  ██║██╔═══██╗██║     ██╔═══██╗██╔════╝ ██╔════╝                                   
+██║   ██║██████╔╝   ██║   ███████║██║   ██║██║     ██║   ██║██║  ███╗███████╗                                   
+██║   ██║██╔══██╗   ██║   ██╔══██║██║   ██║██║     ██║   ██║██║   ██║╚════██║                                   
+╚██████╔╝██║  ██║   ██║   ██║  ██║╚██████╔╝███████╗╚██████╔╝╚██████╔╝███████║                                   
+ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚══════╝                                   
+                                                                                                                
+```{bash, engine.opts='-l'}
+##########################################################################################
+# Clean-up generated data
+##########################################################################################
+echo '++++++ Cleaning up data from previous run ++++++'
+rm -r .temp/
+echo '>> Done <<'
+
+##########################################################################################
+# Handle errors
+##########################################################################################
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+##########################################################################################
+# Create directory structure
+##########################################################################################
+echo '++++++ Creating necessary directory structure ++++++'
+# Dir for .temp data
+mkdir .temp/
+echo '>> Done <<'
+
+##########################################################################################
+# Move to working dir
+##########################################################################################
+cd .temp/
+
+##########################################################################################
+# Download annotations
+##########################################################################################
+echo "++++++++++ Download annotations"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.annotation.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/gencode.vM36.annotation.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/gencode.v27.annotation.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M16/gencode.vM16.annotation.gtf.gz"
+sleep 1
+echo '>> Done <<'
+
+echo "++++++++++ Download datasets"
+# Download LncRNADisease v3.0
+## Was downloaded manually. Description in README.md in this directory.
+echo '>> Done <<'
+
+##########################################################################################
+# Transform the data
+##########################################################################################
+# Extract geneIDs from annotations
+echo "++++++++++ Extracting genes from annotations"
+zcat gencode.v47.annotation.gtf.gz | ../skipcomments - | awk '$3=="gene"{print $1"\t"$10"\t"$12"\t"$14}' | sed 's/"//g' | sed 's/;//g' > gencode.v47.genes.tsv
+zcat gencode.vM36.annotation.gtf.gz | ../skipcomments - | awk '$3=="gene"{print $1"\t"$10"\t"$12"\t"$14}' | sed 's/"//g' | sed 's/;//g' > gencode.vM36.genes.tsv
+zcat gencode.v27.annotation.gtf.gz | ../skipcomments - | awk '$3=="gene"{print $1"\t"$10"\t"$12"\t"$14}' | sed 's/"//g' | sed 's/;//g' > gencode.v27.genes.tsv
+zcat gencode.vM16.annotation.gtf.gz | ../skipcomments - | awk '$3=="gene"{print $1"\t"$10"\t"$12"\t"$14}' | sed 's/"//g' | sed 's/;//g' > gencode.vM16.genes.tsv
+echo '>> Done <<'
+
+# Extract disease related genes from annotations
+echo "++++++++++ Extracting disease related genes from annotations"
+## Section moved to R
+echo '>> Done <<'
+
+##########################################################################################
+# Report completeness
+##########################################################################################
+echo "++++++++++ COMPLETED"
+```
+
+# Load R libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+# Download from CRAN
+pacman::p_load(dplyr,
+               tidyr,
+               scales,
+               stringr,
+               ggplot2)
+```
+
+ ██████╗ ███████╗███╗   ██╗ ██████╗ ██████╗ ██████╗ ███████╗
+██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔═══██╗██╔══██╗██╔════╝
+██║  ███╗█████╗  ██╔██╗ ██║██║     ██║   ██║██║  ██║█████╗  
+██║   ██║██╔══╝  ██║╚██╗██║██║     ██║   ██║██║  ██║██╔══╝  
+╚██████╔╝███████╗██║ ╚████║╚██████╗╚██████╔╝██████╔╝███████╗
+ ╚═════╝ ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data
+df_gencode47 <- read.table(".temp/gencode.v47.genes.tsv", header = F, as.is = T, sep = "\t") %>% 
+  rename("chr" = V1) %>% 
+  rename("geneID" = V2) %>% 
+  rename("geneType" = V3) %>%
+  rename("geneName" = V4) %>% 
+  # Remove gene versions
+  mutate(geneID = str_remove(geneID, "\\.[0-9]+$")) %>% 
+  # Simplify geneTypes (same style as in ConnectOR)
+  mutate(geneType = case_when(
+    geneType %in% c("lncRNA", "TEC", "processed_transcript", "lincRNA", "3prime_overlapping_ncrna", "antisense",
+                "non_coding", "sense_intronic", "sense_overlapping", "macro_lncRNA","antisense_RNA",
+                "bidirectional_promoter_lncrna", "3prime_overlapping_ncRNA", "bidirectional_promoter_lncRNA") ~ "lncRNA",
+    geneType %in% c("ncRNA", "snRNA", "snoRNA", "rRNA", "rRNA_pseudogene", "Mt_tRNA", "Mt_rRNA", "misc_RNA", "miRNA", "ribozyme", "sRNA",
+                "scaRNA", "scRNA", "vault_RNA", "known_ncrna","vaultRNA") ~ "ncRNA",
+    geneType %in% c("other", "processed_pseudogene", "transcribed_processed_pseudogene", "translated_processed_pseudogene", "unprocessed_pseudogene", "transcribed_unprocessed_pseudogene",
+                "translated_unprocessed_pseudogene", "unitary_pseudogene", "transcribed_unitary_pseudogene", "polymorphic pseudogene", "IG_C_gene", "IG_D_gene", "IG_J_gene", "IG_LV_gene",
+                "IG_V_gene", "TR_C_gene", "TR_D_gene", "TR_J_gene", "TR_V_gene", "IG_C_pseudogene", "IG_D_pseudogene", "IG_J_pseudogene", "IG_V_pseudogene", "IG_pseudogene", "TR_J_pseudogene",
+                "TR_V_pseudogene", "NOVEL") ~ "other",
+    geneType %in% c("protein_coding") ~ "pc",
+    TRUE ~ geneType)) %>% 
+  # Keep only lncRNA genes
+  filter(geneType == "lncRNA")
+  
+df_gencode27 <- read.table(".temp/gencode.v27.genes.tsv", header = F, as.is = T, sep = "\t") %>% 
+  rename("chr" = V1) %>% 
+  rename("geneID" = V2) %>% 
+  rename("geneType" = V3) %>%
+  rename("geneName" = V4) %>% 
+  # Remove gene versions
+  mutate(geneID = str_remove(geneID, "\\.[0-9]+$")) %>% 
+  # Simplify geneTypes (same style as in ConnectOR)
+  mutate(geneType = case_when(
+    geneType %in% c("lncRNA", "TEC", "processed_transcript", "lincRNA", "3prime_overlapping_ncrna", "antisense",
+                "non_coding", "sense_intronic", "sense_overlapping", "macro_lncRNA","antisense_RNA",
+                "bidirectional_promoter_lncrna", "3prime_overlapping_ncRNA", "bidirectional_promoter_lncRNA") ~ "lncRNA",
+    geneType %in% c("ncRNA", "snRNA", "snoRNA", "rRNA", "rRNA_pseudogene", "Mt_tRNA", "Mt_rRNA", "misc_RNA", "miRNA", "ribozyme", "sRNA",
+                "scaRNA", "scRNA", "vault_RNA", "known_ncrna","vaultRNA") ~ "ncRNA",
+    geneType %in% c("other", "processed_pseudogene", "transcribed_processed_pseudogene", "translated_processed_pseudogene", "unprocessed_pseudogene", "transcribed_unprocessed_pseudogene",
+                "translated_unprocessed_pseudogene", "unitary_pseudogene", "transcribed_unitary_pseudogene", "polymorphic pseudogene", "IG_C_gene", "IG_D_gene", "IG_J_gene", "IG_LV_gene",
+                "IG_V_gene", "TR_C_gene", "TR_D_gene", "TR_J_gene", "TR_V_gene", "IG_C_pseudogene", "IG_D_pseudogene", "IG_J_pseudogene", "IG_V_pseudogene", "IG_pseudogene", "TR_J_pseudogene",
+                "TR_V_pseudogene", "NOVEL") ~ "other",
+    geneType %in% c("protein_coding") ~ "pc",
+    TRUE ~ geneType)) %>% 
+  # Keep only lncRNA genes
+  filter(geneType == "lncRNA")
+
+# Create Gencode consensus dataset - only genes present in both datasets.
+# In some cases geneName47 != geneName27. We use only geneNames27
+# GeneTypes are consistent across v47 and v27
+inner_join(x = (df_gencode47 %>% select(geneID)),
+           y = df_gencode27,
+           by = join_by(geneID==geneID)) -> df_gencode_consensus
+
+
+# Preview datasets
+df_gencode47
+df_gencode27
+df_gencode_consensus
+```
+
+
+██╗     ███╗   ██╗ ██████╗██████╗ ███╗   ██╗ █████╗ ██████╗ ██╗███████╗███████╗ █████╗ ███████╗███████╗    ██╗   ██╗██████╗     ██████╗ 
+██║     ████╗  ██║██╔════╝██╔══██╗████╗  ██║██╔══██╗██╔══██╗██║██╔════╝██╔════╝██╔══██╗██╔════╝██╔════╝    ██║   ██║╚════██╗   ██╔═████╗
+██║     ██╔██╗ ██║██║     ██████╔╝██╔██╗ ██║███████║██║  ██║██║███████╗█████╗  ███████║███████╗█████╗      ██║   ██║ █████╔╝   ██║██╔██║
+██║     ██║╚██╗██║██║     ██╔══██╗██║╚██╗██║██╔══██║██║  ██║██║╚════██║██╔══╝  ██╔══██║╚════██║██╔══╝      ╚██╗ ██╔╝ ╚═══██╗   ████╔╝██║
+███████╗██║ ╚████║╚██████╗██║  ██║██║ ╚████║██║  ██║██████╔╝██║███████║███████╗██║  ██║███████║███████╗     ╚████╔╝ ██████╔╝██╗╚██████╔╝
+╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝ ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝      ╚═══╝  ╚═════╝ ╚═╝ ╚═════╝ 
+# LncRNADisease v3.0
+```{r}
+# Load data
+df_LncRNADisease <- read.table("LncRNADisease.v3.0.tsv", header = T, as.is = T, sep = "\t") %>% 
+  unique() # Removed multiple duplicated lines (halving the original size)
+
+# Map to Gencode consensus
+df_LncRNADisease %>% 
+  left_join(x = .,
+            y = df_gencode_consensus,
+            by = join_by(ncRNA_Symbol==geneName),
+            keep = TRUE,
+            relationship = "many-to-many") %>%  # same geneName maps to multiple geneIDs
+  # Remove unmatched entries
+  filter(!is.na(geneID)) %>% 
+  # Filter out ugly stuff
+  # Select only distinct geneIDs, keep geneType for future filtering
+  select(geneID, geneType) %>% 
+  unique() %>% 
+  # Add dataset info
+  mutate(dataset = "LncRNADisease") %>% 
+  # Add Gencode version
+  mutate(gen_ver = "27consensus47") -> df_LncRNADisease_gen
+
+# Preview datasets
+df_LncRNADisease_gen
+```
+
+
+ ██████╗██╗      ██████╗    ██████╗ 
+██╔════╝██║     ██╔════╝    ╚════██╗
+██║     ██║     ██║          █████╔╝
+██║     ██║     ██║          ╚═══██╗
+╚██████╗███████╗╚██████╗    ██████╔╝
+ ╚═════╝╚══════╝ ╚═════╝    ╚═════╝ 
+# Cancer lncRNA Census 3 (CLC3)
+```{r}
+# Load data
+df_clc <- read.table("CLC3.tsv", header = T, as.is = T, sep = "\t") # All rows are unique!
+
+# Map to Gencode consensus
+df_clc %>% 
+  left_join(x = .,
+            y = df_gencode_consensus,
+            by = join_by(GENCODE_ID==geneID),
+            keep = TRUE,
+            relationship = "one-to-one") %>% # we expect only 1:1 matches
+  # Remove unmatched entries
+  filter(!is.na(geneID)) %>% 
+  # Select only distinct geneIDs, keep geneType for future filtering
+  select(geneID, geneType) %>% 
+  unique() %>% 
+  # Add dataset info
+  mutate(dataset = "CLC3") %>% 
+  # Add Gencode version
+  mutate(gen_ver = "27consensus47") -> df_clc3_gen
+
+# Preview dataset
+df_clc3_gen
+```
+
+██╗     ███╗   ██╗ ██████╗██████╗  ██████╗  ██████╗ ██╗  ██╗    ██╗   ██╗██████╗     ██████╗ 
+██║     ████╗  ██║██╔════╝██╔══██╗██╔═══██╗██╔═══██╗██║ ██╔╝    ██║   ██║╚════██╗   ██╔═████╗
+██║     ██╔██╗ ██║██║     ██████╔╝██║   ██║██║   ██║█████╔╝     ██║   ██║ █████╔╝   ██║██╔██║
+██║     ██║╚██╗██║██║     ██╔══██╗██║   ██║██║   ██║██╔═██╗     ╚██╗ ██╔╝██╔═══╝    ████╔╝██║
+███████╗██║ ╚████║╚██████╗██████╔╝╚██████╔╝╚██████╔╝██║  ██╗     ╚████╔╝ ███████╗██╗╚██████╔╝
+╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝      ╚═══╝  ╚══════╝╚═╝ ╚═════╝ 
+# LncBook 2.0
+```{r}
+# Load data
+df_lncBook <- read.table("LncBook.v2.0.tsv", header = T, as.is = T, sep = "\t") %>% 
+  filter(Symbol != "-") %>% # All rows are unique!
+  # Split geneNames by comma (some rows contain more than 1 geneName)
+  separate_longer_delim(cols = Symbol, delim = ",") %>% 
+  distinct(Symbol)
+
+# Map ro Gencode consensus using Symbol and geneName
+df_lncBook %>% 
+  left_join(x = .,
+            y = df_gencode_consensus,
+            by = join_by(Symbol==geneName),
+            keep = TRUE,
+            relationship = "one-to-many") %>% # 
+  # Remove unmatched entries
+  filter(!is.na(geneID)) %>% 
+  # Select only distinct geneIDs, keep geneType for future filtering
+  select(geneID, geneType) %>% 
+  unique() %>% 
+  # Add dataset info
+  mutate(dataset = "LncBook") %>% 
+  # Add Gencode version
+  mutate(gen_ver = "27consensus47") -> df_lncBook_gen
+
+# Preview dataset
+df_lncBook_gen
+```
+
+
+ ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗███╗   ██╗███████╗██████╗ 
+██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║████╗  ██║██╔════╝██╔══██╗
+██║     ██║   ██║██╔████╔██║██████╔╝██║██╔██╗ ██║█████╗  ██║  ██║
+██║     ██║   ██║██║╚██╔╝██║██╔══██╗██║██║╚██╗██║██╔══╝  ██║  ██║
+╚██████╗╚██████╔╝██║ ╚═╝ ██║██████╔╝██║██║ ╚████║███████╗██████╔╝
+ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝╚═════╝ 
+# Combined LncRNADisease + CLC3 + lncBook
+```{r}
+# Combine all catalogs
+bind_rows(df_lncBook_gen, df_LncRNADisease_gen, df_clc3_gen) %>% 
+  mutate(dataset = "Combined") %>% 
+  unique() -> df_combined_gen
+
+# Preview dataset
+df_combined_gen
+```
+
+
+ ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗ ██████╗ ██████╗ 
+██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║   ██║   ██║██████╔╝
+██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║   ██║   ██║██╔══██╗
+╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║   ╚██████╔╝██║  ██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+```{r}
+# Load data: ConnectOR
+df_v47_to_vM36_raw <- read.table("../connectOR_output/orthology.table.hg38tomm39.tsv", header = T, as.is = T, sep = "\t")
+df_v27_to_vM16_raw <- read.table("../connectOR_output/orthology.table.hg38tomm10.tsv", header = T, as.is = T, sep = "\t")
+
+# Transform
+# Human -> Mouse
+## GENCODE v47 vs M36
+df_v47_to_vM36_raw %>% 
+  # Add 1to1 separately (both biotypes must be lncRNA)
+  filter(orthology.type == "one-to-one") %>% 
+  filter(hg38.gene.type == "lncRNA" & mm39.gene.type == "lncRNA") %>% 
+  select(hg38) %>% 
+  # Add rest of the orthology.types
+  bind_rows(df_v47_to_vM36_raw %>% 
+              filter(orthology.type != "one-to-one") %>% 
+              filter(hg38.gene.type == "lncRNA") %>%
+              select(hg38) %>% 
+              unique()) %>%
+  # Rename column
+  rename(geneID = "hg38") %>% 
+  # Take only distinct IDs
+  distinct(geneID) %>% 
+  # Remove geneID version
+  mutate(geneID = str_remove(geneID, "\\.[0-9]+$")) %>% 
+  # Add direction and gencode version
+  mutate(direction = "Human -> Mouse") %>% 
+  mutate(version = "v47 vs M36") -> df_v47_to_vM36_orthologs
+  
+## GENCODE v27 vs M16
+df_v27_to_vM16_raw %>% 
+  # Add 1to1 separately (both biotypes must be lncRNA)
+  filter(orthology.type == "one-to-one") %>% 
+  filter(hg38.gene.type == "lncRNA" & mm10.gene.type == "lncRNA") %>% 
+  select(hg38) %>% 
+  # Add rest of the orthology.types
+  bind_rows(df_v27_to_vM16_raw %>% 
+              filter(orthology.type != "one-to-one") %>% 
+              filter(hg38.gene.type == "lncRNA") %>%
+              select(hg38) %>% 
+              unique()) %>%
+  # Rename column
+  rename(geneID = "hg38") %>% 
+  # Take only distinct IDs
+  distinct(geneID) %>% 
+  # Remove geneID version
+  mutate(geneID = str_remove(geneID, "\\.[0-9]+$")) %>% 
+  # Add direction and gencode version
+  mutate(direction = "Human -> Mouse") %>% 
+  mutate(version = "v27 vs M16") -> df_v27_to_vM16_orthologs
+    
+# Preview datasets
+df_v47_to_vM36_orthologs
+df_v27_to_vM16_orthologs
+```
+
+
+██████╗ ██╗      ██████╗ ████████╗
+██╔══██╗██║     ██╔═══██╗╚══██╔══╝
+██████╔╝██║     ██║   ██║   ██║   
+██╔═══╝ ██║     ██║   ██║   ██║   
+██║     ███████╗╚██████╔╝   ██║   
+╚═╝     ╚══════╝ ╚═════╝    ╚═╝   
+# Combine and plot data
+```{r}
+# Transform data into plot input
+# LncRNADisease + v47 orthologs
+full_join(x = df_v47_to_vM36_orthologs,
+          y = df_LncRNADisease_gen,
+          by = join_by(geneID == geneID),
+          relationship = "one-to-one") %>%
+  # Mark data
+  mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+  mutate(gencode = "v47 vs M36") %>% 
+  summarise(.by = c("type", "gencode"),
+            count = n()) %>% 
+  mutate(catalog = "LncRNADisease") %>%
+  # LncRNADisease v27 + v27 orthologs
+  rbind(full_join(x = df_v27_to_vM16_orthologs,
+                  y = df_LncRNADisease_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+                  # Mark data
+                  mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+                  mutate(gencode = "v27 vs M16") %>% 
+                  summarise(.by = c("type", "gencode"),
+                            count = n()) %>% 
+                  mutate(catalog = "LncRNADisease")) %>% 
+  # Add CLC3 + v47 orthologs
+  rbind(full_join(x = df_v47_to_vM36_orthologs,
+                  y = df_clc3_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>%
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v47 vs M36") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "CLC3")) %>% 
+  # Add CLC3 v27 + v27 orthologs
+  rbind(full_join(x = df_v27_to_vM16_orthologs,
+                  y = df_clc3_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v27 vs M16") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "CLC3")) %>% 
+  # Add lncBook + v47 orthologs
+  rbind(full_join(x = df_v47_to_vM36_orthologs,
+                  y = df_lncBook_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v47 vs M36") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "lncBook")) %>% 
+  # Add lncBook + v27 orthologs
+  rbind(full_join(x = df_v27_to_vM16_orthologs,
+                  y = df_lncBook_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v27 vs M16") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "lncBook")) %>% 
+# Add Combined + v47 orthologs
+  rbind(full_join(x = df_v47_to_vM36_orthologs,
+                  y = df_combined_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v47 vs M36") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "Combined")) %>% 
+  # Add Combined + v27 orthologs
+  rbind(full_join(x = df_v27_to_vM16_orthologs,
+                  y = df_combined_gen,
+                  by = join_by(geneID == geneID),
+                  relationship = "one-to-one") %>% 
+          # Mark data
+          mutate(type = ifelse(is.na(dataset), "lncRNA orthologs", ifelse(is.na(version), "Disease/Function", "common"))) %>% 
+          mutate(gencode = "v27 vs M16") %>% 
+          summarise(.by = c("type", "gencode"),
+                    count = n()) %>% 
+          mutate(catalog = "Combined")) -> plot_input
+
+# Plot this
+plot_input %>% 
+  ggplot(aes(x = gencode,
+             y = count,
+             fill = factor(type, levels = c("Disease/Function", "common", "lncRNA orthologs")))) +
+  geom_bar(position="stack", stat="identity") +
+  geom_text(aes(label = comma(count)), position = position_stack(vjust = .5),
+            size = 3) +
+  theme_bw() +
+  ylab('# genes') +
+  scale_fill_manual(values=c("#d9ed92", "#5f9f6a", "#184e77")) +
+  scale_y_continuous(labels = comma) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(colour = "black", size = 9),
+        axis.text.y = element_text(colour = "black", size = 9),
+        axis.ticks = element_line(colour = "black"),
+        legend.title = element_blank(),
+        legend.position = "top",
+        panel.grid = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=11)) +
+  facet_wrap(vars(factor(catalog,
+                         levels = c("CLC3", "lncBook", "LncRNADisease", "Combined"))),
+             ncol = 4) -> disease_orthologs_plot
+
+# Preview plot
+disease_orthologs_plot
+```
+
+# Save to pdf
+```{r}
+pdf(file="disease_orthologs_plot.pdf", width = 7, height = 5)
+disease_orthologs_plot
+```
