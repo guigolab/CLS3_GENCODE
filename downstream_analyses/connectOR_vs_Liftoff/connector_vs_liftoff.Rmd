@@ -1,0 +1,575 @@
+ ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗ ██████╗ ██████╗ 
+██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║   ██║   ██║██████╔╝
+██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║   ██║   ██║██╔══██╗
+╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║   ╚██████╔╝██║  ██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+                                                                               
+██╗   ██╗███████╗                                                              
+██║   ██║██╔════╝                                                              
+██║   ██║███████╗                                                              
+╚██╗ ██╔╝╚════██║                                                              
+ ╚████╔╝ ███████║                                                              
+  ╚═══╝  ╚══════╝                                                              
+                                                                               
+██╗     ██╗███████╗████████╗ ██████╗ ███████╗███████╗                          
+██║     ██║██╔════╝╚══██╔══╝██╔═══██╗██╔════╝██╔════╝                          
+██║     ██║█████╗     ██║   ██║   ██║█████╗  █████╗                            
+██║     ██║██╔══╝     ██║   ██║   ██║██╔══╝  ██╔══╝                            
+███████╗██║██║        ██║   ╚██████╔╝██║     ██║                               
+╚══════╝╚═╝╚═╝        ╚═╝    ╚═════╝ ╚═╝     ╚═╝                               
+                                                                                                         
+# Prepare environment
+```{bash, engine.opts='-l'}
+##########################################################################################
+# Clean-up generated data
+##########################################################################################
+echo '++++++ Cleaning up data from previous run ++++++'
+rm -r ./.temp/
+echo '>> Done <<'
+
+##########################################################################################
+# Handle errors
+##########################################################################################
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+##########################################################################################
+# Create directory structure
+##########################################################################################
+echo '++++++ Creating necessary directory structure ++++++'
+# Dir for .temp data
+mkdir ./.temp/
+mkdir ./.temp/Human/
+mkdir ./.temp/Mouse/
+echo '>> Done <<'
+
+##########################################################################################
+# Move to working dir
+##########################################################################################
+cd ./.temp/
+
+##########################################################################################
+# Transform the data
+##########################################################################################
+# ConnectOR output (default threshold)
+######################
+## H -> M
+######################
+#########################################################
+### All orthology types
+#### HUMAN
+##### Extract 1to1
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_M_connectOR.ids
+##### Add rest
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq >> ./Human/H_to_M_connectOR.ids
+#### MOUSE
+##### Extract 1to1
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H_to_M_connectOR.ids
+##### Add rest
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq >> ./Mouse/H_to_M_connectOR.ids
+#########################################################
+### 1-to-1 only
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_M_connectOR_1to1.ids
+cat ../../connectOR_output/orthology.table.hg38tomm39.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H_to_M_connectOR_1to1.ids
+######################
+## M -> H
+######################
+### All orthology types
+#### MOUSE
+##### Extract 1to1
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/M_to_H_connectOR.ids
+##### Add rest
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq >> ./Mouse/M_to_H_connectOR.ids
+#### HUMAN
+##### Extract 1to1
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Human/M_to_H_connectOR.ids
+##### Add rest
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq >> ./Human/M_to_H_connectOR.ids
+#########################################################
+### 1-to-1 only
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/M_to_H_connectOR_1to1.ids
+cat ../../connectOR_output/orthology.table.mm39tohg38.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Human/M_to_H_connectOR_1to1.ids
+
+# ConnectOR output (lower threshold: 0.05)
+######################
+## H -> M
+######################
+#########################################################
+### All orthology types
+#### HUMAN
+##### Extract 1to1
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_M_connectOR_005.ids
+##### Add rest
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq >> ./Human/H_to_M_connectOR_005.ids
+#### MOUSE
+##### Extract 1to1
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H_to_M_connectOR_005.ids
+##### Add rest
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq >> ./Mouse/H_to_M_connectOR_005.ids
+#########################################################
+### 1-to-1 only
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_M_connectOR_005_1to1.ids
+cat ../connectOR_output_005_threshold/orthology.table.hg38tomm39_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H_to_M_connectOR_005_1to1.ids
+######################
+## M -> H
+######################
+### All orthology types
+#### MOUSE
+##### Extract 1to1
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/M_to_H_connectOR_005.ids
+##### Add rest
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq >> ./Mouse/M_to_H_connectOR_005.ids
+#### HUMAN
+##### Extract 1to1
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Human/M_to_H_connectOR_005.ids
+##### Add rest
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5!="one-to-one"' | awk '$2=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq >> ./Human/M_to_H_connectOR_005.ids
+#########################################################
+### 1-to-1 only
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/M_to_H_connectOR_005_1to1.ids
+cat ../connectOR_output_005_threshold/orthology.table.mm39tohg38_005.tsv | awk '$5=="one-to-one"' | awk '$2=="lncRNA"' | awk '$4=="lncRNA"{print $3}' | awk -F"." '{print $1}' | sort | uniq > ./Human/M_to_H_connectOR_005_1to1.ids
+
+# Liftoff output
+## H -> M
+cat ../liftoff_output/res_HSAtoMMU_lncRNA_fixed.tsv | tail +2 | awk '{print $2}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_M_Liftoff.ids
+cat ../liftoff_output/res_HSAtoMMU_lncRNA_fixed.tsv | tail +2 | awk '{print $4}' | sed 's/,/\n/g' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H_to_M_Liftoff.ids
+## M -> H
+cat ../liftoff_output/res_MMUtoHSA_lncRNA_fixed.tsv | tail +2 | awk '{print $2}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/M_to_H_Liftoff.ids
+cat ../liftoff_output/res_MMUtoHSA_lncRNA_fixed.tsv | tail +2 | awk '{print $4}' | sed 's/,/\n/g' | awk -F"." '{print $1}' | sort | uniq > ./Human/M_to_H_Liftoff.ids
+## H -> Primates
+### Skip rows having 0 in cols 3-34
+#### AWK: awk 'BEGIN{OFS=FS="\t"} {for(i=3;i<=34;i++) if($i==0) next; print}'
+#### Perl: perl -pe 's/(?<=\t)0(?=\t)/FALSE/g'
+cat ../liftoff_output/primatesAllGencodeLncRNA.tsv | perl -pe 's/(?<=\t)0(?=\t)/FALSE/g' | grep -vFw "FALSE" | awk '{print $1}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H_to_P_Liftoff.ids
+### 1-to-1 Human-Mouse (reciprocal)
+cat ../liftoff_output/res_1to1_lncRNA_fixed.tsv | tail +2 | awk '{print $5}' | awk -F"." '{print $1}' | sort | uniq > ./Human/H-M_Liftoff_1to1.ids
+cat ../liftoff_output/res_1to1_lncRNA_fixed.tsv | tail +2 | awk '{print $2}' | awk -F"." '{print $1}' | sort | uniq > ./Mouse/H-M_Liftoff_1to1.ids
+
+# Create output file
+echo -e "base_set\treference_set\tbase_size\treference_size\toverlapping_genes\tpercentage\tspecies" > ../results.tsv
+
+# Analyse Human
+echo "~~~ Analysing Human"
+for file_A in ./Human/*.ids
+  do
+    echo $file_A
+    set_A_name=`echo $file_A | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'`
+    set_A_size=`cat $file_A | wc -l`
+    
+    for file_B in ./Human/*.ids
+      do
+        echo $file_B
+        set_B_name=`echo $file_B | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'`
+        set_B_size=`cat $file_B | wc -l`
+        A_overlap_B=`cat $file_A | grep -Fwf $file_B | grep "\S" | wc -l`
+        percentage=`echo $A_overlap_B / $set_A_size | bc -l`
+        # Report results
+        echo -e "$set_A_name\t$set_B_name\t$set_A_size\t$set_B_size\t$A_overlap_B\t$percentage\tHuman" >> ../results.tsv
+      done
+  done
+
+echo ">>> Human done!"
+
+# Analyse Mouse
+echo "~~~ Analysing Mouse"
+for file_A in ./Mouse/*.ids
+  do
+    echo $file_A
+    set_A_name=`echo $file_A | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'`
+    set_A_size=`cat $file_A | wc -l`
+    
+    for file_B in ./Mouse/*.ids
+      do
+        echo $file_B
+        set_B_name=`echo $file_B | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'`
+        set_B_size=`cat $file_B | wc -l`
+        A_overlap_B=`cat $file_A | grep -Fwf $file_B | grep "\S" | wc -l`
+        percentage=`echo $A_overlap_B / $set_A_size | bc -l`
+        # Report results
+        echo -e "$set_A_name\t$set_B_name\t$set_A_size\t$set_B_size\t$A_overlap_B\t$percentage\tMouse" >> ../results.tsv
+      done
+  done
+
+echo ">>> Mouse done!"
+
+# Report completenes
+echo "+++ COMPLETADO +++"
+```
+
+# Load R libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr,
+               scales,
+               stringr,
+               ggplot2)
+```
+
+# Load data
+```{r}
+# Clean the env
+rm(list = ls())
+
+#####################################################################
+### Load data
+#####################################################################
+df_results <- read.table("results.tsv", header = T, as.is = T, sep = "\t")
+
+# Preview
+df_results
+```
+
+
+ █████╗ ██╗     ██╗     
+██╔══██╗██║     ██║     
+███████║██║     ██║     
+██╔══██║██║     ██║     
+██║  ██║███████╗███████╗
+╚═╝  ╚═╝╚══════╝╚══════╝
+# Create heatmap - HUMAN
+```{r}
+levels_a <-c("M_to_H_connectOR_005",
+             "H_to_M_connectOR_005",
+             "M_to_H_connectOR",
+             "H_to_M_connectOR",
+             "H_to_P_Liftoff",
+             "M_to_H_Liftoff",
+             "H_to_M_Liftoff")
+
+levels_b <- c("H_to_M_Liftoff",
+              "M_to_H_Liftoff",
+              "H_to_P_Liftoff",
+              "H_to_M_connectOR",
+              "M_to_H_connectOR",
+              "H_to_M_connectOR_005",
+              "M_to_H_connectOR_005")
+
+labels_a <-c("M -> H\n(ConnectOR: 5%)",
+             "H -> M\n(ConnectOR: 5%)",
+             "M -> H\n(ConnectOR)",
+             "H -> M\n(ConnectOR)",
+             "H -> P\n(Liftoff)",
+             "M -> H\n(Liftoff)",
+             "H -> M\n(Liftoff)")
+
+labels_b <- c("H -> M\n(Liftoff)",
+              "M -> H\n(Liftoff)",
+              "H -> P\n(Liftoff)",
+              "H -> M\n(ConnectOR)",
+              "M -> H\n(ConnectOR)",
+              "H -> M\n(ConnectOR: 5%)",
+              "M -> H\n(ConnectOR: 5%)")
+
+# Create heatmap
+df_results %>%
+  filter(species == "Human") %>% 
+  filter(!str_detect(base_set, "1to1") & !str_detect(reference_set, "1to1") ) %>% 
+  filter(base_set %in% c("H_to_M_connectOR_005","H_to_M_connectOR","H_to_M_Liftoff")) %>% 
+  filter(reference_set %in% c("H_to_M_connectOR_005","H_to_M_connectOR","H_to_M_Liftoff")) %>% 
+  ggplot(data=.) +
+  geom_tile(data = . %>% filter(percentage == 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b))), fill="#1c75bc") +  #0096c7      #E48430
+  geom_tile(data = . %>% filter(percentage < 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                fill = percentage)) +
+  geom_text(size=5,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = (scales::percent(percentage, accuracy = 0.01)))) +
+  geom_text(size=3.2,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = paste0("\n\n",
+                               "(", scales::comma(overlapping_genes), "/", scales::comma(base_size), ")"))) +
+  scale_fill_gradientn(colours=c("#e9f1f9","#d4e3f3","#bed5ed","#a9c8e6","#94bae0","#7eacd9","#5391cb","#1c75bc"), #"#FFFFFF","#f1f1f1","#d9d9d9","#c7c7c7","#bdbdbd","#b1b1b1","#a7a7a7","#9a9a9a"
+                       values=rescale(c(0, 0.125, 0.250, 0.375, 0.500, 0.625, 0.775, 0.900, 1.0)),
+                       guide="colorbar",
+                       labels = scales::label_percent(),
+                       breaks=c(0.25, 0.50, 0.75, 1.0),
+                       n.breaks=4) +
+  # scale_fill_gradient(low = "#e9f1f9",
+  #                     high = "#1c75bc",
+  #                     guide="colorbar",
+  #                     labels = scales::label_percent(),
+  #                     breaks=c(0.25, 0.50, 0.75, 1.0),
+  #                     n.breaks=4) +
+   theme(axis.title.x = element_blank(),
+         axis.title.y = element_blank(),
+         axis.ticks = element_line(colour = NA),
+         plot.title = element_text(hjust = 0.5),
+         panel.background = element_rect(fill = NA),
+         panel.grid.major = element_line(colour = NA),
+         axis.text.x = element_text(colour="black",
+                                    face="bold"), #, angle = 45, hjust = 1
+         axis.text.y = element_text(colour="black",
+                                    face="bold")) +
+  labs(title = "All HUMAN lncRNA mappings", fill = "% of genes") -> Human_lncRNA_heatmap
+
+# Preview 
+Human_lncRNA_heatmap
+```
+
+# Export to pdf
+```{r}
+pdf(file="Human_lncRNA_heatmap.pdf", width = 6, height = 4)
+Human_lncRNA_heatmap
+```
+
+# Create heatmap - MOUSE
+```{r}
+levels_a <-c("M_to_H_connectOR_005",
+             "H_to_M_connectOR_005",
+             "M_to_H_connectOR",
+             "H_to_M_connectOR",
+             "M_to_H_Liftoff",
+             "H_to_M_Liftoff")
+
+levels_b <- c("H_to_M_Liftoff",
+              "M_to_H_Liftoff",
+              "H_to_M_connectOR",
+              "M_to_H_connectOR",
+              "H_to_M_connectOR_005",
+              "M_to_H_connectOR_005")
+
+labels_a <-c("M -> H\n(ConnectOR: 5%)",
+             "H -> M\n(ConnectOR: 5%)",
+             "M -> H\n(ConnectOR)",
+             "H -> M\n(ConnectOR)",
+             "M -> H\n(Liftoff)",
+             "H -> M\n(Liftoff)")
+
+labels_b <- c("H -> M\n(Liftoff)",
+              "M -> H\n(Liftoff)",
+              "H -> M\n(ConnectOR)",
+              "M -> H\n(ConnectOR)",
+              "H -> M\n(ConnectOR: 5%)",
+              "M -> H\n(ConnectOR: 5%)")
+
+# Create heatmap
+df_results %>%
+  filter(species == "Mouse") %>% 
+  filter(!str_detect(base_set, "1to1") & !str_detect(reference_set, "1to1")) %>% 
+  filter(base_set %in% c("M_to_H_connectOR_005","M_to_H_connectOR","M_to_H_Liftoff")) %>% 
+  filter(reference_set %in% c("M_to_H_connectOR_005","M_to_H_connectOR","M_to_H_Liftoff")) %>% 
+  ggplot(data=.) +
+  geom_tile(data = . %>% filter(percentage == 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b))), fill="#00a79d") +  #0096c7      #E48430
+  geom_tile(data = . %>% filter(percentage < 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                fill = percentage)) +
+  geom_text(size=5,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = (scales::percent(percentage, accuracy = 0.01)))) +
+  geom_text(size=3.2,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = paste0("\n\n",
+                               "(", scales::comma(overlapping_genes), "/", scales::comma(base_size), ")"))) +
+  scale_fill_gradientn(colours=c("#ecf6f5","#d8eeeb","#c5e5e1","#b1dcd7","#9cd3cd","#88cac3","#59b9b0","#00a79d"), #"#B5519C", "#cfabdb", "#8574a1", "#6dc6cc", "#0896a0", "#0a5a59"
+                       values=rescale(c(0, 0.125, 0.250, 0.375, 0.500, 0.625, 0.775, 0.900, 1.0)),
+                       guide="colorbar",
+                       labels = scales::label_percent(),
+                       breaks=c(0.25, 0.50, 0.75, 1.0),
+                       n.breaks=4) +
+  # scale_fill_gradient(low = "#ecf6f5",
+  #                     high = "#00a79d",
+  #                     guide="colorbar",
+  #                     labels = scales::label_percent(),
+  #                     breaks=c(0.25, 0.50, 0.75, 1.0),
+  #                     n.breaks=4) +
+   theme(axis.title.x = element_blank(),
+         axis.title.y = element_blank(),
+         axis.ticks = element_line(colour = NA),
+         plot.title = element_text(hjust = 0.5),
+         panel.background = element_rect(fill = NA),
+         panel.grid.major = element_line(colour = NA),
+         axis.text.x = element_text(colour="black",
+                                    face="bold"), #, angle = 45, hjust = 1
+         axis.text.y = element_text(colour="black",
+                                    face="bold")) +
+  labs(title = "All MOUSE lncRNA mappings", fill = "% of genes") -> Mouse_lncRNA_heatmap
+
+# Preview 
+Mouse_lncRNA_heatmap
+```
+
+# Export to pdf
+```{r}
+pdf(file="Mouse_lncRNA_heatmap.pdf", width = 6, height = 4)
+Mouse_lncRNA_heatmap
+```
+
+
+ ██╗    ████████╗ ██████╗      ██╗
+███║    ╚══██╔══╝██╔═══██╗    ███║
+╚██║       ██║   ██║   ██║    ╚██║
+ ██║       ██║   ██║   ██║     ██║
+ ██║       ██║   ╚██████╔╝     ██║
+ ╚═╝       ╚═╝    ╚═════╝      ╚═╝
+# Create heatmap - HUMAN
+```{r}
+levels_a <-c("M_to_H_connectOR_005_1to1",
+             "H_to_M_connectOR_005_1to1",
+             "M_to_H_connectOR_1to1",
+             "H_to_M_connectOR_1to1",
+             "H-M_Liftoff_1to1")
+
+levels_b <- c("H-M_Liftoff_1to1",
+              "H_to_M_connectOR_1to1",
+              "M_to_H_connectOR_1to1",
+              "H_to_M_connectOR_005_1to1",
+              "M_to_H_connectOR_005_1to1")
+
+labels_a <-c("M -> H\n(ConnectOR: 5%)",
+             "H -> M\n(ConnectOR: 5%)",
+             "M -> H\n(ConnectOR)",
+             "H -> M\n(ConnectOR)",
+             "H <-> M\n(Liftoff)")
+
+labels_b <- c("H <-> M\n(Liftoff)",
+              "H -> M\n(ConnectOR)",
+              "M -> H\n(ConnectOR)",
+              "H -> M\n(ConnectOR: 5%)",
+              "M -> H\n(ConnectOR: 5%)")
+
+# Create heatmap
+df_results %>%
+  filter(species == "Human") %>% 
+  filter(str_detect(base_set, "1to1") & str_detect(reference_set, "1to1")) %>% 
+  filter(base_set %in% c("H_to_M_connectOR_005_1to1","H_to_M_connectOR_1to1","H-M_Liftoff_1to1")) %>% 
+  filter(reference_set %in% c("H_to_M_connectOR_005_1to1","H_to_M_connectOR_1to1","H-M_Liftoff_1to1")) %>% 
+  ggplot(data=.) +
+  geom_tile(data = . %>% filter(percentage == 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b))), fill="#1c75bc") +  #0096c7      #E48430
+  geom_tile(data = . %>% filter(percentage < 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                fill = percentage)) +
+  geom_text(size=5,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = (scales::percent(percentage, accuracy = 0.01)))) +
+  geom_text(size=3.2,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = paste0("\n\n",
+                               "(", scales::comma(overlapping_genes), "/", scales::comma(base_size), ")"))) +
+  scale_fill_gradientn(colours=c("#e9f1f9","#d4e3f3","#bed5ed","#a9c8e6","#94bae0","#7eacd9","#5391cb","#1c75bc"), #"#B5519C", "#cfabdb", "#8574a1", "#6dc6cc", "#0896a0", "#0a5a59"
+                       values=rescale(c(0, 0.125, 0.250, 0.375, 0.500, 0.625, 0.775, 0.900, 1.0)),
+                       guide="colorbar",
+                       labels = scales::label_percent(),
+                       breaks=c(0.25, 0.50, 0.75, 1.0),
+                       n.breaks=4) +
+  # scale_fill_gradient(low = "#B5519C",
+  #                     high = "#0a5a59") +      #C8742A
+   theme(axis.title.x = element_blank(),
+         axis.title.y = element_blank(),
+         axis.ticks = element_line(colour = NA),
+         plot.title = element_text(hjust = 0.5),
+         panel.background = element_rect(fill = NA),
+         panel.grid.major = element_line(colour = NA),
+         axis.text.x = element_text(colour="black",
+                                    face="bold"), #, angle = 45, hjust = 1
+         axis.text.y = element_text(colour="black",
+                                    face="bold")) +
+  labs(title = "1 to 1 HUMAN lncRNA mappings", fill = "% of genes") -> Human_lncRNA_heatmap_1to1
+
+# Preview 
+Human_lncRNA_heatmap_1to1
+```
+
+# Export to pdf
+```{r}
+pdf(file="Human_lncRNA_heatmap_1to1.pdf", width = 6, height = 4)
+Human_lncRNA_heatmap_1to1
+```
+
+# Create heatmap - MOUSE
+```{r}
+levels_a <-c("M_to_H_connectOR_005_1to1",
+             "H_to_M_connectOR_005_1to1",
+             "M_to_H_connectOR_1to1",
+             "H_to_M_connectOR_1to1",
+             "H-M_Liftoff_1to1")
+
+levels_b <- c("H-M_Liftoff_1to1",
+              "H_to_M_connectOR_1to1",
+              "M_to_H_connectOR_1to1",
+              "H_to_M_connectOR_005_1to1",
+              "M_to_H_connectOR_005_1to1")
+
+labels_a <-c("M -> H\n(ConnectOR: 5%)",
+             "H -> M\n(ConnectOR: 5%)",
+             "M -> H\n(ConnectOR)",
+             "H -> M\n(ConnectOR)",
+             "H <-> M\n(Liftoff)")
+
+labels_b <- c("H <-> M\n(Liftoff)",
+              "H -> M\n(ConnectOR)",
+              "M -> H\n(ConnectOR)",
+              "H -> M\n(ConnectOR: 5%)",
+              "M -> H\n(ConnectOR: 5%)")
+
+# Create heatmap
+df_results %>%
+  filter(species == "Mouse") %>% 
+  filter(str_detect(base_set, "1to1") & str_detect(reference_set, "1to1")) %>% 
+  filter(base_set %in% c("M_to_H_connectOR_005_1to1","M_to_H_connectOR_1to1","H-M_Liftoff_1to1")) %>% 
+  filter(reference_set %in% c("M_to_H_connectOR_005_1to1","M_to_H_connectOR_1to1","H-M_Liftoff_1to1")) %>% 
+  ggplot(data=.) +
+  geom_tile(data = . %>% filter(percentage == 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b))), fill="#00a79d") +  #0096c7      #E48430
+  geom_tile(data = . %>% filter(percentage < 1.0),
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                fill = percentage)) +
+  geom_text(size=5,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = (scales::percent(percentage, accuracy = 0.01)))) +
+  geom_text(size=3.2,
+            aes(x=factor(reference_set, levels=rev(levels_a), labels=rev(labels_a)),
+                y=factor(base_set, levels=rev(levels_b), labels=rev(labels_b)),
+                label = paste0("\n\n",
+                               "(", scales::comma(overlapping_genes), "/", scales::comma(base_size), ")"))) +
+  scale_fill_gradientn(colours=c("#ecf6f5","#d8eeeb","#c5e5e1","#b1dcd7","#9cd3cd","#88cac3","#59b9b0","#00a79d"), #"#B5519C", "#cfabdb", "#8574a1", "#6dc6cc", "#0896a0", "#0a5a59"
+                       values=rescale(c(0, 0.125, 0.250, 0.375, 0.500, 0.625, 0.775, 0.900, 1.0)),
+                       guide="colorbar",
+                       labels = scales::label_percent(),
+                       breaks=c(0.25, 0.50, 0.75, 1.0),
+                       n.breaks=4) +
+  # scale_fill_gradient(low = "#ecf6f5",
+  #                     high = "#00a79d",
+  #                     guide="colorbar",
+  #                     labels = scales::label_percent(),
+  #                     breaks=c(0.25, 0.50, 0.75, 1.0),
+  #                     n.breaks=4) +
+   theme(axis.title.x = element_blank(),
+         axis.title.y = element_blank(),
+         axis.ticks = element_line(colour = NA),
+         plot.title = element_text(hjust = 0.5),
+         panel.background = element_rect(fill = NA),
+         panel.grid.major = element_line(colour = NA),
+         axis.text.x = element_text(colour="black",
+                                    face="bold"), #, angle = 45, hjust = 1
+         axis.text.y = element_text(colour="black",
+                                    face="bold")) +
+  labs(title = "1 to 1 MOUSE lncRNA mappings", fill = "% of genes") -> Mouse_lncRNA_heatmap_1to1
+
+# Preview 
+Mouse_lncRNA_heatmap_1to1
+```
+
+# Export to pdf
+```{r}
+pdf(file="Mouse_lncRNA_heatmap_1to1.pdf", width = 6, height = 4)
+Mouse_lncRNA_heatmap_1to1
+```
