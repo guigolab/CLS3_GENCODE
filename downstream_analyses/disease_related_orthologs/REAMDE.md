@@ -5,8 +5,8 @@
 ###### LncRNADisease.v3.0:
 
 We focuse on v.3.0 as it is the most recent and complete version of the database (check: Nucleic Acids Research, **2024**).
-In general, website sux. Well formatted and most complete data can only be downloaded through the Search section (http://www.rnanut.net/lncrnadisease/index.php/home/search).
-To download data I used advanced filter with specified settings:
+Well formatted and most complete data can only be downloaded through the Search section (http://www.rnanut.net/lncrnadisease/index.php/home/search).
+To download data advanced filter with specified settings were used:
 
 * **ncRNA Category:** lncRNA
 * **Species:** Homo sapiens
@@ -14,23 +14,17 @@ To download data I used advanced filter with specified settings:
 * **Validated Method:** Nothing selected
 * **Score:** From: 0 To: 1
 
-I renamed file to indicate used filters and saved using tsv extension in Raw_data directory. Something was wrong with 5th column. While reading with read_table() R function it was skipping ~ 20% of rows without any warning. Problem was caused by the 5th column (Disease_Name), thus it was removed and tables were subsequently joined together by simply:
+Raw data may be problematic for some R functions (e.g. read_table()) because of the structure of the 5th column (Disease_Name). Column was removed and tables were subsequently joined together by simply:
 
 `cat LncRNADisease.v3.0_search_lncRNA_hs_causlity-yes_score0-1.tsv | cut -f5 --complement > LncRNADisease.v3.0.tsv`
 `tail +2 LncRNADisease.v3.0_search_lncRNA_hs_causlity-unknown_score0-1.tsv | cut -f5 --complement >> LncRNADisease.v3.0.tsv`
 
-There are inconsistent hyphens present in the dataset. I had a good day so I fixed them as well (**in place**):
+There are inconsistent hyphens present in the dataset. It was fixed (**in place**) by:
 
 `sed -i $'s/\u2011/-/g' LncRNADisease.v3.0.tsv`    # 48 occurences
 `sed -i $'s/\u2010/-/g' LncRNADisease.v3.0.tsv`    # 108 occurences
 `sed -i $'s/\u2013/-/g' LncRNADisease.v3.0.tsv`    # 2 occurences
 `sed -i $'s/\u00a0//g' LncRNADisease.v3.0.tsv`      # 2 occurences
-
-Above mumbo-jumbo led to detect 2 more genes.
-
-**Note:**
-
-Forget about numbers on the website. They are not reproducible using any avaiable resources. Numbers of experimentally supported lncRNA/circRNA-disease Associations listed on the website sums up to 25,440 associacions in the `website_alldata.tsv`. But ratio of lncRNA/circRNA do not match. `website_alldata.tsv` dataset is chaotic and after matching with Gencode geneIDs leads fewer genes compared to described extraction method using Search section (2,194 vs 2,443 geneIDs). Forget about 6,066 lncRNAs listed on the website. There are only 5,540 in the `website_alldata.tsv` but more (6,042) if you join all datasets, for all species using Search section. Notice, that while downloading data using Search section you get tabular data with duplicated rows. If you exclude the header there are exacly twice as many. For LncRNADisease.v3.0_search_lncRNA_hs_causlity-yes_score0-1.tsv it's 10,649 vs 5,325.
 
 ###### Cancer lncRNA Census 3 (CLC3):
 
