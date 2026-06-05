@@ -1,0 +1,321 @@
+ ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗ ██████╗ ██████╗ 
+██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║   ██║   ██║██████╔╝
+██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║   ██║   ██║██╔══██╗
+╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║   ╚██████╔╝██║  ██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+                                                                               
+███████╗████████╗ █████╗ ████████╗███████╗                                     
+██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝                                     
+███████╗   ██║   ███████║   ██║   ███████╗                                     
+╚════██║   ██║   ██╔══██║   ██║   ╚════██║                                     
+███████║   ██║   ██║  ██║   ██║   ███████║                                     
+╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝                                     
+                                                                                        
+# Prepare environment
+```{bash, engine.opts='-l'}
+##########################################################################################
+# Comment
+##########################################################################################
+# LiftOver used: the one from ConnectOR-optimized repo
+# (https://github.com/cobRNA/ConnectOR-optimized/tree/main/scripts)
+
+# Chainfiles used:
+# H --> M
+#https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz
+#http://hgdownload.cse.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm39.over.chain.gz
+# M --> H
+#https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz
+#http://hgdownload.cse.ucsc.edu/goldenPath/mm39/liftOver/mm39ToHg38.over.chain.gz
+
+
+##########################################################################################
+# Set paths <----- Update required before running
+##########################################################################################
+export liftOver=PATH/TO/LIFTOVER
+
+
+##########################################################################################
+# Clean-up generated data
+##########################################################################################
+echo '++++++ Cleaning up data from previous run ++++++'
+rm -r ./.temp/
+echo '>> Done <<'
+
+
+##########################################################################################
+# Handle errors
+##########################################################################################
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+
+##########################################################################################
+# Create directory structure
+##########################################################################################
+echo '++++++ Creating necessary directory structure ++++++'
+# Dir for .temp data
+mkdir ./.temp/
+echo '>> Done <<'
+
+
+##########################################################################################
+# Move to working dir
+##########################################################################################
+cd ./.temp/
+
+
+##########################################################################################
+# Download annotations and chain files
+##########################################################################################
+echo "++++++++++ Download annotations"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.long_noncoding_RNAs.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/gencode.vM36.long_noncoding_RNAs.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/gencode.v27.long_noncoding_RNAs.gtf.gz"
+wget --no-verbose "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M16/gencode.vM16.long_noncoding_RNAs.gtf.gz"
+echo '>> Done <<'
+echo "++++++++++ Download chain files"
+wget --no-verbose "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm10.over.chain.gz"
+wget --no-verbose "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/liftOver/hg38ToMm39.over.chain.gz"
+wget --no-verbose "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/mm10ToHg38.over.chain.gz"
+wget --no-verbose "http://hgdownload.cse.ucsc.edu/goldenPath/mm39/liftOver/mm39ToHg38.over.chain.gz"
+echo '>> Done <<'
+
+
+##########################################################################################
+# Transform the data
+##########################################################################################
+# Convert annotations to bed6 with gene_id (exon level)
+echo "++++++++++ Convert annotations to exon level bed6"
+zcat gencode.v47.long_noncoding_RNAs.gtf.gz | awk '$3=="exon"' | ../../../Utils/gff2bed_simplistic_geneID - > gencode.v47.long_noncoding_RNAs.bed6
+zcat gencode.vM36.long_noncoding_RNAs.gtf.gz | awk '$3=="exon"' | ../../../Utils/gff2bed_simplistic_geneID - > gencode.vM36.long_noncoding_RNAs.bed6
+zcat gencode.v27.long_noncoding_RNAs.gtf.gz | awk '$3=="exon"' | ../../../Utils/gff2bed_simplistic_geneID - > gencode.v27.long_noncoding_RNAs.bed6
+zcat gencode.vM16.long_noncoding_RNAs.gtf.gz | awk '$3=="exon"' | ../../../Utils/gff2bed_simplistic_geneID - > gencode.vM16.long_noncoding_RNAs.bed6
+
+# LiftOver ConnectOR-optimized-main/scripts/liftOver
+echo "++++++++++ LiftOver"
+$liftOver -minMatch=0.3 gencode.v47.long_noncoding_RNAs.bed6 hg38ToMm39.over.chain.gz gencode.v47.long_noncoding_RNAs.mm39.bed6 gencode.v47.long_noncoding_RNAs.unMapped
+$liftOver -minMatch=0.3 gencode.v27.long_noncoding_RNAs.bed6 hg38ToMm10.over.chain.gz gencode.v27.long_noncoding_RNAs.mm10.bed6 gencode.v27.long_noncoding_RNAs.unMapped
+$liftOver -minMatch=0.3 gencode.vM36.long_noncoding_RNAs.bed6 mm39ToHg38.over.chain.gz gencode.vM36.long_noncoding_RNAs.hg38.bed6 gencode.vM36.long_noncoding_RNAs.unMapped
+$liftOver -minMatch=0.3 gencode.vM16.long_noncoding_RNAs.bed6 mm10ToHg38.over.chain.gz gencode.vM16.long_noncoding_RNAs.hg38.bed6 gencode.vM16.long_noncoding_RNAs.unMapped
+
+# Report results to a file
+echo "++++++++++ Report results to a full file (with gene_ids)"
+echo -e "version\tgene_id\ttype" > ../results_full.tsv
+cat gencode.v47.long_noncoding_RNAs.mm39.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | awk '{print "v47\t$1\tlifted"}' >> ../results_full.tsv
+cat gencode.v27.long_noncoding_RNAs.mm10.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | awk '{print "v27\t$1\tlifted"}' >> ../results_full.tsv
+cat gencode.vM36.long_noncoding_RNAs.hg38.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | awk '{print "vM36\t$1\tlifted"}' >> ../results_full.tsv
+cat gencode.vM16.long_noncoding_RNAs.hg38.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | awk '{print "vM16\t$1\tlifted"}' >> ../results_full.tsv
+
+echo "++++++++++ Report results to a short file (only numbers)"
+total_47=`zcat gencode.v47.long_noncoding_RNAs.gtf.gz | ./extract.gtf.tags.sh - gene_id | sort | uniq | grep "\S" | wc -l`
+total_27=`zcat gencode.v27.long_noncoding_RNAs.gtf.gz | ./extract.gtf.tags.sh - gene_id | sort | uniq | grep "\S" | wc -l`
+total_M36=`zcat gencode.vM36.long_noncoding_RNAs.gtf.gz | ./extract.gtf.tags.sh - gene_id | sort | uniq | grep "\S" | wc -l`
+total_M16=`zcat gencode.vM16.long_noncoding_RNAs.gtf.gz | ./extract.gtf.tags.sh - gene_id | sort | uniq | grep "\S" | wc -l`
+
+lifted_47=`cat gencode.v47.long_noncoding_RNAs.mm39.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | wc -l`
+lifted_27=`cat gencode.v27.long_noncoding_RNAs.mm10.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | wc -l`
+lifted_M36=`cat gencode.vM36.long_noncoding_RNAs.hg38.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | wc -l`
+lifted_M16=`cat gencode.vM16.long_noncoding_RNAs.hg38.bed6 | awk '{print $4}' | sort | uniq | grep "\S" | wc -l`
+
+echo -e "version\ttotal_genes\tlifted_genes" > ../results_short.tsv
+echo -e "v47\t$total_47\t$lifted_47" >> ../results_short.tsv
+echo -e "v27\t$total_27\t$lifted_27" >> ../results_short.tsv
+echo -e "vM36\t$total_M36\t$lifted_M36" >> ../results_short.tsv
+echo -e "vM16\t$total_M16\t$lifted_M16" >> ../results_short.tsv
+```
+
+# Load R libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr,
+               scales,
+               stringr,
+               ggplot2,
+               tidyr)
+```
+
+# Load data
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data: ConnectOR
+df_v47_to_vM36_raw <- read.table("../connectOR_output/orthology.table.hg38tomm39.tsv", header = T, as.is = T, sep = "\t")
+df_v27_to_vM16_raw <- read.table("../connectOR_output/orthology.table.hg38tomm10.tsv", header = T, as.is = T, sep = "\t")
+df_vM36_to_v47_raw <- read.table("../connectOR_output/orthology.table.mm39tohg38.tsv", header = T, as.is = T, sep = "\t")
+df_vM16_to_v27_raw <- read.table("../connectOR_output/orthology.table.mm10tohg38.tsv", header = T, as.is = T, sep = "\t")
+
+# Load data: lifted genes
+df_liftOver_results <- read.table("results_short.tsv", header = T, as.is = T, sep = "\t")
+
+# Transform
+# Human -> Mouse
+## GENCODE v47 vs M36
+df_v47_to_vM36_raw %>% 
+  # Add 1to1 separately (both biotypes must be lncRNA)
+  filter(orthology.type == "one-to-one") %>% 
+  filter(hg38.gene.type == "lncRNA" & mm39.gene.type == "lncRNA") %>% 
+  summarise(.by = c("orthology.type"),
+            count = n_distinct(hg38)) %>% 
+  # Add rest of the orthology.types
+  bind_rows(df_v47_to_vM36_raw %>% 
+              filter(orthology.type != "one-to-one") %>% 
+              filter(hg38.gene.type == "lncRNA") %>%
+              summarise(.by = c("orthology.type"),
+                        count = n_distinct(hg38))) %>% 
+  # Add direction and gencode version
+  mutate(direction = "Human -> Mouse") %>% 
+  mutate(version = "v47 vs M36") %>% 
+  # Add total - number of unique genes from categories above
+  mutate(unique_total = (df_v47_to_vM36_raw %>% 
+                           filter((orthology.type == "one-to-one"
+                                   & hg38.gene.type == "lncRNA"
+                                   & mm39.gene.type == "lncRNA") | (orthology.type != "one-to-one"
+                                                                    & hg38.gene.type == "lncRNA")) %>% 
+                           distinct(hg38) %>% 
+                                       nrow())) %>% 
+## GENCODE v27 vs M16
+  bind_rows(df_v27_to_vM16_raw %>%
+              # Add 1to1 separately (both biotypes must be lncRNA)
+              filter(orthology.type == "one-to-one") %>% 
+              filter(hg38.gene.type == "lncRNA" & mm10.gene.type == "lncRNA") %>% 
+              summarise(.by = c("orthology.type"),
+                        count = n_distinct(hg38)) %>% 
+              # Add rest of the orthology.types
+              bind_rows(df_v27_to_vM16_raw %>% 
+                          filter(orthology.type != "one-to-one") %>% 
+                          filter(hg38.gene.type == "lncRNA") %>%
+                          summarise(.by = c("orthology.type"),
+                                    count = n_distinct(hg38))) %>% 
+              # Add direction and gencode version
+              mutate(direction = "Human -> Mouse") %>% 
+              mutate(version = "v27 vs M16") %>% 
+              # Add total - number of unique genes from categories above
+              mutate(unique_total = (df_v27_to_vM16_raw %>% 
+                                       filter((orthology.type == "one-to-one"
+                                               & hg38.gene.type == "lncRNA"
+                                               & mm10.gene.type == "lncRNA") | (orthology.type != "one-to-one"
+                                                                                & hg38.gene.type == "lncRNA")) %>% 
+                                       distinct(hg38) %>% 
+                                       nrow()))) %>% 
+# Mouse -> Human
+  ## GENCODE v47 vs M36
+  bind_rows(df_vM36_to_v47_raw %>%
+              # Add 1to1 separately (both biotypes must be lncRNA)
+              filter(orthology.type == "one-to-one") %>% 
+              filter(mm39.gene.type == "lncRNA" & hg38.gene.type == "lncRNA") %>% 
+              summarise(.by = c("orthology.type"),
+                        count = n_distinct(mm39)) %>% 
+              # Add rest of the orthology.types
+              bind_rows(df_vM36_to_v47_raw %>% 
+                          filter(orthology.type != "one-to-one") %>% 
+                          filter(mm39.gene.type == "lncRNA") %>%
+                          summarise(.by = c("orthology.type"),
+                                    count = n_distinct(mm39))) %>% 
+              # Add direction and gencode version
+              mutate(direction = "Mouse -> Human") %>% 
+              mutate(version = "v47 vs M36") %>% 
+              # Add total - number of unique genes from categories above
+              mutate(unique_total = (df_vM36_to_v47_raw %>% 
+                                       filter((orthology.type == "one-to-one"
+                                               & mm39.gene.type == "lncRNA"
+                                               & hg38.gene.type == "lncRNA") | (orthology.type != "one-to-one" &
+                                                                                  mm39.gene.type == "lncRNA")) %>% 
+                                       distinct(mm39) %>% 
+                                       nrow()))) %>% 
+  ## GENCODE v27 vs M16
+  bind_rows(df_vM16_to_v27_raw %>%
+              # Add 1to1 separately (both biotypes must be lncRNA)
+              filter(orthology.type == "one-to-one") %>% 
+              filter(mm10.gene.type == "lncRNA" & hg38.gene.type == "lncRNA") %>% 
+              summarise(.by = c("orthology.type"),
+                        count = n_distinct(mm10)) %>% 
+              # Add rest of the orthology.types
+              bind_rows(df_vM16_to_v27_raw %>% 
+                          filter(orthology.type != "one-to-one") %>% 
+                          filter(mm10.gene.type == "lncRNA") %>%
+                          summarise(.by = c("orthology.type"),
+                                    count = n_distinct(mm10))) %>% 
+              # Add direction and gencode version
+              mutate(direction = "Mouse -> Human") %>% 
+              mutate(version = "v27 vs M16") %>% 
+              # Add total - number of unique genes from categories above
+              mutate(unique_total = (df_vM16_to_v27_raw %>% 
+                                       filter((orthology.type == "one-to-one"
+                                               & mm10.gene.type == "lncRNA"
+                                               & hg38.gene.type == "lncRNA") | (orthology.type != "one-to-one"
+                                                                                & mm10.gene.type == "lncRNA")) %>% 
+                                       distinct(mm10) %>% 
+                                       nrow()))) %>%
+  # Rename columns for consistency
+  rename(type = orthology.type) %>% 
+  # Remove unused column
+  select(!c("unique_total")) %>% 
+  # Add liftOver results
+  bind_rows(df_liftOver_results %>% 
+              rowwise() %>% 
+              mutate("non-lifted" = total_genes - lifted_genes) %>% 
+              rename(lifted = "lifted_genes") %>% 
+              select(version, lifted, "non-lifted") %>% 
+              pivot_longer(cols = c("lifted", "non-lifted"),
+                           names_to = "type",
+                           values_to = "count") %>% 
+              mutate(direction = ifelse((version == "v47" | version == "v27"), "Human -> Mouse", "Mouse -> Human"))) %>% 
+  # Add one-to-none (by hand ;/)
+  bind_rows(tibble(type = c("one-to-none", "one-to-none", "one-to-none", "one-to-none"),
+                   count = c(11973-2090, 28551-9153, 9523-1890, 29365-9142),
+                   direction = c("Human -> Mouse", "Human -> Mouse", "Mouse -> Human", "Mouse -> Human"),
+                   version = c("v27 vs M16", "v47 vs M36", "v27 vs M16", "v47 vs M36"))) %>% 
+  # Calculate percentage
+  group_by(version) %>% 
+  mutate(total = sum(count)) %>% 
+  mutate(percentage = count/total) -> df_connector_stats
+
+# Preview data
+df_connector_stats
+```
+
+# Create barplot
+```{r}
+df_connector_stats %>% 
+  ggplot(aes(x = factor(version, levels = c("v27", "vM16", "v27 vs M16", "v47", "vM36", "v47 vs M36")),
+             y = percentage,
+             fill = factor(type, levels = c("lifted", "non-lifted", "one-to-one", "one-to-half", "one-to-many", "many-to-many", "one-to-none")))) +
+  geom_bar(stat = "identity",
+           position = "fill") +
+  
+  geom_text(aes(label = scales::comma(count)), 
+            position = position_fill(vjust = 0.5),
+            size = 3) +
+  theme_bw() +
+  scale_fill_manual(values=c("#4C7484", "#4C7484", "#29666E",  "#7C9885", "#B5B682", "#FEDC97", "#C4C4C2")) +
+  scale_y_continuous(labels = scales::percent) +
+  #ggtitle("") +
+  ylab("Percent of lncRNA genes") +
+  xlab("Type") +
+  theme(legend.position="top") +
+  guides(fill = guide_legend(nrow = 1)) +
+  theme(axis.text.x = element_text(size = 10,  colour = "black"), #, angle = 60, hjust = 1,
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 12,  colour = "black"),
+        legend.text = element_text(size=12),
+        plot.title = element_text(size = 15, hjust = 0.5),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14),
+        strip.text.x=element_text(size=15),
+        strip.text.y=element_text(size=15)) +
+  facet_wrap(~ direction,
+             scales = "free") -> connector_stats_plot
+  
+# Preview
+connector_stats_plot
+  
+```
+
+# Export to pdf
+```{r}
+pdf(file="./connector_stats.pdf", width = 12, height = 5)
+connector_stats_plot
+```
