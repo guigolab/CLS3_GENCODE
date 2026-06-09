@@ -4,10 +4,10 @@ We used mammalian conservation of human lncRNAs as a metric to compare the GENCO
 Transcripts lacking PhyloP scores for more than 10% of the exon bases or any of its splice-junction were excluded. We set the neutrally evolving range based on the PhyloP score distribution from -1.0 to 1.0. To avoid confounding conservation signals from protein-coding genes, we used the [disjoint set of annotations described at _complementary_data_](https://github.com/guigolab/CLS3_GENCODE/tree/main/complementary_data/gencode_byotypes_datasets#disjoint-sets). The sets of conserved _disjoint_ transcripts (either by sequence or splice-junctions conservation) are released here and detailed below. A gene is considered conserved if one of its transcript is conserved.
 
 ### protein-coding: 54,643 transcripts (96.2%)
-Of which 46,701 show conservation signal for their exonic sequence, while 53,705 have conserved splice-junctions. These correspond to 12,989 genes (94.5% of the total genes present in the disjoint set).
+Of which 46,701 show conservation signal for their exonic sequence, while 53,705 have conserved splice-junctions. These correspond to 12,989 genes (93.6% of the total genes present in the disjoint set).
 
 ### lncRNAs: 1,924 transcripts (14.6%)
-Of which 820 show conservation signal for their exonic sequence, while 1,628 have conserved splice-junctions. These correspond to 1,010 genes (12.4% of the total genes present in the disjoint set).
+Of which 820 show conservation signal for their exonic sequence, while 1,628 have conserved splice-junctions. These correspond to 1,010 genes (13% of the total genes present in the disjoint set).
 
 ### CLS: 2,146 transcripts (11.2%)
 Of which 1,126 show conservation signal for their exonic sequence, while 1,522 have conserved splice-junctions. These correspond to 1,196 genes (14.3% of the total genes present in the disjoint set).
