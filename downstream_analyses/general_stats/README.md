@@ -6,6 +6,6 @@ Included further mapped sample and target source for the models (anchTMs) from a
 smT="../../IntronChainMT/Hv3_splicedmasterTable_refined.gtf" 
 umT="../../IntronChainMT/Hv3_unsplicedmasterTable_refined.gtf"
 
-python $currnoHiss/revision/TSS/tagv47-CLSmap.anchIC.SID.py <(cat ${smT} ${umT}) <(grep -v geneID_v47 $currnoHiss/revision/TSS/data/tmp.mainChr.novel.transcripts.map) $currnoHiss/revision/TSS/oldIDs.gtf > data/tmp.mainChr.novel.tagged.map
+python tagv47-CLSmap.anchIC.SID.py <(cat ${smT} ${umT}) <(grep -v geneID_v47 data/tmp.mainChr.novel.transcripts.map) oldIDs.gtf > data/tmp.mainChr.novel.tagged.map
 ```
 
