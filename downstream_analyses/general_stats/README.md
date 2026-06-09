@@ -1,5 +1,6 @@
 To obtain tagged "v47-CLS3" mapping table. 
 The mapping table is further tagged with source sample(s), and source target catalog(s) to aid in the downstream analyses.
+Included further mapped sample and target source for the models (anchTMs) from an older version of the release.
 
 ```
 smT="../../IntronChainMT/Hv3_splicedmasterTable_refined.gtf" 
