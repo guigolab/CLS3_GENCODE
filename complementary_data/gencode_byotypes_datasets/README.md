@@ -5,7 +5,7 @@ Accurate gene annotations are fundamental to functionally interpreting the activ
 In GENCODE v47, a total of 151,618 transcripts (listed [here](https://zenodo.org/records/15004659/files/v47-CLS3mapping_status.txt?download=1)) have been either created (140,268 lncRNAs and 293 others) or modified (10,852 lncRNAs and 205 others) thanks to CLS data. Each of these transcripts and genes have been assigned a novelty category as detailed in [GENCODE-CLS3 Mappings](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release#gencode-cls3-mappings).
 
 ### Novel transcripts: 149,010 transcripts - 17,777 genes
-In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones, while novel loci are instead only those genes introduced as a consequence of CLS data. We also restricted the set to loci on main chromosomes only.
+In these analyses, novel transcripts are restricted to lncRNAs transcripts, including those extending previously annotated ones. We also restricted the set to loci on main chromosomes only.
 
 ```
 wget -nv https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.primary_assembly.annotation.gtf.gz
