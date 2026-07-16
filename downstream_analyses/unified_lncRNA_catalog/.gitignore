@@ -7,7 +7,10 @@
 
 # Downloadable files
 .temp*
-Data/masterTable/*.gz
+Data/masterTable/Hv3_masterTable_refined.gtf.gz
+Data/masterTable/Hv3_splicedmasterTable_refined.gtf.gz
+Data/masterTable/Mv2_masterTable_refined.gtf.gz
+Data/masterTable/Mv2_splicedmasterTable_refined.gtf.gz
 Data/Additional/*.gz
 Data/Additional/*.sizes
 Data/Additional/hg38.polyAsignals.bed
