@@ -1,0 +1,254 @@
+██╗   ██╗██████╗ ███████╗███████╗████████╗    ██████╗ ██╗      ██████╗ ████████╗
+██║   ██║██╔══██╗██╔════╝██╔════╝╚══██╔══╝    ██╔══██╗██║     ██╔═══██╗╚══██╔══╝
+██║   ██║██████╔╝███████╗█████╗     ██║       ██████╔╝██║     ██║   ██║   ██║   
+██║   ██║██╔═══╝ ╚════██║██╔══╝     ██║       ██╔═══╝ ██║     ██║   ██║   ██║   
+╚██████╔╝██║     ███████║███████╗   ██║       ██║     ███████╗╚██████╔╝   ██║   
+ ╚═════╝ ╚═╝     ╚══════╝╚══════╝   ╚═╝       ╚═╝     ╚══════╝ ╚═════╝    ╚═╝   
+                                                                                
+# Prepare environment
+```{bash echo=FALSE, engine.opts='-l'}
+# Remove old results
+rm -r .temp/
+
+# Create directory tree
+mkdir .temp/
+
+# Move to working dir
+cd .temp/
+
+# Set paths
+utils=../../Utils
+
+# Process lncRNA catalogues <- exclude chrM, keep unspliced
+zcat ../../Data/H_catalogs/NONCODE.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > NONCODE.hg38.gtf
+zcat ../../Data/H_catalogs/refSeq.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > refSeq.hg38.gtf
+zcat ../../Data/H_catalogs/miTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > miTranscriptome.hg38.gtf
+zcat ../../Data/H_catalogs/gencode20+.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > gencode20+.hg38.gtf
+zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > bigTranscriptome.hg38.gtf
+zcat ../../Data/H_catalogs/fantomCat.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > fantomCat.hg38.gtf
+# Add chess and lncBook (convert to bed12 and then gtf to remove unnecessary data)
+zcat ../../Data/H_catalogs/chess3_1_2_GRCh38_lncRNA.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - > chess3_1_2.hg38.gtf
+zcat ../../Data/H_catalogs/lncRNA_LncBookv2_0_GRCh38.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - > lncBookv2_0.hg38.gtf
+# Add gencode 27 and 47 
+zcat ../../Data/H_catalogs/gen47.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen47.hg38.gtf
+zcat ../../Data/H_catalogs/gen27.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen27.hg38.gtf
+
+# Include concatenated catalogs
+## Concatenate human catalogs into 1 file (ENST00000610119.1 has inconsistent strand); remove chrM
+cat NONCODE.hg38.gtf refSeq.hg38.gtf miTranscriptome.hg38.gtf gencode20+.hg38.gtf bigTranscriptome.hg38.gtf fantomCat.hg38.gtf | $utils/gff2bed_full.pl - | sort | uniq | grep -vFw "ENST00000610119.1" | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' > H_concat_catalogs.hg38.gtf
+
+# Prepare config file
+## Ends
+echo "5" >> ends.config
+echo "3" >> ends.config
+
+# Prepare Config files
+for catalogue in `ls *.hg38.gtf`; do echo $catalogue >> upSet.config; done
+
+# Run buildLoci for all except gencode 27 and gencode 47
+echo "Running buildLoci"
+while read file || [ -n "$file" ]
+  do
+      name=`echo $file | awk -F'.' '{print $1}'`
+      echo "Name: $name"
+      if [[ "$name" == "gen27" ]] || [[ "$name" == "gen47" ]]; then
+         $utils/gff2gff.pl $name.hg38.gtf > $name.hg38.gene.gtf
+         $utils/extract_locus_coords.pl $name.hg38.gene.gtf > $name.hg38.gene.bed
+      
+      else
+         bedtools intersect -s -wao -a $file -b $file | $utils/buildLoci.pl - > $name.gene.tmp.gtf
+         $utils/gff2gff.pl $name.gene.tmp.gtf > $name.hg38.gene.gtf
+         $utils/extract_locus_coords.pl $name.hg38.gene.gtf > $name.hg38.gene.bed
+      fi
+  done < ./upSet.config
+
+# Report completeness
+echo "######### COMPLETED"
+```
+
+# Generate data
+```{bash echo=FALSE, engine.opts='-l'}
+# Move to working dir
+cd .temp/
+
+# Remove files from previous run
+rm -r upSet/
+
+# Create sub-dir to separate files and go there
+mkdir upSet/ && cd upSet/
+
+# Set paths
+utils=../../Utils
+
+# Handle errors
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+# Create master bed by concatenating catalogs
+echo "++ Concatenating gene files..."
+while read file || [ -n "$file" ]
+  do
+    name=`echo $file | awk -F'.' '{print $1}'`
+    # Include catalog name in geneID (otherwise we will end up with duplicated buildLoci ids)
+    cat ../$name.hg38.gene.bed | awk -F'\t' -v name="$name" 'BEGIN {OFS=FS} {$4=name "|" $4; print $0}' >> master.gene.temp.bed
+  done < ../upSet.config
+echo ">> Done"
+
+# Remove duplicates from concatenated master.temp.bed
+echo "++ Removing duplicated genes..."
+cat master.gene.temp.bed | awk '!seen[$1,$2,$3,$6]++{print $0}' > master.gene.bed
+echo ">> Done"
+
+# Extract only geneIDs
+echo "++ Extracting geneIDs from master.bed ..."
+cat master.gene.bed | awk '{print $4}' > master.gene.ids
+echo ">> Done"
+
+# Run intersecting
+echo "++ Running intersecting... "
+
+while read file || [ -n "$file" ]
+  do
+    name=`echo $file | awk -F'.' '{print $1}'`
+    echo "~~ Intersecting: $name"
+    bedtools intersect -s -wa -wb -f 1.00 -F 1.00 -e -a master.gene.bed -b ../$name.hg38.gene.bed > master.intersecting.$name.bed
+    echo ">> Done"
+    
+    echo "~~ Extracting genes..."
+    cat master.intersecting.$name.bed | awk '!seen[$4]++{print $4}' > master.intersecting.$name.gene.ids
+    echo ">> Done"
+    
+  done < ../upSet.config
+
+# Report completeness
+echo "######### COMPLETED"
+```
+
+# Load libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr,
+               data.table,
+               UpSetR)
+```
+
+# Process data and create UpSet plot
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data
+df_masterIDs <- read.table(".temp/upSet/master.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(master = 1)
+
+df_inter_bigtrans <- read.table(".temp/upSet/master.intersecting.bigTranscriptome.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(bigtrans = 1)
+df_inter_chess3_1_2 <- read.table(".temp/upSet/master.intersecting.chess3_1_2.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(chess3_1_2 = 1)
+df_inter_fantomCat <- read.table(".temp/upSet/master.intersecting.fantomCat.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(fantomCat = 1)
+df_inter_gen27 <- read.table(".temp/upSet/master.intersecting.gen27.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(gen27 = 1)
+df_inter_gen47 <- read.table(".temp/upSet/master.intersecting.gen47.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(gen47 = 1)
+df_inter_gencodeLncRna <- read.table(".temp/upSet/master.intersecting.gencode20+.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(gencodeLncRna = 1)
+df_inter_H_concat_catalogs <- read.table(".temp/upSet/master.intersecting.H_concat_catalogs.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(H_concat_catalogs = 1)
+df_inter_lncBookv2_0 <- read.table(".temp/upSet/master.intersecting.lncBookv2_0.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(lncBookv2_0 = 1)
+df_inter_mitrans <- read.table(".temp/upSet/master.intersecting.miTranscriptome.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(mitrans = 1)
+df_inter_noncode <- read.table(".temp/upSet/master.intersecting.NONCODE.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(noncode = 1)
+df_inter_refseq <- read.table(".temp/upSet/master.intersecting.refSeq.gene.ids", header=F, sep="\t") %>%
+  rename(geneID = "V1") %>% 
+  mutate(refseq = 1)
+
+# Join tables
+df_masterIDs %>% 
+  left_join(x = .,
+            y = df_inter_bigtrans,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_chess3_1_2,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_fantomCat,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_gen27,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_gen47,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_gencodeLncRna,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_H_concat_catalogs,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_lncBookv2_0,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_mitrans,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_noncode,
+            by = "geneID") %>% 
+  left_join(x = .,
+            y = df_inter_refseq,
+            by = "geneID") %>% 
+  # Exclude master column
+  select(!master) %>% 
+  # Convert NA to 0
+  mutate(across(where(is.numeric), ~ifelse(is.na(.x), 0, .x))) -> df_one_hot_encoded
+
+# Prepare labels  
+pretty_labels <- c(
+  chess3_1_2 = "CHESS 3.1.2",
+  lncBookv2_0 = "lncBook v2.0",
+  bigtrans = "bigTranscriptome",
+  gencodeLncRna = "GENCODEv20+",
+  refseq = "refSeq",
+  fantomCat = "fantomCat",
+  mitrans = "miTranscriptome",
+  noncode = "NONCODE",
+  H_concat_catalogs = "lncRNA-merge",
+  gen27 = "GENCODE v27",
+  gen47 = "GENCODE v47"
+)
+
+# Create Upset plot - with lncRNA-merge
+df_one_hot_encoded %>% 
+  as.data.table() %>%
+  setnames(old = names(pretty_labels), new = pretty_labels) %>%
+  upset(., 
+        sets = pretty_labels,
+        mb.ratio = c(0.55, 0.45),
+        keep.order = TRUE,
+        order.by = "freq",
+        set_size.show = TRUE,
+        set_size.numbers_size = 4) -> upSet_plot
+
+# Preview
+upSet_plot
+```
+
+# Save plot to pdf - with lncRNA-merge
+```{r}
+pdf("upSet_plot.pdf", bg = "white", width=14, height=9)
+upSet_plot
+```

@@ -1,30 +1,36 @@
-
-░██████████░██                                               ░██████     ░██    ░██████  ░██        
-░██                                                         ░██   ░██  ░████   ░██   ░██ ░██        
-░██        ░██ ░████████ ░██    ░██ ░██░████  ░███████     ░██           ░██         ░██ ░████████  
-░█████████ ░██░██    ░██ ░██    ░██ ░███     ░██    ░██     ░████████    ░██     ░█████  ░██    ░██ 
-░██        ░██░██    ░██ ░██    ░██ ░██      ░█████████            ░██   ░██    ░██      ░██    ░██ 
-░██        ░██░██   ░███ ░██   ░███ ░██      ░██            ░██   ░██    ░██   ░██       ░███   ░██ 
-░██        ░██ ░█████░██  ░█████░██ ░██       ░███████       ░██████   ░██████ ░████████ ░██░█████  
-                     ░██                                                                            
-               ░███████                                                                             
-                                                                                                    
+ ██████╗ █████╗ ████████╗ █████╗ ██╗      ██████╗  ██████╗                 
+██╔════╝██╔══██╗╚══██╔══╝██╔══██╗██║     ██╔═══██╗██╔════╝                 
+██║     ███████║   ██║   ███████║██║     ██║   ██║██║  ███╗                
+██║     ██╔══██║   ██║   ██╔══██║██║     ██║   ██║██║   ██║                
+╚██████╗██║  ██║   ██║   ██║  ██║███████╗╚██████╔╝╚██████╔╝                
+ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝                 
+                                                                           
+███████╗██████╗ ███████╗ ██████╗██╗███████╗██╗ ██████╗██╗████████╗██╗   ██╗
+██╔════╝██╔══██╗██╔════╝██╔════╝██║██╔════╝██║██╔════╝██║╚══██╔══╝╚██╗ ██╔╝
+███████╗██████╔╝█████╗  ██║     ██║█████╗  ██║██║     ██║   ██║    ╚████╔╝ 
+╚════██║██╔═══╝ ██╔══╝  ██║     ██║██╔══╝  ██║██║     ██║   ██║     ╚██╔╝  
+███████║██║     ███████╗╚██████╗██║██║     ██║╚██████╗██║   ██║      ██║   
+╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝     ╚═╝ ╚═════╝╚═╝   ╚═╝      ╚═╝   
+                                                                           
 # Prepare environment and run tmerge
 ```{bash echo=FALSE, engine.opts='-l'}
 # Remove old results
-rm -r .temp_s12b/
+rm -r .temp/
 
 # Handle errors
 set -e          # exit on any non-0 exit status
 set -o pipefail # exit on any non-0 exit status in pipe
 
 # Create directory tree
-mkdir .temp_s12b/
-mkdir .temp_s12b/H_catalogs/
-mkdir .temp_s12b/H_tmerged/
+mkdir .temp/
+mkdir .temp/H_catalogs/
+mkdir .temp/H_tmerged/
 
 # Move to working dir
-cd .temp_s12b/
+cd .temp/
+
+# Set paths
+utils=../../Utils
 
 # Copy necessary files
 ## Full Gencode.v47 annotation
@@ -39,24 +45,24 @@ cp ../../Data/masterTable/Hv3_metadata.tsv.gz .
 cp ../../Data/masterTable/Hv3_CLS3_targetDesign.gtf.gz .
 # human Catalogs (only main chr, exclude chrM)
 ## longNonCoding
-zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/bigTranscriptome.hg38.bed12
-zcat ../../Data/H_catalogs/fantomCat.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/fantomCat.hg38.bed12
-zcat ../../Data/H_catalogs/gencode20+.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/gencode20+.hg38.bed12
-zcat ../../Data/H_catalogs/miTranscriptome.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/miTranscriptome.hg38.bed12
-zcat ../../Data/H_catalogs/NONCODE.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/NONCODE.hg38.bed12
-zcat ../../Data/H_catalogs/refSeq.gtf.gz | ../../Utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/refSeq.hg38.bed12
+zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/bigTranscriptome.hg38.bed12
+zcat ../../Data/H_catalogs/fantomCat.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/fantomCat.hg38.bed12
+zcat ../../Data/H_catalogs/gencode20+.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/gencode20+.hg38.bed12
+zcat ../../Data/H_catalogs/miTranscriptome.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/miTranscriptome.hg38.bed12
+zcat ../../Data/H_catalogs/NONCODE.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/NONCODE.hg38.bed12
+zcat ../../Data/H_catalogs/refSeq.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/refSeq.hg38.bed12
 ## smallNonCoding
 zcat ../../Data/H_catalogs/miRNA.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/miRNA.hg38.bed12
 zcat ../../Data/H_catalogs/snoRNA.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/snoRNA.hg38.bed12
 zcat ../../Data/H_catalogs/snRNA.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/snRNA.hg38.bed12
 ## putative
-zcat ../../Data/H_catalogs/CMfinderCRSs.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$5="0"' | awk -F"\t" '{OFS=FS}$4="CMfinderCRSs."$4"."$1"."$2"."$3"."$6' | ../../Utils/bed2gff.pl - | ../../Utils/gff2bed_full.pl - > ./H_catalogs/CMfinderCRSs.hg38.bed12
-zcat ../../Data/H_catalogs/GWAScatalog.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | awk -F"\t" '{OFS=FS}$4="GWAScatalog."$4"."$6"."$1"."$2"."$3"."$6' | ../../Utils/bed2gff.pl - | ../../Utils/gff2bed_full.pl - > ./H_catalogs/GWAScatalog.hg38.bed12
+zcat ../../Data/H_catalogs/CMfinderCRSs.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$5="0"' | awk -F"\t" '{OFS=FS}$4="CMfinderCRSs."$4"."$1"."$2"."$3"."$6' | $utils/bed2gff.pl - | $utils/gff2bed_full.pl - > ./H_catalogs/CMfinderCRSs.hg38.bed12
+zcat ../../Data/H_catalogs/GWAScatalog.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | awk -F"\t" '{OFS=FS}$4="GWAScatalog."$4"."$6"."$1"."$2"."$3"."$6' | $utils/bed2gff.pl - | $utils/gff2bed_full.pl - > ./H_catalogs/GWAScatalog.hg38.bed12
 zcat ../../Data/H_catalogs/phyloCSF.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$4="phyloCSF."$4"."$1"."$2"."$3"."$6' > ./H_catalogs/phyloCSF.hg38.bed12
-zcat ../../Data/H_catalogs/UCE.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | awk -F"\t" '{OFS=FS}$4="UCE."$4"."$6"."$1"."$2"."$3"."$6' | ../../Utils/bed2gff.pl - | ../../Utils/gff2bed_full.pl - > ./H_catalogs/UCE.hg38.bed12
+zcat ../../Data/H_catalogs/UCE.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | awk -F"\t" '{OFS=FS}$4="UCE."$4"."$6"."$1"."$2"."$3"."$6' | $utils/bed2gff.pl - | $utils/gff2bed_full.pl - > ./H_catalogs/UCE.hg38.bed12
 ## enhancers
 zcat ../../Data/H_catalogs/fantomEnhancers.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > ./H_catalogs/fantomEnhancers.hg38.bed12
-zcat ../../Data/H_catalogs/VISTAenhancers.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | ../../Utils/bed2gff.pl - | ../../Utils/gff2bed_full.pl - > ./H_catalogs/VISTAenhancers.hg38.bed12
+zcat ../../Data/H_catalogs/VISTAenhancers.bed.gz | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F"\t" '{OFS=FS}$6="+",$5="0"' | $utils/bed2gff.pl - | $utils/gff2bed_full.pl - > ./H_catalogs/VISTAenhancers.hg38.bed12
 
 ## Extract target_ids detected in mT
 ### Extract target_ids with artifact tags
@@ -70,7 +76,7 @@ zcat Hv3_masterTable_refined_targets_with_artifacts.tsv.gz | awk '$2=="no"{print
 ################
 # Create list of all catalog transcript ids (not only main chr etc.)
 ## For diagnostics only
-zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz ../../Data/H_catalogs/fantomCat.gtf.gz ../../Data/H_catalogs/gencode20+.gtf.gz ../../Data/H_catalogs/miTranscriptome.gtf.gz ../../Data/H_catalogs/NONCODE.gtf.gz ../../Data/H_catalogs/refSeq.gtf.gz | ../../Utils/gff2bed_full.pl - | awk '{print $4}' | sort | uniq > temp.H_concat_longNonCoding.tx.ids
+zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz ../../Data/H_catalogs/fantomCat.gtf.gz ../../Data/H_catalogs/gencode20+.gtf.gz ../../Data/H_catalogs/miTranscriptome.gtf.gz ../../Data/H_catalogs/NONCODE.gtf.gz ../../Data/H_catalogs/refSeq.gtf.gz | $utils/gff2bed_full.pl - | awk '{print $4}' | sort | uniq > temp.H_concat_longNonCoding.tx.ids
 # Transform data
 ## Concatenate human catalogs into 1 file (remove tx with inconsistent strand);
 ### Only non-lifted (so for human - all catalogs)
@@ -116,7 +122,7 @@ while read file || [ -n "$file" ]
     name=`echo $file | awk -F"/" '{print $3}' | awk -F"." '{print $1}'`
     echo "---- $name ----"
     echo "Tmerging..."
-    cat $file | ../../Utils/bed12togff - | ../../Utils/sortgff - | ../../Utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
+    cat $file | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
     echo "Preparing tmerged targeted slice..."
     zcat ./H_tmerged/$name.tmerged.gtf.gz | grep -Fwf Hv3_targeted_longNonCoding_tx.ids | grep "\S" | gzip > ./H_tmerged/$name.targeted.slice.tmerged.gtf.gz
     echo "Preparing tmerged detected in genuine mT slice..."
@@ -130,13 +136,13 @@ while read file || [ -n "$file" ]
     # Temporary decompress files
     zcat ./H_tmerged/$name.detectedInGenuine.slice.tmerged.gtf.gz > $name.detectedInGenuine.slice.tmerged.gtf
     # Convert catalogs to gtf (to calculate detected_in_genuinde_TX in GENCODE.v47)
-    cat $file | grep -Fwf H_longNonCoding_tx_ids_detected_in_genuinemT.ids | grep "\S" | ../../Utils/bed12togff - > $name.detectedInGenuine.slice.gtf
+    cat $file | grep -Fwf H_longNonCoding_tx_ids_detected_in_genuinemT.ids | grep "\S" | $utils/bed12togff - > $name.detectedInGenuine.slice.gtf
     # Run gffcompare
     gffcompare -o ${name}_IC -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.tmerged.gtf
     gffcompare -o ${name}_TX -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.gtf
     # Extract only Equal, Included, Extends and Overlaps classes (according to simplifyGffCompareClasses.pl)
-    cat ${name}_IC.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
-    cat ${name}_TX.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
+    cat ${name}_IC.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
+    cat ${name}_TX.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
     # Remove decompressed files
     rm $name.detectedInGenuine.slice.tmerged.gtf
     echo "Adding numbers to the output file..."
@@ -206,7 +212,7 @@ while read file || [ -n "$file" ]
     name=`echo $file | awk -F"/" '{print $3}' | awk -F"." '{print $1}'`
     echo "---- $name ----"
     echo "Tmerging..."
-    cat $file | ../../Utils/bed12togff - | ../../Utils/sortgff - | ../../Utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
+    cat $file | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
     echo "Preparing tmerged targeted slice..."
     zcat ./H_tmerged/$name.tmerged.gtf.gz | grep -Fwf Hv3_targeted_smallNonCoding_tx.ids | grep "\S" | gzip > ./H_tmerged/$name.targeted.slice.tmerged.gtf.gz
     echo "Preparing tmerged detected in genuine mT slice..."
@@ -220,13 +226,13 @@ while read file || [ -n "$file" ]
     # Temporary decompress files
     zcat ./H_tmerged/$name.detectedInGenuine.slice.tmerged.gtf.gz > $name.detectedInGenuine.slice.tmerged.gtf
     # Convert catalogs to gtf (to calculate detected_in_genuinde_TX in GENCODE.v47)
-    cat $file | grep -Fwf H_smallNonCoding_tx_ids_detected_in_genuinemT.ids | grep "\S" | ../../Utils/bed12togff - > $name.detectedInGenuine.slice.gtf
+    cat $file | grep -Fwf H_smallNonCoding_tx_ids_detected_in_genuinemT.ids | grep "\S" | $utils/bed12togff - > $name.detectedInGenuine.slice.gtf
     # Run gffcompare
     gffcompare -o ${name}_IC -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.tmerged.gtf
     gffcompare -o ${name}_TX -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.gtf
     # Extract only Equal, Included, Extends and Overlaps classes (according to simplifyGffCompareClasses.pl)
-    cat ${name}_IC.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
-    cat ${name}_TX.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
+    cat ${name}_IC.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
+    cat ${name}_TX.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
     # Remove decompressed files
     rm $name.detectedInGenuine.slice.tmerged.gtf
     echo "Adding numbers to the output file..."
@@ -301,7 +307,7 @@ while read file || [ -n "$file" ]
     name=`echo $file | awk -F"/" '{print $3}' | awk -F"." '{print $1}'`
     echo "---- $name ----"
     echo "Tmerging..."
-    cat $file | ../../Utils/bed12togff - | ../../Utils/sortgff - | ../../Utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
+    cat $file | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
     echo "Preparing tmerged targeted slice..."
     zcat ./H_tmerged/$name.tmerged.gtf.gz | grep -Fwf Hv3_targeted_putative_tx.ids | grep "\S" | gzip > ./H_tmerged/$name.targeted.slice.tmerged.gtf.gz
     echo "Preparing tmerged detected in genuine mT slice..."
@@ -315,13 +321,13 @@ while read file || [ -n "$file" ]
     # Temporary decompress files
     zcat ./H_tmerged/$name.detectedInGenuine.slice.tmerged.gtf.gz > $name.detectedInGenuine.slice.tmerged.gtf
     # Convert catalogs to gtf (to calculate detected_in_genuinde_TX in GENCODE.v47)
-    cat $file | grep -Fwf H_putative_tx_ids_detected_in_genuinemT.ids | grep "\S" | ../../Utils/bed12togff - > $name.detectedInGenuine.slice.gtf
+    cat $file | grep -Fwf H_putative_tx_ids_detected_in_genuinemT.ids | grep "\S" | $utils/bed12togff - > $name.detectedInGenuine.slice.gtf
     # Run gffcompare
     gffcompare -o ${name}_IC -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.tmerged.gtf
     gffcompare -o ${name}_TX -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.gtf
     # Extract only Equal, Included, Extends and Overlaps classes (according to simplifyGffCompareClasses.pl)
-    cat ${name}_IC.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
-    cat ${name}_TX.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
+    cat ${name}_IC.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
+    cat ${name}_TX.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
     # Remove decompressed files
     rm $name.detectedInGenuine.slice.tmerged.gtf
     echo "Adding numbers to the output file..."
@@ -391,7 +397,7 @@ while read file || [ -n "$file" ]
     name=`echo $file | awk -F"/" '{print $3}' | awk -F"." '{print $1}'`
     echo "---- $name ----"
     echo "Tmerging..."
-    cat $file | ../../Utils/bed12togff - | ../../Utils/sortgff - | ../../Utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
+    cat $file | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | gzip > ./H_tmerged/$name.tmerged.gtf.gz
     echo "Preparing tmerged targeted slice..."
     zcat ./H_tmerged/$name.tmerged.gtf.gz | grep -Fwf Hv3_targeted_enhancers_tx.ids | grep "\S" | gzip > ./H_tmerged/$name.targeted.slice.tmerged.gtf.gz
     echo "Preparing tmerged detected in genuine mT slice..."
@@ -405,13 +411,13 @@ while read file || [ -n "$file" ]
     # Temporary decompress files
     zcat ./H_tmerged/$name.detectedInGenuine.slice.tmerged.gtf.gz > $name.detectedInGenuine.slice.tmerged.gtf
     # Convert catalogs to gtf (to calculate detected_in_genuinde_TX in GENCODE.v47)
-    cat $file | grep -Fwf H_enhancers_tx_ids_detected_in_genuinemT.ids | grep "\S" | ../../Utils/bed12togff - > $name.detectedInGenuine.slice.gtf
+    cat $file | grep -Fwf H_enhancers_tx_ids_detected_in_genuinemT.ids | grep "\S" | $utils/bed12togff - > $name.detectedInGenuine.slice.gtf
     # Run gffcompare
     gffcompare -o ${name}_IC -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.tmerged.gtf
     gffcompare -o ${name}_TX -r gencode.v47.chr_patch_hapl_scaff.annotation.gtf $name.detectedInGenuine.slice.gtf
     # Extract only Equal, Included, Extends and Overlaps classes (according to simplifyGffCompareClasses.pl)
-    cat ${name}_IC.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
-    cat ${name}_TX.tracking | ../../Utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
+    cat ${name}_IC.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_IC_detected_GENCODE.ids
+    cat ${name}_TX.tracking | $utils/simplifyGffCompareClasses.pl - | grep -wE "Equal|Included|Extends|Overlaps" | awk '!seen[$1]++{print$1}' | grep "\S" > ${name}_TX_detected_GENCODE.ids
     # Remove decompressed files
     rm $name.detectedInGenuine.slice.tmerged.gtf
     echo "Adding numbers to the output file..."
@@ -464,8 +470,10 @@ for file in ../H_catalogs/*bed12
      fi
      cat $file | awk -v catalog=$name '{print $4 "\t" catalog}' >> H_transcripts_with_catalog_names.tsv
   done
-  
-echo "++ Done ++"  
+echo "++ Done ++"
+
+# Report completeness
+echo "######### COMPLETED"
 ```
 
 # Load R libraries
@@ -486,7 +494,7 @@ rm(list = ls())
 
 # Load data
 ## Transcript_ids not detected in genuine (NOT in GENCODE 47)
-df_H_extracted_transcripts <- read.table(".temp_s12b/Catalog_specificity/H_extracted_transcripts.ids",
+df_H_extracted_transcripts <- read.table(".temp/Catalog_specificity/H_extracted_transcripts.ids",
                                        header=F, sep="\t") %>%
   rename(H_intronChain_id="V1",
          H_transcript_id="V2")
@@ -495,7 +503,7 @@ df_H_extracted_transcripts <- read.table(".temp_s12b/Catalog_specificity/H_extra
 df_H_extracted_transcripts
 
 ## Transcript_ids detected in genuine (in GENCODE 47)
-df_H_extracted_transcripts_detected <- read.table(".temp_s12b/Catalog_specificity/H_extracted_transcripts_detected.ids",
+df_H_extracted_transcripts_detected <- read.table(".temp/Catalog_specificity/H_extracted_transcripts_detected.ids",
                                        header=F, sep="\t") %>%
   rename(H_intronChain_id="V1",
          H_transcript_id="V2")
@@ -506,7 +514,7 @@ df_H_extracted_transcripts_detected
 
 #########################################
 ## Transcript_ids with catalog names
-df_H_transcripts_with_catalogs <- read.table(".temp_s12b/Catalog_specificity/H_transcripts_with_catalog_names.tsv",
+df_H_transcripts_with_catalogs <- read.table(".temp/Catalog_specificity/H_transcripts_with_catalog_names.tsv",
                                        header=F, sep="\t") %>%
   rename(H_transcript_id="V1",
          H_catalog="V2") %>% 
@@ -652,15 +660,15 @@ df_H_joined_tables %>%
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 14),
         strip.text.x = element_text(size = 18),
-        strip.text.y = element_text(size = 18)) -> plot_figure_s12b
+        strip.text.y = element_text(size = 18)) -> catalog_specificity_plot
 
 
 # Preview plot
-plot_figure_s12b
+catalog_specificity_plot
 ```
 
 # Save plot - catalog specificity with composition
 ```{r}
-pdf(file="figure_s12b.pdf", width = 8, height = 6)
-plot_figure_s12b
+pdf(file="catalog_specificity_plot.pdf", width = 8, height = 6)
+catalog_specificity_plot
 ```

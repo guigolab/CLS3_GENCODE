@@ -1,7 +1,7 @@
 ########################
 ###### Description
 ########################
-# Download GENCODE - CLS Master Table data. Used to produce Figure S17A & S17C
+# Download GENCODE - CLS Master Table data. Used to produce catalog specificity and intron chain analysis plots
 
 # Handle errors
 set -e          # exit on any non-0 exit status
@@ -13,25 +13,12 @@ set -o pipefail # exit on any non-0 exit status in pipe
 
 # masterTable - full
 ## Human
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v3.0/Hv3_masterTable_refined.gtf.gz"
+wget -O "Hv3_masterTable_refined.gtf.gz" "https://zenodo.org/records/15004659/files/Hv3_masterTable_refined.gtf.gz?download=1"
 ## Mouse
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v3.0/Mv2_masterTable_refined.gtf.gz"
+wget -O "Mv2_masterTable_refined.gtf.gz" "https://zenodo.org/records/15004659/files/Mv2_masterTable_refined.gtf.gz?download=1"
 
 # masterTable - spliced
 ## Human
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v3.0/Hv3_splicedmasterTable_refined.gtf.gz"
+wget -O "Hv3_splicedmasterTable_refined.gtf.gz" "https://zenodo.org/records/15004659/files/Hv3_splicedmasterTable_refined.gtf.gz?download=1"
 ## Mouse
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v3.0/Mv2_splicedmasterTable_refined.gtf.gz"
-
-# samplesMetadata
-## Human
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v1.0/Hv3_metadata.tsv.gz"
-## Mouse
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/GencodeCLS_v1.0/Mv2_metadata.tsv.gz"
-
-# targetDesign
-## Human
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/Supplementary/Hv3_CLS3_targetDesign.gtf.gz"
-## Mouse
-wget "https://github.com/guigolab/gencode-cls-master-table/releases/download/Supplementary/Mv2_CLS3_targetDesign.gtf.gz"
-
+wget -O "Mv2_splicedmasterTable_refined.gtf.gz" "https://zenodo.org/records/15004659/files/Mv2_splicedmasterTable_refined.gtf.gz?download=1"
