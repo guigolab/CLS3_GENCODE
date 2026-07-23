@@ -76,8 +76,11 @@ def main() -> None:
     # Update progress, so ppl won\t think last lines were skipped
     print(f"\rProcessed {i:,} lines.", end="", file=sys.stderr, flush=True)
 
-    # Extract catalog specific genes from possibly_specific set and joined them with kept genes
-    kept_genes.add(possibly_specific.difference(duplicates))
+    # Remove genes known as duplicates from possibly catalog specific geneIDs
+    possibly_specific.difference_update(duplicates)
+
+    # Add catalog sepcific genes with deduplicated geneIDs
+    kept_genes.update(possibly_specific)
 
     # Write deduplicated genes to STDOUT
     sys.stdout.write("\n".join(kept_genes))
