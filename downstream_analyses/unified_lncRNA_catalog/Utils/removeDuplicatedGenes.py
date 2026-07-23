@@ -46,6 +46,7 @@ def main() -> None:
     # Create sets
     kept_genes = set()
     duplicates = set()
+    possibly_specific = set()
 
     # Process intput lines
     with cm as infile:
@@ -59,8 +60,9 @@ def main() -> None:
             gene1 = features_list[3]
             gene2 = features_list[9]
 
-            # Skip lines where gene1 == gene2
+            # Keep IDs of genes intersecting themselves for future
             if gene1 == gene2:
+                possibly_specific.add(gene1)
                 continue
 
             # If geneID is not the duplicate; add to kept_genes
@@ -73,6 +75,9 @@ def main() -> None:
                 print(f"\rProcessed {i:,} lines.", end="", file=sys.stderr, flush=True)
     # Update progress, so ppl won\t think last lines were skipped
     print(f"\rProcessed {i:,} lines.", end="", file=sys.stderr, flush=True)
+
+    # Extract catalog specific genes from possibly_specific set and joined them with kept genes
+    kept_genes.add(possibly_specific.difference(duplicates))
 
     # Write deduplicated genes to STDOUT
     sys.stdout.write("\n".join(kept_genes))
