@@ -18,24 +18,31 @@ cd .temp/
 
 # Set paths
 utils=../../Utils
+H_catalogs=../../Data/H_catalogs/
 
-# Process lncRNA catalogues <- exclude chrM, keep unspliced
-zcat ../../Data/H_catalogs/NONCODE.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > NONCODE.hg38.gtf
-zcat ../../Data/H_catalogs/refSeq.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > refSeq.hg38.gtf
-zcat ../../Data/H_catalogs/miTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > miTranscriptome.hg38.gtf
-zcat ../../Data/H_catalogs/gencode20+.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > gencode20+.hg38.gtf
-zcat ../../Data/H_catalogs/bigTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > bigTranscriptome.hg38.gtf
-zcat ../../Data/H_catalogs/fantomCat.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" > fantomCat.hg38.gtf
+# Process lncRNA catalogues <- exclude chrM, exclude unspliced
+zcat $H_catalogs/NONCODE.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > NONCODE.hg38.gtf
+zcat $H_catalogs/refSeq.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > refSeq.hg38.gtf
+zcat $H_catalogs/miTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > miTranscriptome.hg38.gtf
+zcat $H_catalogs/gencode20+.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > gencode20+.hg38.gtf
+zcat $H_catalogs/bigTranscriptome.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > bigTranscriptome.hg38.gtf
+zcat $H_catalogs/fantomCat.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $0}' | $utils/bed12togff - | grep "\S" > fantomCat.hg38.gtf
 # Add chess and lncBook (convert to bed12 and then gtf to remove unnecessary data)
-zcat ../../Data/H_catalogs/chess3_1_2_GRCh38_lncRNA.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - > chess3_1_2.hg38.gtf
-zcat ../../Data/H_catalogs/lncRNA_LncBookv2_0_GRCh38.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - > lncBookv2_0.hg38.gtf
-# Add gencode 27 and 47 
-zcat ../../Data/H_catalogs/gen47.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen47.hg38.gtf
-zcat ../../Data/H_catalogs/gen27.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" > gen27.hg38.gtf
+zcat $H_catalogs/chess3_1_2_GRCh38_lncRNA.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$10 > 1 {print $0}' | grep "\S" | $utils/bed12togff - > chess3_1_2.hg38.gtf
+zcat $H_catalogs/lncRNA_LncBookv2_0_GRCh38.gtf.gz | $utils/gff2bed_full.pl - | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$10 > 1 {print $0}' | grep "\S" | $utils/bed12togff - > lncBookv2_0.hg38.gtf
+# Add gencode 27 and 47
+## Extract spliced transcriptIDs - v47
+zcat $H_catalogs/gen47.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $4}' | sort | uniq | grep "\S" > gen47_spliced_tx.ids
+## Extract clean v47 slice
+zcat $H_catalogs/gen47.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep -Fwf gen47_spliced_tx.ids | grep "\S" > gen47.hg38.gtf
+## Extract spliced transcriptIDs - v47
+zcat $H_catalogs/gen27.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep "\S" | $utils/sortgff - | $utils/gff2bed_full.pl - | awk '$10 > 1 {print $4}' | sort | uniq | grep "\S" > gen27_spliced_tx.ids
+## Extract clean v27 slice
+zcat $H_catalogs/gen27.gtf.gz | awk 'BEGIN{FS=OFS="\t"}$7!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk '$3=="exon"' | grep -Fwf gen27_spliced_tx.ids | grep "\S" > gen27.hg38.gtf
 
 # Include concatenated catalogs
 ## Concatenate human catalogs into 1 file (ENST00000610119.1 has inconsistent strand); remove chrM
-cat NONCODE.hg38.gtf refSeq.hg38.gtf miTranscriptome.hg38.gtf gencode20+.hg38.gtf bigTranscriptome.hg38.gtf fantomCat.hg38.gtf | $utils/gff2bed_full.pl - | sort | uniq | grep -vFw "ENST00000610119.1" | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' > H_concat_catalogs.hg38.gtf
+cat NONCODE.hg38.gtf refSeq.hg38.gtf miTranscriptome.hg38.gtf gencode20+.hg38.gtf bigTranscriptome.hg38.gtf fantomCat.hg38.gtf | $utils/gff2bed_full.pl - | sort | uniq | grep -vFw "ENST00000610119.1" | awk 'BEGIN{FS=OFS="\t"}$6!="."' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | grep "\S" | awk '$10 > 1 {print $0}' | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' > H_concat_catalogs.hg38.gtf
 
 # Prepare config file
 ## Ends
@@ -78,7 +85,7 @@ rm -r upSet/
 mkdir upSet/ && cd upSet/
 
 # Set paths
-utils=../../Utils
+utils=../../../Utils
 
 # Handle errors
 set -e          # exit on any non-0 exit status
@@ -94,15 +101,28 @@ while read file || [ -n "$file" ]
   done < ../upSet.config
 echo ">> Done"
 
-# Remove duplicates from concatenated master.temp.bed
-echo "++ Removing duplicated genes..."
-cat master.gene.temp.bed | awk '!seen[$1,$2,$3,$6]++{print $0}' > master.gene.bed
+## Run bedtools intersect to find genes that are intersecting each other
+echo "++ Running bedtools intersect to find mutually intersectin genes..."
+bedtools intersect -s -wa -wb -f 1.00 -F 1.00 -e -a master.gene.temp.bed -b master.gene.temp.bed > master.intersecting.master.bed
+echo ">> Done"
+## Extract geneIDs that are not intersecting with each other
+echo "++ Extracting IDs of genes, that are not intersecting each other..."
+$utils/removeDuplicatedGenes.py master.intersecting.master.bed > master.gene.ids
+echo ">> Done"
+## Remove intersecting genes
+echo "++ Removing intersecting genes from master.gene.temp.bed file..."
+cat master.gene.temp.bed | grep -Fwf master.gene.ids > master.gene.bed
 echo ">> Done"
 
+# Remove duplicates from concatenated master.temp.bed
+#echo "++ Removing duplicated genes..."
+#cat master.gene.temp.bed | awk '!seen[$1,$2,$3,$6]++{print $0}' > master.gene.bed
+#echo ">> Done"
+
 # Extract only geneIDs
-echo "++ Extracting geneIDs from master.bed ..."
-cat master.gene.bed | awk '{print $4}' > master.gene.ids
-echo ">> Done"
+#echo "++ Extracting geneIDs from master.bed ..."
+#cat master.gene.bed | awk '{print $4}' > master.gene.ids
+#echo ">> Done"
 
 # Run intersecting
 echo "++ Running intersecting... "
@@ -252,3 +272,204 @@ upSet_plot
 pdf("upSet_plot.pdf", bg = "white", width=14, height=9)
 upSet_plot
 ```
+
+######################################################################################
+######################################################################################
+######################################################################################
+# Generate data for alternative version of upSet plot using intron-chains
+# Plan:
+#      - All catalogs including GENCODE will be filtered (main chr, nothing else) 
+#      - All catalogs including GENCODE will be tmerged to reduce redundancy
+#      - All catalogs including GENCODE will be concatenated and duplicated bed12 entires will be filtered out
+#      - Using grep I will find overlapping intron-chains
+```{bash echo=FALSE, engine.opts='-l'}
+# Remove old results
+rm -r .temp2/
+
+# Create directory tree
+mkdir .temp2/
+
+# Move to working dir
+cd .temp2/
+
+# Set paths
+utils=../../Utils
+H_catalogs=../../Data/H_catalogs/
+
+# Handle errors
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+# Extract non-redundant intron-chains from each lncRNA catalog
+echo "++ Transforming catalogs... "
+for catalog in bigTranscriptome fantomCat gencode20+ miTranscriptome NONCODE refSeq chess3_1_2_GRCh38_lncRNA lncRNA_LncBookv2_0_GRCh38 gen27 gen47
+  do
+    echo -e "++ Transforming ${catalog}... "
+    zcat $H_catalogs/$catalog.gtf.gz | $utils/gff2bed_full.pl - | sort | uniq | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' > $catalog.bed12
+    cat $catalog.bed12 | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | $utils/gff2bed_full.pl - | grep '\S' > $catalog.merged.bed12
+   echo ">> Done"
+  done
+
+# Create merged catalog 
+echo "++ Creating marged catalog... "
+cat bigTranscriptome.bed12 fantomCat.bed12 gencode20+.bed12 miTranscriptome.bed12 NONCODE.bed12 refSeq.bed12 | sort | uniq | grep -vFw "ENST00000610119.1" | grep "\S" | grep -vFw "ENST00000610119.1" | $utils/bed12togff - | $utils/sortgff - | $utils/tmerge --exonOverhangTolerance 8 --tmPrefix IC - | grep '\S' | $utils/gff2bed_full.pl - | awk -F'\t' '!seen[$1,$2,$3,$6,$10,$11,$12]++ {print $0}' | grep '\S' > H_concat_catalogs.merged.bed12
+echo ">> Done"
+
+# Concatenate all catalogs, remove duplicated intron-chains and switch txID with a unique signature | extract only signature
+echo "++ Creating master catalog... "
+cat bigTranscriptome.merged.bed12 fantomCat.merged.bed12 gencode20+.merged.bed12 miTranscriptome.merged.bed12 NONCODE.merged.bed12 refSeq.merged.bed12 H_concat_catalogs.merged.bed12 chess3_1_2_GRCh38_lncRNA.merged.bed12 lncRNA_LncBookv2_0_GRCh38.merged.bed12 gen27.merged.bed12 gen47.merged.bed12 | awk -F'\t' '!seen[$1,$2,$3,$6,$10,$11,$12]++ {print $0}' | awk -F'\t' '{OFS="\t"} $4=$1"|"$2"|"$3"|"$6"|"$10"|"$11"|"$12 {print $4}' > master.IC.sig
+echo ">> Done"
+
+# Check intersection of each catalog with master
+echo "++ Intersecting catalogs with master... "
+for catalog in bigTranscriptome fantomCat gencode20+ miTranscriptome NONCODE refSeq H_concat_catalogs chess3_1_2_GRCh38_lncRNA lncRNA_LncBookv2_0_GRCh38 gen27 gen47
+  do
+    echo -e "++ Intersecting ${catalog}... "
+    # Extract signature
+    cat $catalog.merged.bed12 | awk -F'\t' '$4=$1"|"$2"|"$3"|"$6"|"$10"|"$11"|"$12 {print $4}' | sort | uniq | grep "\S" > $catalog.merged.sig
+    # Search signature in master
+    cat master.IC.sig | grep -Fwf $catalog.merged.sig > $catalog.intersecting.master.sig
+    echo ">> Done"
+  done
+
+# Report completness
+echo "######## COMPLETED"
+```
+
+# Load libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr,
+               data.table,
+               UpSetR)
+```
+
+# Process data and create UpSet plot
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data
+df_masterIDs <- read.table(".temp2/master.IC.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(master = 1)
+
+df_inter_bigtrans <- read.table(".temp2/bigTranscriptome.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(bigtrans = 1)
+df_inter_chess3_1_2 <- read.table(".temp2/chess3_1_2_GRCh38_lncRNA.intersecting.master.sig", header=F, sep="\t") %>%
+ rename(icID = "V1") %>%
+ mutate(chess3_1_2 = 1)
+df_inter_fantomCat <- read.table(".temp2/fantomCat.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(fantomCat = 1)
+df_inter_gen27 <- read.table(".temp2/gen27.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gen27 = 1)
+df_inter_gen47 <- read.table(".temp2/gen47.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gen47 = 1)
+df_inter_gencodeLncRna <- read.table(".temp2/gencode20+.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gencodeLncRna = 1)
+df_inter_H_concat_catalogs <- read.table(".temp2/H_concat_catalogs.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>%
+  mutate(H_concat_catalogs = 1)
+df_inter_lncBookv2_0 <- read.table(".temp2/lncRNA_LncBookv2_0_GRCh38.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>%
+  mutate(lncBookv2_0 = 1)
+df_inter_mitrans <- read.table(".temp2/miTranscriptome.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(mitrans = 1)
+df_inter_noncode <- read.table(".temp2/NONCODE.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(noncode = 1)
+df_inter_refseq <- read.table(".temp2/refSeq.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(refseq = 1)
+
+# Join tables
+df_masterIDs %>% 
+  left_join(x = .,
+            y = df_inter_bigtrans,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_chess3_1_2,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_fantomCat,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gen27,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gen47,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gencodeLncRna,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_H_concat_catalogs,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_lncBookv2_0,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_mitrans,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_noncode,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_refseq,
+            by = "icID") %>% 
+  # Exclude master column
+  select(!master) %>% 
+  # Convert NA to 0
+  mutate(across(where(is.numeric), ~ifelse(is.na(.x), 0, .x))) -> df_one_hot_encoded
+
+# Prepare labels  
+pretty_labels <- c(
+  chess3_1_2 = "CHESS 3.1.2",
+  lncBookv2_0 = "lncBook v2.0",
+  bigtrans = "bigTranscriptome",
+  gencodeLncRna = "GENCODEv20+",
+  refseq = "refSeq",
+  fantomCat = "fantomCat",
+  mitrans = "miTranscriptome",
+  noncode = "NONCODE",
+  H_concat_catalogs = "lncRNA-merge",
+  gen27 = "GENCODE v27",
+  gen47 = "GENCODE v47"
+)
+
+# Create Upset plot - with lncRNA-merge
+df_one_hot_encoded %>% 
+  as.data.table() %>%
+  setnames(old = names(pretty_labels), new = pretty_labels) %>%
+  upset(., 
+        sets = pretty_labels,
+        mb.ratio = c(0.55, 0.45),
+        keep.order = TRUE,
+        order.by = "freq",
+        set_size.show = TRUE,
+        set_size.numbers_size = 4) -> upSet_plot
+
+# Preview
+upSet_plot
+```
+
+# Save plot to pdf - with lncRNA-merge
+```{r}
+pdf("IC_upSet_plot.pdf", bg = "white", width=14, height=9)
+upSet_plot
+```
+
+
+
+
+
+
+
+
+
