@@ -70,10 +70,19 @@ def main() -> None:
                 kept_genes.add(gene1)
                 duplicates.add(gene2)
 
+            # Not all duplicates can align with each other
+            # Add genes2 to duplicates if gene1 is there
+            elif (gene1 in duplicates) and (gene2 not in kept_genes):
+                duplicates.add(gene2)
+
+            # Do not add kept genes to duplicates
+            else:
+                pass
+
             # Report progress
             if i % 1000 == 0:
                 print(f"\rProcessed {i:,} lines.", end="", file=sys.stderr, flush=True)
-    # Update progress, so ppl won\t think last lines were skipped
+    # Update progress, so ppl won't think last lines were skipped
     print(f"\rProcessed {i:,} lines.", end="", file=sys.stderr, flush=True)
 
     # Remove genes known as duplicates from possibly catalog specific geneIDs
