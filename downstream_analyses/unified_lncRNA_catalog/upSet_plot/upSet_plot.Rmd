@@ -505,11 +505,11 @@ set -o pipefail # exit on any non-0 exit status in pipe
 
 # Transform data to bed6
 echo "++ Transforming catalogs... "
-for catalog in miTranscriptome NONCODE gen47 gen27 #bigTranscriptome fantomCat gencode20+ refSeq chess3_1_2_GRCh38_lncRNA lncRNA_LncBookv2_0_GRCh38
+for catalog in miTranscriptome NONCODE gen47 gen27 bigTranscriptome fantomCat gencode20+ refSeq chess3_1_2_GRCh38_lncRNA lncRNA_LncBookv2_0_GRCh38
   do
     echo -e "++ Transforming ${catalog}... "
-    # Keep only main chromosomes
-    zcat $H_catalogs/$catalog.gtf.gz | awk -F'\t' '$3=="exon"' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F'\t' '$7!="."' > $catalog.gtf
+    # Keep only main chromosomes | transforming from gff to bed and then to gff is to fix lncBook 9th field!
+    zcat $H_catalogs/$catalog.gtf.gz | $utils/gff2bed_full.pl - | $utils/bed12togff - | awk -F'\t' '$3=="exon"' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F'\t' '$7!="."' > $catalog.gtf
     # Run buildLoci
     bedtools intersect -s -wao -a $catalog.gtf -b $catalog.gtf | $utils/buildLoci.pl - > $catalog.tmp.gtf
     # Fix gtf
@@ -521,9 +521,9 @@ for catalog in miTranscriptome NONCODE gen47 gen27 #bigTranscriptome fantomCat g
 
 # Run custom script to get upSet matrix
 echo "++ Running custom python script... "
-python3 build_consensus_upset_matrix.py \
-  --catalogs GENCODE47=gen47.exons.bed GENCODE27=gencode27.exons.bed \
-             miTranscriptome=miTranscriptome.exons.bed NONCODE=NONCODE.exons.bed \
+python3 ../build_consensus_upset_matrix.py \
+  --catalogs GENCODE47=gen47.exons.bed6 GENCODE27=gen27.exons.bed6 \
+             miTranscriptome=miTranscriptome.exons.bed6 NONCODE=NONCODE.exons.bed6 \
   --min-frac 0.3 \
   --outdir results/
 echo ">> Done"
