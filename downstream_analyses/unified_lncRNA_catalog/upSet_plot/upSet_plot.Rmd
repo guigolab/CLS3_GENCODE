@@ -468,7 +468,198 @@ upSet_plot
 
 
 
+######################################################################################
+######################################################################################
+######################################################################################
+# Create python venv - run it once
+```{bash echo=FALSE, engine.opts='-l'}
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install pandas networkx
+```
 
+# Generate data for alternative version of upSet plot using exonic gene structure
+# Plan:
+#      - Running on a prayer
+```{bash echo=FALSE, engine.opts='-l'}
+# Remove old results
+rm -r .temp3/
+
+# Create directory tree
+mkdir .temp3/
+
+# Move to working dir
+cd .temp3/
+
+# Set paths
+utils=../../Utils
+H_catalogs=../../Data/H_catalogs/
+
+# Activate python venv
+source ../.venv/bin/activate
+
+# Handle errors
+set -e          # exit on any non-0 exit status
+set -o pipefail # exit on any non-0 exit status in pipe
+
+# Transform data to bed6
+echo "++ Transforming catalogs... "
+for catalog in miTranscriptome NONCODE gen47 gen27 #bigTranscriptome fantomCat gencode20+ refSeq chess3_1_2_GRCh38_lncRNA lncRNA_LncBookv2_0_GRCh38
+  do
+    echo -e "++ Transforming ${catalog}... "
+    # Keep only main chromosomes
+    zcat $H_catalogs/$catalog.gtf.gz | awk -F'\t' '$3=="exon"' | awk '$1 ~ /^chr[0-9XY]{1,2}$/ {print $0}' | awk -F'\t' '$7!="."' > $catalog.gtf
+    # Run buildLoci
+    bedtools intersect -s -wao -a $catalog.gtf -b $catalog.gtf | $utils/buildLoci.pl - > $catalog.tmp.gtf
+    # Fix gtf
+    $utils/gff2gff.pl $catalog.tmp.gtf > $catalog.loci.gtf
+    # Convert to bed6 with geneID in $4
+    cat $catalog.loci.gtf | $utils/gff2bed_simplistic_geneID - | awk -F'\t' -v catalog=$catalog '{OFS=FS} $4=catalog"|"$4'  | sort | uniq  > $catalog.exons.bed6
+   echo ">> Done"
+  done
+
+# Run custom script to get upSet matrix
+echo "++ Running custom python script... "
+python3 build_consensus_upset_matrix.py \
+  --catalogs GENCODE47=gen47.exons.bed GENCODE27=gencode27.exons.bed \
+             miTranscriptome=miTranscriptome.exons.bed NONCODE=NONCODE.exons.bed \
+  --min-frac 0.3 \
+  --outdir results/
+echo ">> Done"
+
+# Report completness
+echo "######## COMPLETED"
+```
+
+# Load libraries
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr,
+               data.table,
+               UpSetR)
+```
+
+# Process data and create UpSet plot
+```{r}
+# Clean the env
+rm(list = ls())
+
+# Load data
+df_masterIDs <- read.table(".temp2/master.IC.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(master = 1)
+
+df_inter_bigtrans <- read.table(".temp2/bigTranscriptome.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(bigtrans = 1)
+df_inter_chess3_1_2 <- read.table(".temp2/chess3_1_2_GRCh38_lncRNA.intersecting.master.sig", header=F, sep="\t") %>%
+ rename(icID = "V1") %>%
+ mutate(chess3_1_2 = 1)
+df_inter_fantomCat <- read.table(".temp2/fantomCat.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(fantomCat = 1)
+df_inter_gen27 <- read.table(".temp2/gen27.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gen27 = 1)
+df_inter_gen47 <- read.table(".temp2/gen47.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gen47 = 1)
+df_inter_gencodeLncRna <- read.table(".temp2/gencode20+.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(gencodeLncRna = 1)
+df_inter_H_concat_catalogs <- read.table(".temp2/H_concat_catalogs.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>%
+  mutate(H_concat_catalogs = 1)
+df_inter_lncBookv2_0 <- read.table(".temp2/lncRNA_LncBookv2_0_GRCh38.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>%
+  mutate(lncBookv2_0 = 1)
+df_inter_mitrans <- read.table(".temp2/miTranscriptome.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(mitrans = 1)
+df_inter_noncode <- read.table(".temp2/NONCODE.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(noncode = 1)
+df_inter_refseq <- read.table(".temp2/refSeq.intersecting.master.sig", header=F, sep="\t") %>%
+  rename(icID = "V1") %>% 
+  mutate(refseq = 1)
+
+# Join tables
+df_masterIDs %>% 
+  left_join(x = .,
+            y = df_inter_bigtrans,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_chess3_1_2,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_fantomCat,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gen27,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gen47,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_gencodeLncRna,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_H_concat_catalogs,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_lncBookv2_0,
+            by = "icID") %>%
+  left_join(x = .,
+            y = df_inter_mitrans,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_noncode,
+            by = "icID") %>% 
+  left_join(x = .,
+            y = df_inter_refseq,
+            by = "icID") %>% 
+  # Exclude master column
+  select(!master) %>% 
+  # Convert NA to 0
+  mutate(across(where(is.numeric), ~ifelse(is.na(.x), 0, .x))) -> df_one_hot_encoded
+
+# Prepare labels  
+pretty_labels <- c(
+  chess3_1_2 = "CHESS 3.1.2",
+  lncBookv2_0 = "lncBook v2.0",
+  bigtrans = "bigTranscriptome",
+  gencodeLncRna = "GENCODEv20+",
+  refseq = "refSeq",
+  fantomCat = "fantomCat",
+  mitrans = "miTranscriptome",
+  noncode = "NONCODE",
+  H_concat_catalogs = "lncRNA-merge",
+  gen27 = "GENCODE v27",
+  gen47 = "GENCODE v47"
+)
+
+# Create Upset plot - with lncRNA-merge
+df_one_hot_encoded %>% 
+  as.data.table() %>%
+  setnames(old = names(pretty_labels), new = pretty_labels) %>%
+  upset(., 
+        sets = pretty_labels,
+        mb.ratio = c(0.55, 0.45),
+        keep.order = TRUE,
+        order.by = "freq",
+        set_size.show = TRUE,
+        set_size.numbers_size = 4) -> upSet_plot
+
+# Preview
+upSet_plot
+```
+
+# Save plot to pdf - with lncRNA-merge
+```{r}
+pdf("IC_upSet_plot.pdf", bg = "white", width=14, height=9)
+upSet_plot
+```
 
 
 
