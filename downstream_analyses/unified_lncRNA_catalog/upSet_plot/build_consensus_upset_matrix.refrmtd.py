@@ -248,6 +248,104 @@ def dump_components_long(components, node_catalog, node_gene) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["consensus_locus", "catalog", "gene_id"])
 
 
+def add_relationship_type(matrix_df: pd.DataFrame, catalog_names: list) -> pd.DataFrame:
+    """
+    Label each locus by its cardinality pattern across catalogs, using the
+    *_n (raw gene count) columns already in matrix_df:
+      - "empty"     : 0 catalogs present (shouldn't occur, sanity guard)
+      - "singleton" : only 1 catalog present at all (no comparison possible)
+      - "1:1"       : every present catalog contributes exactly 1 gene
+      - "1:many"    : present catalogs contribute a mix of 1s and >1s
+      - "many:many" : every present catalog contributes >1 gene
+    This is what lets you report split events as a proportion rather than
+    trying to force them into the UpSet bar heights themselves.
+    """
+    df = matrix_df.copy()
+    n_cols = [f"{c}_n" for c in catalog_names]
+
+    def classify(row):
+        present_counts = [row[c] for c in n_cols if row[c] > 0]
+        if len(present_counts) == 0:
+            return "empty"
+        if len(present_counts) == 1:
+            return "singleton"
+        if all(c == 1 for c in present_counts):
+            return "1:1"
+        if all(c > 1 for c in present_counts):
+            return "many:many"
+        return "1:many"
+
+    df["relationship_type"] = df.apply(classify, axis=1)
+    return df
+
+
+def fragmentation_index(matrix_df: pd.DataFrame, catalog_gene_ids: dict) -> pd.DataFrame:
+    """
+    Per catalog: raw_gene_count vs n_loci_present (the number this catalog
+    contributes to on the UpSet set-size side bar), and their ratio.
+
+    fragmentation_index = raw_gene_count / n_loci_present
+
+    ~1.0  -> this catalog's genes show up ~1-per-locus; the UpSet bar for
+             this catalog faithfully represents its true gene count.
+    >>1.0 -> this catalog is having multiple genes absorbed into shared
+             loci; its UpSet set-size bar is an UNDERCOUNT of its true
+             gene contribution by roughly that factor. Catalogs with
+             fragmentary transcript models (MiTranscriptome, NONCODE, etc.)
+             are expected to show the highest values here.
+    """
+    rows = []
+    for cat, genes in catalog_gene_ids.items():
+        raw = len(genes)
+        n_loci = int(matrix_df[cat].sum())
+        n_true = int(matrix_df[f"{cat}_n"].sum())
+        frag_idx = raw / n_loci if n_loci > 0 else float("nan")
+        rows.append({
+            "catalog": cat,
+            "raw_gene_count": raw,
+            "n_loci_present": n_loci,
+            "genes_recovered_check": n_true,  # should equal raw_gene_count
+            "fragmentation_index": round(frag_idx, 3),
+        })
+    return pd.DataFrame(rows).sort_values("fragmentation_index", ascending=False)
+
+
+def plot_dual_bar(frag_df: pd.DataFrame, out_path: Path):
+    """
+    Companion bar chart: raw gene count vs. loci-present count, per catalog,
+    side by side. This is the visual answer to "did the UpSet plot catch all
+    of this catalog's genes" -- the gap between the two bars for a given
+    catalog IS the fragmentation effect; the UpSet plot itself cannot show
+    this (see fragmentation_index docstring for why).
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    df = frag_df.sort_values("fragmentation_index", ascending=False)
+    x = np.arange(len(df))
+    width = 0.38
+
+    fig, ax = plt.subplots(figsize=(max(6, 0.6 * len(df)), 5))
+    ax.bar(x - width / 2, df["raw_gene_count"], width, label="Raw gene count", color="#1b9e77")
+    ax.bar(x + width / 2, df["n_loci_present"], width, label="Loci present (UpSet set size)", color="#d95f02")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(df["catalog"], rotation=45, ha="right")
+    ax.set_ylabel("Count")
+    ax.set_title("Raw gene count vs. UpSet set size, per catalog")
+    ax.legend()
+
+    for i, row in enumerate(df.itertuples()):
+        ax.annotate(f"{row.fragmentation_index}x", (i, max(row.raw_gene_count, row.n_loci_present)),
+                    textcoords="offset points", xytext=(0, 4), ha="center", fontsize=8)
+
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=200)
+    plt.close(fig)
+
+
 # ---------------------------------------------------------------------------
 # Diagnostics: flag likely chaining artifacts
 # ---------------------------------------------------------------------------
@@ -277,6 +375,8 @@ def main():
     ap.add_argument("--outdir", type=Path, default=Path("consensus_out"))
     ap.add_argument("--dump-components", action="store_true",
                      help="Also write a long-format (locus, catalog, gene_id) table for full manual audit")
+    ap.add_argument("--no-dual-bar-plot", action="store_true",
+                     help="Skip generating raw_vs_loci_dual_bar.png (requires matplotlib)")
     args = ap.parse_args()
 
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -318,11 +418,13 @@ def main():
     matrix_df, components, node_catalog, node_gene = build_consensus_matrix(catalog_gene_ids, edges_by_pair)
     print(f"  {len(matrix_df)} consensus loci", file=sys.stderr)
 
+    matrix_df = add_relationship_type(matrix_df, list(catalogs.keys()))
     matrix_path = args.outdir / "consensus_matrix.tsv"
     matrix_df.to_csv(matrix_path, sep="\t", index=False)
     print(f"  wrote {matrix_path}", file=sys.stderr)
     print("  (columns '<catalog>' = 0/1 presence for UpSet; "
-          "'<catalog>_n' = raw gene count absorbed into that locus)", file=sys.stderr)
+          "'<catalog>_n' = raw gene count absorbed into that locus; "
+          "'relationship_type' = 1:1 / 1:many / many:many / singleton per locus)", file=sys.stderr)
 
     print("[4/4] Flagging likely chaining artifacts (top 1% by component size)...", file=sys.stderr)
     flagged = flag_outlier_components(matrix_df, list(catalogs.keys()))
@@ -341,6 +443,22 @@ def main():
         long_path = args.outdir / "components_long_format.tsv"
         long_df.to_csv(long_path, sep="\t", index=False)
         print(f"  wrote full member audit table {long_path}", file=sys.stderr)
+
+    frag_df = fragmentation_index(matrix_df, catalog_gene_ids)
+    frag_path = args.outdir / "fragmentation_index.tsv"
+    frag_df.to_csv(frag_path, sep="\t", index=False)
+    print(f"  wrote {frag_path} "
+          "(fragmentation_index > 1 means the UpSet set-size bar UNDERCOUNTS "
+          "that catalog's true gene contribution -- see docstring)", file=sys.stderr)
+
+    if not args.no_dual_bar_plot:
+        try:
+            dual_bar_path = args.outdir / "raw_vs_loci_dual_bar.png"
+            plot_dual_bar(frag_df, dual_bar_path)
+            print(f"  wrote {dual_bar_path}", file=sys.stderr)
+        except ImportError:
+            print("  (skipped dual-bar plot: matplotlib not installed -- "
+                  "pip install matplotlib --break-system-packages)", file=sys.stderr)
 
     # sanity check printout -- uses TRUE per-catalog gene counts (sum of *_n
     # columns), not presence sums, so 1-to-many splits no longer look like
