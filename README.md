@@ -1,29 +1,48 @@
 # The GENCODE CLS Project
-## massively expanding the lncRNA catalog through capture long-read RNA sequencing
-Tamara Perteghella<sup>1,2,\*</sup>, Gazaldeep Kaur<sup>1,\*</sup>,  Sílvia Carbonell-Sala<sup>1,\*</sup>, Jose Gonzalez-Martinez<sup>3,\*</sup>, Toby Hunt<sup>3,\*</sup>, Tomasz Mądry<sup>4</sup>, Irwin Jungreis<sup>5,6</sup>, Fabien Degalez<sup>1</sup>, Carme Arnan<sup>1</sup>, Ramil Nurtdinov<sup>1</sup>, Julien Lagarde<sup>1,7</sup>, Beatrice Borsari<sup>8,9</sup>, Cristina Sisu<sup>10</sup>, Yunzhe Jiang<sup>8,9</sup>, Ruth Bennett<sup>3</sup>, Andrew Berry<sup>3</sup>, Marta Blangiewicz<sup>4</sup>, Daniel Cerdán-Vélez<sup>11</sup>, Kelly Cochran<sup>12</sup>, Covadonga Vara<sup>13</sup>, Claire Davidson<sup>3</sup>, Sarah Donaldson<sup>3</sup>, Cagatay Dursun<sup>8,9</sup>, Silvia González-López<sup>1,2</sup>, Sasti Gopal Das<sup>4</sup>, Kathryn Lawrence<sup>14</sup>, Daniel Nachun<sup>14</sup>, Matthew Hardy<sup>3</sup>, Zoe Hollis<sup>3</sup>, Mike Kay<sup>3</sup>, José Carlos Montañés<sup>13</sup>, Pengyu Ni<sup>8,9</sup>, Emilio Palumbo<sup>1</sup>, Carlos Pulido-Quetglas<sup>15,16</sup>, Marie-Marthe Suner<sup>3</sup>, Xuezhu Yu<sup>8,9</sup>, Dingyao Zhang<sup>8,9</sup>, Francois Aguet<sup>6</sup>, Kristin Ardlie<sup>6</sup>, Stephen B. Montgomery<sup>14,17,18</sup>, Jane E. Loveland<sup>3</sup>, M. Mar Albà<sup>13,19</sup>, Mark Diekhans<sup>20</sup>, Andrea Tanzer<sup>21</sup>, Jonathan M. Mudge<sup>3</sup>, Paul Flicek<sup>3</sup>, Fergal J Martin<sup>3</sup>, Mark Gerstein<sup>8,9</sup>, Manolis Kellis<sup>5,6</sup>, Anshul Kundaje<sup>12,14</sup>, Benedict Paten<sup>20</sup>, Michael L. Tress<sup>11</sup>, Rory Johnson<sup>15,16</sup>, Barbara Uszczynska-Ratajczak<sup>4</sup>, Adam Frankish<sup>3</sup>, Roderic Guigó<sup>1,2</sup>
+## Massively expanding the lncRNA catalog through capture long-read RNA sequencing
+Tamara Perteghella<sup>1,2,\*</sup>, Gazaldeep Kaur<sup>1,\*</sup>,  Sílvia Carbonell-Sala<sup>1,3,\*</sup>, Jose Gonzalez-Martinez<sup>4,\*</sup>, Toby Hunt<sup>4,\*</sup>, Tomasz Mądry<sup>5</sup>, Irwin Jungreis<sup>6,7</sup>, Fabien Degalez<sup>1,8</sup>, Carme Arnan<sup>1</sup>, Silvia González-López<sup>1,2</sup>, Ramil Nurtdinov<sup>1</sup>, Julien Lagarde<sup>1</sup>, Beatrice Borsari<sup>9,10,11</sup>, Yunzhe Jiang<sup>9,10</sup>, Sebastien auber<sup>1</sup>, Ruth Bennett<sup>4</sup>, Andrew Berry<sup>4</sup>, Marta Blangiewicz<sup>5</sup>, Daniel Cerdán-Vélez<sup>12</sup>, Kelly Cochran<sup>13</sup>, Claire Davidson<sup>4</sup>, Sarah Donaldson<sup>4</sup>, Cagatay Dursun<sup>9,10</sup>, Stefan Ernst Seemann<sup>14</sup>, Veerendra P. Gadekar<sup>14,15</sup>, Sasti Gopal Das<sup>5</sup>, Roderic Guigó-Corominas<sup>16</sup>, Guillem Guigó i Corominas<sup>3,17</sup>, Matthew Hardy<sup>4</sup>, Zoe Hollis<sup>4</sup>, Mike Kay<sup>4</sup>, Kathryn Lawrence<sup>18</sup>, Daniel Nachun<sup>19</sup>, José Carlos Montañés<sup>20,21</sup>, Pengyu Ni<sup>9,10</sup>, Vasilis F. Ntasis<sup>1,20</sup>, Emilio Palumbo<sup>1</sup>, Carlos Pulido-Quetglas<sup>22,23</sup>, Cristina Sisu<sup>24</sup>, Marie-Marthe Suner<sup>4</sup>, Covadonga Vara<sup>20</sup>, Xuezhu Yu<sup>9,10</sup>, Dingyao Zhang<sup>9,10</sup>, Francois Aguet<sup>7</sup>, Kristin Ardlie<sup>7</sup>, Stephen B. Montgomery<sup>18,19,25</sup>, M. Mar Albà<sup>20,26</sup>, Jan Gorodkin<sup>14</sup>, John R. Prensner<sup>27,28</sup>, Jane E. Loveland<sup>4</sup>,  Mark Diekhans<sup>29,30</sup>, Andrea Tanzer<sup>31</sup>, Jonathan M. Mudge<sup>4,32</sup>, Paul Flicek<sup>33,34</sup>, Fergal J Martin<sup>4</sup>, Anshul Kundaje<sup>13,18</sup>, Benedict Paten<sup>29</sup>, Mark Gerstein<sup>9,10,35,36,37</sup>, Manolis Kellis<sup>6,7</sup>, Michael L. Tress<sup>12</sup>, Rory Johnson<sup>38,39,40</sup>, Barbara Uszczynska-Ratajczak<sup>5</sup>, Adam Frankish<sup>4</sup>, Roderic Guigó<sup>1,2</sup>
  
     1. Centre for Genomic Regulation (CRG), The Barcelona Institute of Science and Technology, Dr. Aiguader 88, Barcelona 08003, Catalonia, Spain.
     2. Departament de Ciències Experimentals i de la Salut, Universitat Pompeu Fabra (UPF).
-    3. European Molecular Biology Laboratory, European Bioinformatics Institute, Wellcome Genome Campus, Hinxton, Cambridge CB10 1SD, UK.
-    4. Department of Computational Biology of Noncoding RNA, Institute of Bioorganic Chemistry, Polish Academy of Sciences, Noskowskiego 12/14, 61-704 Poznan, Poland.
-    5. Computer Science and Artificial Intelligence Lab, Massachusetts Institute of Technology, 32 Vassar St, Cambridge, MA 02139, USA.
-    6. The Broad Institute of MIT and Harvard, 415 Main Street, Cambridge, MA 02142, USA.
-    7. Flomics Biotech, SL, Carrer de Roc Boronat 31, 08005 Barcelona, Catalonia, Spain.
-    8. Program in Computational Biology and Bioinformatics, Yale University, New Haven, Connecticut 06520, USA.
-    9. Department of Molecular Biophysics and Biochemistry, Yale University, New Haven, Connecticut 06520, USA.
-    10. Department of Life Sciences, Brunel University London, Uxbridge, London, UB8 3PH, UK.
-    11. Bioinformatics Unit, Spanish National Cancer Research Centre (CNIO), Calle Melchor Fernandez Almagro, 3, 28029 Madrid, Spain.
-    12. Department of Computer Science, Stanford University, Stanford, CA, USA.
-    13. Hospital del Mar Research Institute, Dr. Aiguader 88, Barcelona 08003, Spain.
-    14. Department of Genetics, Stanford University School of Medicine, Stanford, CA, USA.
-    15. Department of Medical Oncology, Bern University Hospital, Murtenstrasse 35, 3008 Bern, Switzerland.
-    16. School of Biology and Environmental Science, University College Dublin, University College Dublin, Belfield, Dublin 4, D04 V1W8, Ireland.
-    17. Department of Pathology, Stanford University School of Medicine, Stanford, CA, USA
-    18. Department of Biomedical Data Science, Stanford University School of Medicine, Stanford, CA, USA
-    19. Catalan Institute for Research and Advanced Studies (ICREA), Barcelona, Spain.
-    20. UC Santa Cruz Genomics Institute, 2300 Delaware Avenue, University of California, Santa Cruz, CA 95060, USA.
-    21. University of Vienna, Department of Biochemistry and Cell Biology, Vienna, Austria
-    
+    3. Facultat de Ciències, Tecnologia i Enginyeries, Universitat de Vic-Universitat Central de Catalunya, Catalonia.
+    4. European Molecular Biology Laboratory, European Bioinformatics Institute, Wellcome Genome Campus, Hinxton, Cambridge CB10 1SD, UK.
+    5. Department of Computational Biology of Noncoding RNA, Institute of Bioorganic Chemistry, Polish Academy of Sciences, Noskowskiego 12/14, 61-704 Poznan, Poland.
+    6. Computer Science and Artificial Intelligence Lab, Massachusetts Institute of Technology, 32 Vassar St, Cambridge, MA 02139, USA.
+    7. The Broad Institute of MIT and Harvard, 415 Main Street, Cambridge, MA 02142, USA.
+    8. PEGASE, INRAE, Institut Agro, 35590, Saint Gilles, France
+    9. Program in Computational Biology and Biomedical informatics, Yale University, New Haven, Connecticut 06520, USA.
+    10. Department of Molecular Biophysics and Biochemistry, Yale University, New Haven, Connecticut 06520, USA.
+    11. Departament de Genètica, Microbiologia i Estadística, Universitat de Barcelona (UB), Barcelona, 08028, Spain
+    12. Bioinformatics Unit, Spanish National Cancer Research Centre (CNIO), Calle Melchor Fernandez Almagro, 3, 28029 Madrid, Spain.
+    13. Department of Computer Science, Stanford University, Stanford, CA, USA.
+    14. Center for non-coding RNA in Technology and Health, Section for Health Data Science and AI, Department of Public Health, University of Copenhagen, Denmark
+    15. Centre for Integrative Biology and Systems Medicine, IIT Madras, Chennai, India
+    16. Department of Mathematics, Harvard University, Cambridge MA 02138
+    17. eXIT research group, Universitat de Girona, Catalonia
+    18. Department of Genetics, Stanford University School of Medicine, Stanford, CA, USA.
+    19. Department of Pathology, Stanford University School of Medicine, Stanford, CA, USA.
+    20. Hospital del Mar Research Institute, Dr. Aiguader 88, Barcelona 08003, Spain.
+    21. Molecular Biology Core, Biomedical Diagnostic Centre, Hospital Clínic de Barcelona, Barcelona, Spain.
+    22. Department of Computational Biology, University of Lausanne, Lausanne, CH-1015, Switzerland
+    23. School of Biology and Environmental Science, University College Dublin, Belfield, Dublin 4, D04 V1W8, Ireland. 
+    24. Department of Life Sciences, Brunel University London, Uxbridge, London, UB8 3PH, UK.
+    25. Department of Biomedical Data Science, Stanford University School of Medicine, Stanford, CA, USA
+    26. Catalan Institute for Research and Advanced Studies (ICREA), Barcelona, Spain.
+    27. Department of Pediatrics, Division of Pediatric Hematology/Oncology, University of Michigan Medical School, Ann Arbor, MI, 48109, USA
+    28. Department of Biological Chemistry, University of Michigan Medical School, Ann Arbor, MI, 48109, USA
+    29. UC Santa Cruz Genomics Institute, 2300 Delaware Avenue, University of California, Santa Cruz, CA 95060, USA.
+    30. Tricode Genomics, Santa Cruz, CA, USA
+    31. University of Vienna, Max Perutz Labs, Vienna, Austria
+    32. Institute of Cancer Research, London SW3 6JB, UK
+    33. Institute for Systems Genomics, University of Connecticut, Storrs, CT 06269, USA.	
+    34. Department of Genetics and Genome Sciences, University of Connecticut School of Medicine, 400 Farmington Ave, Farmington, CT 06030, USA.
+    35. Department of Statistics & Data Science, Yale University, New Haven, Connecticut 06520, USA.
+    36. Department of Computer Science, Yale University, New Haven, Connecticut 06520, USA.
+    37. Department of Biomedical Informatics & Data Science, Yale University, New Haven, Connecticut 06520, USA.
+    38. School of Medicine, University College Dublin, Dublin, Ireland.
+    39. Systems Biology Ireland, School of Medicine, University College Dublin, Dublin, Ireland. 
+    40. Conway Institute of Biomolecular and Biomedical Research, University College Dublin, Dublin, Ireland.
+
     * Equal contribution
     Correspondence should be addressed to R.G. (roderic.guigo@crg.cat)
 
