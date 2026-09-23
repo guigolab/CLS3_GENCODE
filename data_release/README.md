@@ -60,38 +60,6 @@ awk -F "\t" '$9 ~ /created_gene/ && $2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CL
 awk -F "\t" '$2 ~ /CLS3_created/ && $5 ~ /lncRNA/' v47-CLS3_extended_mappings | cut -f1 | sort -u | wc -l
 ```
 
-The novelty brought by these transcripts, with respect to version v27 (human) and vM16 (mouse) are reported the following table, and assigned as defined in the schema below.
-
-  - [v47-CLS3 mapping](https://zenodo.org/records/13946596/files/v47-CLS3mapping_status.txt?download=1)
-  - [vM36-CLS3 mapping](https://zenodo.org/records/15004659/files/vM36-CLS3mapping_status.txt?download=1)
-
-The mapping across v47 ENSTs and the CLS3 anchICs they were extended/created from, with added details like novelty at the transcript as well as gene level. 
-
-For each transcript (ENST) created/extended due to CLS3 (anchICs), the file lists: <br />
-||||
-|-|-|-|
-**geneID_v47** | v47 gene (ENSG) that the transcript belongs to <br />
-**transcriptID_v47** | v47 transcript ID (ENST) <br />
-**created/extended** | tag specifying whether the transcript was created or extended using TAGENE/manually <br />
-**CLS3_anchIC** | CLS3 anchIC(s) that led to the addition of the transcript to v47 <br />
-**CLS3_anchIC_gffComparev27** | gffcompare classification for the anchIC(s) w.r.t. v27 (reference annotation) <br />
-**v47-CLS3_mappingTag** | states the mapping strategy used; details in the above section <br />
-**v47_biotype** | v47 biotype <br />
-**transcriptClassification** | transcript (ENST) novelty status taking into account the different gffcompare classifications from all the underlying anchICs <br />
-**geneClassification** | gene (ENSG) novelty status taking into account the different gffcompare classifications from all the underlying transcripts <br />
-**CLS3_anchTM** | CLS3 anchTM(s) that led to the addition of the transcript to v47. Mapped through the anchICs. <br />
-
-The gffcompare novelty status definitions w.r.t. v27 for the anchICs, ENSTs and ENSGs.
-![Mapping](https://github.com/user-attachments/assets/7bbfea20-27d5-4bf5-8a55-494e5991943b)
-<br />
-
-## Extended GENCODE v47
-For the sole purpose of analysing those CLS transcripts that were not yet incorporated into the annotation, for some analyses we leveraged an extended version of the GENCODE v47.
-This refers to a tailored-made GTF file enhanced by adding CLS3 loci built from non artefactual spliced transcripts.
-
-This can be downloaded here:
-  - [Human v47 extended annotation](https://zenodo.org/records/15004659/files/enhanced_annotation_v47.refined.gtf.gz?download=1)
-    
 ## Target files
 Targets used for probe design:
 - [Human targeted regions](https://zenodo.org/records/15004659/files/hs.allNonPcgTargetsMerged.targets.gtf.gz?download=1)
