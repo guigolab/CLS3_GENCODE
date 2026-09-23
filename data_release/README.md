@@ -3,7 +3,7 @@
 Summary of files generated from the CLS3 data:
     <li><a href="#CLS-anchored-models">CLS anchored models</a></li>
     <li><a href="#CLS-transcripts">CLS transcripts</a></li>
-    <li><a href="#CLS-loci">CLS loci</a>
+    <li><a href="#CLS-LyRic-loci">CLS loci</a>
     <li><a href="#GENCODE-CLS3-Mappings">GENCODE-CLS3 Mappings</a>
     <li><a href="#Extended-GENCODE-v47">Extended GENCODE v47</a>
     <li><a href="#Target-files">Target files</a>
@@ -37,7 +37,7 @@ The attribute tags description can be found [here](gtf_tags_explained.md).
 
 Get an [overview](https://github.com/guigolab/CLS3_GENCODE/tree/main/data_release/overview) of the transcripts distribution across stages, tissues, and technology.
 
-## CLS loci
+## CLS LyRic-loci
 With the intent of grouping together different models in uniquely identifiable loci, we clustered CLS transcripts into regions of continuous transcription.
 Eventually, transcripts sharing any overlap on the same strand have been brought together into a single locus, preserving their structure. 
 
