@@ -5,7 +5,6 @@ Summary of files generated from the CLS3 data:
     <li><a href="#CLS-transcripts">CLS transcripts</a></li>
     <li><a href="#CLS-LyRic-loci">CLS LyRic-loci</a>
     <li><a href="#GENCODE-CLS3-Mappings">GENCODE-CLS3 Mappings</a>
-    <li><a href="#Extended-GENCODE-v47">Extended GENCODE v47</a>
     <li><a href="#Target-files">Target files</a>
     
 ![CLS workflow](https://github.com/user-attachments/assets/47c87440-8aca-44fc-a3bc-0bf27d5527f8)
