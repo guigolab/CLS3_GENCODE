@@ -36,6 +36,7 @@ awk -F"\t" -v OFS="\t" '{ split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4]}
 ```
 
 6. CLS models
+Here we purposely build an extended version of the GENCODE v27 annotation, were we merge the whole set of CLS transcripts with the primary assembly gene set release. With the intent of grouping together different models in uniquely identifiable loci, we clustered CLS transcripts into regions of continuous transcription. Eventually, transcripts sharing any overlap on the same strand have been brought together into a single locus, preserving their structure. These can be downloaded at: [Human - gencode v27 tagged](https://zenodo.org/records/15004659/files/Hv3_masterTable_refined_+withinTmerge_gencodev27_tagged.loci.gtf.gz?download=1). 
 ```
 zgrep -Ff <(zgrep "spliced \"1\"" Hv3+withinTmerge_gencodev27.loci.gtf.gz | cut -d"\"" -f2 | sort -u) Hv3+withinTmerge_gencodev27.loci.gtf.gz > spliced_cls.loci.gtf
 awk -F"\t" -v OFS="\t" '{ split($9, tags, "\""); print $1,$4,$5,tags[2],tags[4]}' spliced_cls.loci.gtf | sort -k1,1 -k2,2n > cls.sorted.gtf
