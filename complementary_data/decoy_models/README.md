@@ -1,5 +1,5 @@
 ## Objective: 
-# Generate a random set of transcripts by relocating in the intergenic space (according to GENCODEv27 extended with CLS models) the loci obtained through CLS. 
+# Generate a random set of transcripts in the enhanced GENCODE v27 intergenic space. 
 
 Requirements:
 
