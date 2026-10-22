@@ -10,7 +10,7 @@ Summary of files generated from the CLS3 data:
  
 ## CLS anchored models
 
-The CLS3 long-read data is processed through LyRic to obtaing high-confidence transcript models per sample. Further, to collect a comprehensive set of transcripts from the different tissues and technologies, the models were "anchored" according to their support at 5' and 3' ends (anchorTranscriptsEnds.pl), and merged together ([tmerge](https://github.com/guigolab/tmerge)). In this way we reduce the redundancy in the dataset while also preserving potential alternative start and end sites. 
+The CLS3 long-read data is processed through LyRic to obtaing high-confidence transcript models per sample. Further, to collect a comprehensive set of transcripts from the different tissues and technologies, the models were "anchored" according to their support at 5' and 3' ends (_anchorTranscriptsEnds.pl_), and merged together ([tmerge](https://github.com/guigolab/tmerge)). In this way we reduce the redundancy in the dataset while also preserving potential alternative start and end sites. 
 
 The final set of transcript models, anchor-merged across samples, for human and mouse can be downloaded at:
   - [Human](https://zenodo.org/records/15004659/files/Hv3_masterTable_refined.gtf.gz?download=1)
