@@ -24,13 +24,17 @@ for (sample in samples) {
         expression_matrix = Matrix(t(expression_matrix), sparse = TRUE)
         colnames(expression_matrix) = readLines(paste0(path, "/kb_out_nac/counts_filtered/cells_x_genes.barcodes.txt"))
         rownames(expression_matrix) = sapply(str_split(readLines(paste0(path, "/kb_out_nac/counts_unfiltered/cells_x_genes.genes.names.txt")), "[.]"), head, 1)
-
-        #Get simulated expression matrix without lncRNAs
+        expression_matrix[is.na(expression_matrix)] = 0
+        expression_matrix = colSums(expression_matrix)
+        
         expression_matrix_nascent = readMM(file = paste0(path, "/kb_out_nac/counts_filtered/cells_x_genes.nascent.mtx"))
         expression_matrix_nascent = Matrix(t(expression_matrix_nascent), sparse = TRUE)
         colnames(expression_matrix_nascent) = readLines(paste0(path, "/kb_out_nac/counts_filtered/cells_x_genes.barcodes.txt"))
         rownames(expression_matrix_nascent) = sapply(str_split(readLines(paste0(path, "/kb_out_nac/counts_unfiltered/cells_x_genes.genes.names.txt")), "[.]"), head, 1)
-
+        expression_matrix_nascent[is.na(expression_matrix_nascent)] = 0
+        expression_matrix_nascent = colSums(expression_matrix_nascent)
+        expression_matrix_nascent = expression_matrix_nascent[names(expression_matrix)]
+        
         nascents = round(expression_matrix_nascent/expression_matrix*100, 2)
         saveRDS(nascents, paste0("./intronic_reads/", sample, "_nascent.rds"))
 
