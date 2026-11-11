@@ -34,7 +34,7 @@ for (sample in samples) {
     }
 
     matrixv47 = readRDS(paste0(path_input, sample, "_v47Novel.rds"))
-    intronic_cell = readRDS(paste0("./intronic_reads/", sample, "_nascent.bycell.rds"))
+    intronic_cell = readRDS(paste0("./intronic_reads/", sample, "_nascent.rds"))
 
     malat_filter = ifelse( tissue == "blood", 0, as.numeric(quantile(matrixv47[["SCT"]]$data["MALAT1", ], 0.05)))
     mitoc_filter = as.numeric(quantile(matrixv47@meta.data$percent.mitochondrial, 0.95))
